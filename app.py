@@ -1,15 +1,10 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from elasticsearch import Elasticsearch
-from jproperties import Properties
 
-configs = Properties()
-with open('app.props', 'rb') as config_file:
-    configs.load(config_file)
 app = Flask(__name__)
 cors = CORS(app)
-es = Elasticsearch(["http://nel.cs.upb.de:9200"],
-                   http_auth=(configs.get("elastic.user").data, configs.get("elastic.password").data))
+es = Elasticsearch(["http://localhost:9200"])
 
 
 @app.route('/ping', methods=['GET'])
@@ -41,56 +36,23 @@ def get_entity_embedding():
     if "entities" not in request.json:
         return "Invalid parameters", 400
     entities = request.json["entities"]
+    index_name = request.json["indexname"]
     embeddings = {}
     for entity in entities:
         if entity in embeddings:
             continue
-        embeddings[entity] = get_embeddings(entity, "embedding_index")[0]['embeddings']
+        embeddings[entity] = get_embeddings(entity, index_name)[0]['embeddings']
         if len(embeddings.keys()) >= 10:
             break
     return embeddings
 
 
-@app.route('/get-entity-index-info', methods=['GET'])
+@app.route('/get-index-info', methods=['GET'])
 @cross_origin()
-def get_entity_index_info():
-    settings = es.indices.get(index="embedding_index")
+def get_index_info():
+    index_name = request.json["indexname"]
+    settings = es.indices.get(index=index_name)
     return settings["embedding_index"]["mappings"]
-
-
-@app.route('/get-relation-index-info', methods=['GET'])
-@cross_origin()
-def get_relation_index_info():
-    settings = es.indices.get(index="relation_embedding_index")
-    return settings["relation_embedding_index"]["mappings"]
-
-
-@app.route('/get-relation-embedding', methods=['GET'])
-@cross_origin()
-def get_relation_embedding():
-    if "relations" not in request.json:
-        return "Invalid parameters", 400
-    entities = request.json["relations"]
-    embeddings = {}
-    for entity in entities:
-        if entity in embeddings:
-            continue
-        hits = get_embeddings(entity, "relation_embedding_index", "relation", 4)
-        embeddings[entity] = {
-            'real': {
-                'rhs': [],
-                'lhs': []
-            },
-            'imag': {
-                'rhs': [],
-                'lhs': []
-            }
-        }
-        for hit in hits:
-            embeddings[entity][hit['dtype']][hit['operator']] = hit['embeddings']
-        if len(embeddings.keys()) >= 10:
-            break
-    return embeddings
 
 
 if __name__ == '__main__':

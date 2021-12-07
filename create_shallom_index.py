@@ -56,4 +56,4 @@ for index, row in data.iterrows() :
         count += 50000
         print(count)
         documents = []
-
+res = es.bulk(index="shallom_dbpedia_index", body=documents)
