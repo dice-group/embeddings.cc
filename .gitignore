@@ -1,0 +1,8 @@
+*.props
+data/*
+saved_model/*
+
+.idea
+*.iws
+*.iml
+*.ipr
