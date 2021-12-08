@@ -81,7 +81,10 @@ def get_entity_embedding_neighbour():
         return "Invalid parameters", 400
     embedding = request.json["embedding"]
     index_name = request.json["indexname"]
-    result = get_embeddings_neighbour(embedding, index_name)
+    neighbours = get_embeddings_neighbour(embedding, index_name)
+    result = {
+        "neighbours" : neighbours
+    }
     return result
 
 
