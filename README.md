@@ -1,4 +1,4 @@
-##  DBpedia entity embeddings
+##  KG entity embedding Service
 
 This repo has APIs the can be used to access embeddings for all the DBpedia entities. The embeddings are indexed on Elasticsearch server. 
 <br><br>
