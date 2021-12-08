@@ -52,7 +52,7 @@ def get_entity_embedding():
 def get_index_info():
     index_name = request.json["indexname"]
     settings = es.indices.get(index=index_name)
-    return settings["embedding_index"]["mappings"]
+    return settings[index_name]["mappings"]
 
 
 if __name__ == '__main__':
