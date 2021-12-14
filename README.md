@@ -11,32 +11,23 @@ This API takes a list of entities as input and returns the embeddings of the giv
          URL: /get-entity-embedding
       METHOD: GET
 Request Body: {
-                  "entities": Array of entities
+                  "entities": Array of entities,
+                  "indexname": Name of the index
               }
 ```
 
-#### 2. Get elastic search entity embedding index properties
-This API returns the list of properties of every document in the Elasticsearch index of entity embeddings. 
-```
-         URL: /get-entity-index-info
-      METHOD: GET
-```
 
-#### 3. Get relation embeddings
-This API takes a list of relations as input and returns the embeddings of the given entities in response. It returns embeddings of first 10 unique entities and ignores the rest. 
+
+#### 2. Get neighbour entities and their embedding for an embedding vector
+This API returns the 10 nearest neighbour of an embedding based on cosine distance.
 ```
-         URL: /get-relation-embedding
-      METHOD: GET
+         URL: /get-entity-embedding-neighbour
+       METHOD: GET
 Request Body: {
-                  "relations": Array of relations
+                  "indexname": Name of the index,
+                  "embedding": Emdebbing vector
+                  
               }
 ```
 
-#### 4. Get elastic search relation embedding index properties
-This API returns the list of properties of every document in the Elasticsearch index of relation embeddings. 
-```
-         URL: /get-relation-index-info
-      METHOD: GET
-```
-
-These APIs can be accessed from http://nel.cs.upb.de:5000/ on UPB network for now.
+These APIs can be accessed from http://unikge.cs.upb.de:5001/ on UPB network for now.
