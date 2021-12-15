@@ -5,7 +5,17 @@ This repo has APIs the can be used to access embeddings for KGE entities. The em
 
 ###  List of APIs
 
-#### 1. Get entity embeddings
+
+#### 1. List all indexes
+This API returns list of all available indexes on the elastic search server. 
+```
+         URL: /get-index-list
+      METHOD: GET
+Request Body: NA
+
+```
+
+#### 2. Get entity embeddings
 This API takes a list of entities and index name as input and returns the embeddings of the given entities in response. It returns embeddings of first 10 unique entities and ignores the rest. 
 ```
          URL: /get-entity-embedding
@@ -21,10 +31,7 @@ Sample request body:
 }
 ```
 
-
-
-
-#### 2. Get neighbour entities and their embedding for an embedding vector
+#### 3. Get neighbour entities and their embedding for an embedding vector
 This API returns the 10 nearest neighbour of an embedding based on cosine distance.
 ```
          URL: /get-entity-embedding-neighbour
@@ -41,6 +48,36 @@ Sample request body:
         0.010766734,
         0.02364266,
         -0.027576402,... 0.010766734]
+}
+```
+
+#### 4. Get neighbour entities and their embedding using entity name
+This API returns the 10 nearest neighbour of an entity based on cosine distance.
+```
+         URL: /get-entity-embedding-neighbour
+       METHOD: GET
+Request Body: {
+                  "indexname": Name of the index,
+                  "entity": Entity resource name
+                  
+              }
+Sample request body:
+{
+    "indexname":"shallom_dbpedia_index",
+    "entity" : "/resource/Boeing_747_hull_losses"
+}
+```
+#### 5. Get index information
+This API takes an index name and returns the all available information about the index(settings and mapping) 
+```
+         URL: /get-index-info
+      METHOD: GET
+Request Body: {
+                  "indexname": Name of the index
+              }
+Sample request body:
+{
+    "indexname" : "shallom_dbpedia_index"
 }
 ```
 
