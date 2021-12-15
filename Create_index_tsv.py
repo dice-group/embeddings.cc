@@ -31,7 +31,7 @@ def create_entity_index():
     res = es.indices.create(index_name, body=index_config)
     print("Done")
 
-#create_entity_index()
+create_entity_index()
 data = dd.read_csv(data_path, sep="\t")
 count = 0
 doc_id = 0
@@ -41,9 +41,8 @@ print("Starting to index the relation embeddings now!!")
 print("*********************************************")
 print(data.head())
 for index, row in data.iterrows() :
-    embeddings = row[1:101]
+    embeddings = row[1:dim+1]
     entity = row[0]
-    print(entity,len(embeddings))
     documents.append({
                 "index": {
                     "_id": doc_id,
