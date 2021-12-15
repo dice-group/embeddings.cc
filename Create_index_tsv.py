@@ -39,10 +39,11 @@ documents = []
 print("*********************************************")
 print("Starting to index the relation embeddings now!!")
 print("*********************************************")
+print(data.head())
 for index, row in data.iterrows() :
-    embeddings = [float(i) for i in row['entity_embeddings'].split(",")]
-    entity = row['entity']
-    print(entity,embeddings)
+    embeddings = row[1:101]
+    entity = row[0]
+    print(entity,len(embeddings))
     documents.append({
                 "index": {
                     "_id": doc_id,
