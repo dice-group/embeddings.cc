@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 
 app = Flask(__name__)
 cors = CORS(app)
-es = Elasticsearch(["http://porque.cs.upb.de:9200"])
+es = Elasticsearch(["http://localhost:9200"])
 
 
 @app.route('/ping', methods=['GET'])
