@@ -38,16 +38,20 @@ This API returns the 10 nearest neighbour of an embedding based on cosine distan
        METHOD: GET
 Request Body: {
                   "indexname": Name of the index,
-                  "embedding": Emdebbing vector
-                  
+                  "embedding": Emdebbing vector,
+                  "distmetric: Distance measure for neighbour search (Default : Cosine)                  
               }
+Supported distance measures:
+         Cosine Similarity : "cosine"
+         Euclidean Distance : "l2"
 Sample request body:
 {
     "indexname":"shallom_dbpedia_index",
     "embedding" : [0.02233588,
         0.010766734,
         0.02364266,
-        -0.027576402,... 0.010766734]
+        -0.027576402,... 0.010766734],
+    "distmetric":"cosine"
 }
 ```
 
