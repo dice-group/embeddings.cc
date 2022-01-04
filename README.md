@@ -13,6 +13,8 @@ This API returns list of all available indexes on the elastic search server.
       METHOD: GET
 Request Body: NA
 
+curl -X GET http://unikge.cs.upb.de:5001/get-index-list
+
 ```
 
 #### 2. Get entity embeddings
@@ -29,6 +31,7 @@ Sample request body:
     "indexname":"shallom_dbpedia_index",
     "entities" : ["/resource/Boeing_747_hull_losses"]
 }
+curl -X GET http://unikge.cs.upb.de:5001/get-entity-embedding -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","entities" : ["/resource/Boeing_747_hull_losses"]}'
 ```
 
 #### 3. Get neighbour entities and their embedding for an embedding vector
@@ -53,12 +56,17 @@ Sample request body:
         -0.027576402,... 0.010766734],
     "distmetric":"cosine"
 }
+curl -X GET http://unikge.cs.upb.de:5001/get-entity-embedding-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","embedding" : [0.02233588,
+        0.010766734,
+        0.02364266,
+        -0.027576402,... 0.010766734],
+    "distmetric":"cosine"}'
 ```
 
 #### 4. Get neighbour entities and their embedding using entity name
 This API returns the 10 nearest neighbour of an entity based on cosine distance.
 ```
-         URL: /get-entity-embedding-neighbour
+         URL: /get-entity-neighbour
        METHOD: GET
 Request Body: {
                   "indexname": Name of the index,
@@ -70,6 +78,7 @@ Sample request body:
     "indexname":"shallom_dbpedia_index",
     "entity" : "/resource/Boeing_747_hull_losses"
 }
+curl -X GET http://unikge.cs.upb.de:5001/get-entity-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","entity" : "/resource/Boeing_747_hull_losses"}'
 ```
 #### 5. Get index information
 This API takes an index name and returns the all available information about the index(settings and mapping) 
@@ -83,6 +92,7 @@ Sample request body:
 {
     "indexname" : "shallom_dbpedia_index"
 }
+curl -X GET http://unikge.cs.upb.de:5001/get-index-info -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index"}'
 ```
 
 These APIs can be accessed from http://unikge.cs.upb.de:5001/ on UPB network for now.
