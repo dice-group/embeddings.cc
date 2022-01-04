@@ -30,7 +30,13 @@ def get_embeddings(query_string, index_name, field_name='entity', first_n=1):
     return None
 
 
-def get_embeddings_neighbour(query_embedding, index_name, field_name='embeddings', first_n=1):
+def get_embeddings_neighbour(query_embedding, index_name,disttype="cosine"):
+    first_n = 1
+    source = "cosineSimilarity(params.query_vector, 'embeddings' ) + 1.0"
+    if disttype == "l2":
+        source = "1 / (1 + l2norm(params.query_vector, 'embeddings'))"
+
+
     res = es.search(index=index_name, body={
         "query": {
             "script_score": {
@@ -39,7 +45,7 @@ def get_embeddings_neighbour(query_embedding, index_name, field_name='embeddings
                     }
                 },
                 "script": {
-                    "source": "cosineSimilarity(params.query_vector, 'embeddings' ) + 1.0",
+                    "source": source,
                     "params": {
                         "query_vector": query_embedding
                     }
@@ -84,11 +90,14 @@ def get_entity_embedding():
 @app.route('/get-entity-embedding-neighbour', methods=['GET'])
 @cross_origin()
 def get_entity_embedding_neighbour():
+    dist = "cosine"
     if "embedding" not in request.json:
         return "Invalid parameters", 400
+    if "distmetric" in request.json:
+        dist = request.json["distmetric"]
     embedding = request.json["embedding"]
     index_name = request.json["indexname"]
-    neighbours = get_embeddings_neighbour(embedding, index_name)
+    neighbours = get_embeddings_neighbour(embedding, index_name, dist)
     result = {
         "neighbours" : neighbours
     }
