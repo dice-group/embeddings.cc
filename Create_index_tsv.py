@@ -2,8 +2,8 @@ import dask.dataframe as dd
 from elasticsearch import Elasticsearch
 es = Elasticsearch(["http://localhost:9200"])
 
-index_name = "TransE_dbpedia_entity"
-data_path  = "/data/KGE/TransE/entity_embeddings_dbp21-03_transe_dot.tsv"
+index_name = "transe_dbpedia_complex_entity"
+data_path  = "/data/KGE/complex/entity_embeddings_dbp21-03_complex.tsv"
 dim = 100
 
 def create_entity_index():
@@ -56,8 +56,8 @@ for index, row in data.iterrows() :
     })
     doc_id += 1
     if len(documents) == 100000:
-        res = es.bulk(index=index_name, body=documents)
+        res = es.bulk(index=index_name, body=documents,request_timeout=2000)
         count += 50000
         print(count)
         documents = []
-res = es.bulk(index=index_name, body=documents)
+res = es.bulk(index=index_name, body=documents,request_timeout=2000)
