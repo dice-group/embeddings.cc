@@ -95,4 +95,5 @@ Sample request body:
 curl -X GET http://unikge.cs.upb.de:5001/get-index-info -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index"}'
 ```
 
-These APIs can be accessed from http://unikge.cs.upb.de:5001/ on UPB network for now.
+These APIs can be accessed from http://unikge.cs.upb.de:5001/ on UPB network for now.  
+Data available in the indexes is documented in the [wiki](https://github.com/dice-group/kg-embedding-service/wiki/Indexes-unikge.cs.upb.de).
