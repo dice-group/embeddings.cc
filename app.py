@@ -119,7 +119,7 @@ def get_entity_neighbour():
 
 
 
-@app.route('/get-index-info', methods=['GET'])
+@app.route('/get-index-info', methods=['GET','POST'])
 @cross_origin()
 def get_index_info():
     if "indexname" not in request.json:
