@@ -15,8 +15,10 @@ def test():
 
 def get_entity_list(index_name):
     s = Search(using=es, index=index_name)
+    result = []
     for hit in s.scan():
-        print(hit)
+        result.append(hit.entity)
+        print(hit.entity)
     # hits = res['hits']['hits']
     # if len(hits) > 0:
     #     results = []
