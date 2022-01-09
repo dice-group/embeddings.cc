@@ -12,6 +12,20 @@ es = Elasticsearch(["http://localhost:9200"])
 def test():
     return "Status:\tOK", 200
 
+def get_entity_list(index_name):
+    res = es.search(index=index_name, body={
+        "query": {
+            "match_all": {}
+            }
+        }
+    )
+    hits = res['hits']['hits']
+    if len(hits) > 0:
+        results = []
+        for i in range(len(hits)):
+            results.append(hits[i]['_source'])
+        return results
+    return None
 
 def get_embeddings(query_string, index_name, field_name='entity', first_n=1):
     res = es.search(index=index_name, body={
@@ -70,7 +84,7 @@ def get_index_list():
     return indexes
 
 
-@app.route('/get-entity-embedding', methods=['GET'])
+@app.route('/get-entity-embedding', methods=['GET','POST'])
 @cross_origin()
 def get_entity_embedding():
     if "entities" not in request.json:
@@ -86,8 +100,17 @@ def get_entity_embedding():
             break
     return embeddings
 
+@app.route('/get-all-entity', methods=['GET','POST'])
+@cross_origin()
+def get_all_entity():
+    if "indexname" not in request.json:
+        return "Invalid parameters", 400
+    index_name = request.json["indexname"]
+    embeddings = get_entity_list(index_name)
+    return embeddings
 
-@app.route('/get-entity-embedding-neighbour', methods=['GET'])
+
+@app.route('/get-entity-embedding-neighbour', methods=['GET','POST'])
 @cross_origin()
 def get_entity_embedding_neighbour():
     dist = "cosine"
@@ -103,7 +126,7 @@ def get_entity_embedding_neighbour():
     }
     return result
 
-@app.route('/get-entity-neighbour', methods=['GET'])
+@app.route('/get-entity-neighbour', methods=['GET','POST'])
 @cross_origin()
 def get_entity_neighbour():
     if "entity" not in request.json:
