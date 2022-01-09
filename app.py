@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -13,18 +14,15 @@ def test():
     return "Status:\tOK", 200
 
 def get_entity_list(index_name):
-    res = es.search(index=index_name, body={
-        "query": {
-            "match_all": {}
-            }
-        }
-    )
-    hits = res['hits']['hits']
-    if len(hits) > 0:
-        results = []
-        for i in range(len(hits)):
-            results.append(hits[i]['_source'])
-        return results
+    s = Search(using=es, index=index_name)
+    for hit in s.scan():
+        print(hit)
+    # hits = res['hits']['hits']
+    # if len(hits) > 0:
+    #     results = []
+    #     for i in range(len(hits)):
+    #         results.append(hits[i]['_source'])
+    #     return results
     return None
 
 def get_embeddings(query_string, index_name, field_name='entity', first_n=1):
