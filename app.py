@@ -15,17 +15,11 @@ def test():
 
 def get_entity_list(index_name):
     s = Search(using=es, index=index_name)
-    result = []
+    entity = []
     for hit in s.scan():
-        result.append(hit.entity)
-        print(hit.entity)
-    # hits = res['hits']['hits']
-    # if len(hits) > 0:
-    #     results = []
-    #     for i in range(len(hits)):
-    #         results.append(hits[i]['_source'])
-    #     return results
-    return None
+        entity.append(hit.entity)
+    result = {"entitylist":entity}
+    return result
 
 def get_embeddings(query_string, index_name, field_name='entity', first_n=1):
     res = es.search(index=index_name, body={
