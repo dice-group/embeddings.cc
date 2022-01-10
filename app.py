@@ -100,6 +100,9 @@ def get_all_entity():
     if "indexname" not in request.json:
         return "Invalid parameters", 400
     index_name = request.json["indexname"]
+    settings = es.indices.get(index=index_name)
+    if settings[index_name]["mappings"]["properties"].get("entity") == None:
+        return "Invalid Index Name", 400
     embeddings = get_entity_list(index_name)
     return embeddings
 
