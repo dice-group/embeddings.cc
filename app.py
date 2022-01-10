@@ -13,13 +13,15 @@ es = Elasticsearch(["http://localhost:9200"])
 def test():
     return "Status:\tOK", 200
 
-def get_entity_list(index_name):
+
+def get_uri_list(index_name, field_name='entity'):
     s = Search(using=es, index=index_name)
-    entity = []
+    uri_list = []
     for hit in s.scan():
-        entity.append(hit.entity)
-    result = {"entitylist":entity}
+        list.append(hit[field_name])
+    result = {field_name + "list": uri_list}
     return result
+
 
 def get_embeddings(query_string, index_name, field_name='entity', first_n=1):
     res = es.search(index=index_name, body={
@@ -37,12 +39,12 @@ def get_embeddings(query_string, index_name, field_name='entity', first_n=1):
         return results
     return None
 
-def get_embeddings_neighbour(query_embedding, index_name,disttype="cosine"):
+
+def get_embeddings_neighbour(query_embedding, index_name, disttype="cosine"):
     first_n = 1
     source = "cosineSimilarity(params.query_vector, 'embeddings' ) + 1.0"
     if disttype == "l2":
         source = "1 / (1 + l2norm(params.query_vector, 'embeddings'))"
-
 
     res = es.search(index=index_name, body={
         "query": {
@@ -69,6 +71,7 @@ def get_embeddings_neighbour(query_embedding, index_name,disttype="cosine"):
         return results
     return None
 
+
 @app.route('/get-index-list', methods=['GET'])
 @cross_origin()
 def get_index_list():
@@ -76,7 +79,8 @@ def get_index_list():
     indexes["index_list"] = list(es.indices.get_alias().keys());
     return indexes
 
-@app.route('/get-index-info', methods=['GET','POST'])
+
+@app.route('/get-index-info', methods=['GET', 'POST'])
 @cross_origin()
 def get_index_info():
     if "indexname" not in request.json:
@@ -86,8 +90,7 @@ def get_index_info():
     return settings
 
 
-
-@app.route('/get-entity-embedding', methods=['GET','POST'])
+@app.route('/get-entity-embedding', methods=['GET', 'POST'])
 @cross_origin()
 def get_entity_embedding():
     if "entities" not in request.json:
@@ -106,7 +109,8 @@ def get_entity_embedding():
             break
     return embeddings
 
-@app.route('/get-relation-embedding', methods=['GET','POST'])
+
+@app.route('/get-relation-embedding', methods=['GET', 'POST'])
 @cross_origin()
 def get_relation_embedding():
     if "relations" not in request.json:
@@ -120,12 +124,13 @@ def get_relation_embedding():
     for relation in relations:
         if relation in embeddings:
             continue
-        embeddings[relation] = get_embeddings(relation, index_name,'relation')[0]['embeddings']
+        embeddings[relation] = get_embeddings(relation, index_name, 'relation')[0]['embeddings']
         if len(embeddings.keys()) >= 10:
             break
     return embeddings
 
-@app.route('/get-all-entity', methods=['GET','POST'])
+
+@app.route('/get-all-entity', methods=['GET', 'POST'])
 @cross_origin()
 def get_all_entity():
     if "indexname" not in request.json:
@@ -134,11 +139,24 @@ def get_all_entity():
     settings = es.indices.get(index=index_name)
     if settings[index_name]["mappings"]["properties"].get("entity") == None:
         return "Invalid Index Name", 400
-    embeddings = get_entity_list(index_name)
-    return embeddings
+    entities = get_uri_list(index_name)
+    return entities
 
 
-@app.route('/get-entity-embedding-neighbour', methods=['GET','POST'])
+@app.route('/get-all-relation', methods=['GET', 'POST'])
+@cross_origin()
+def get_all_relation():
+    if "indexname" not in request.json:
+        return "Invalid parameters", 400
+    index_name = request.json["indexname"]
+    settings = es.indices.get(index=index_name)
+    if settings[index_name]["mappings"]["properties"].get("relation") == None:
+        return "Invalid Index Name", 400
+    relations = get_uri_list(index_name,'relation')
+    return relations
+
+
+@app.route('/get-entity-embedding-neighbour', methods=['GET', 'POST'])
 @cross_origin()
 def get_entity_embedding_neighbour():
     dist = "cosine"
@@ -153,11 +171,12 @@ def get_entity_embedding_neighbour():
         return "Invalid Index Name", 400
     neighbours = get_embeddings_neighbour(embedding, index_name, dist)
     result = {
-        "neighbours" : neighbours
+        "neighbours": neighbours
     }
     return result
 
-@app.route('/get-entity-neighbour', methods=['GET','POST'])
+
+@app.route('/get-entity-neighbour', methods=['GET', 'POST'])
 @cross_origin()
 def get_entity_neighbour():
     if "entity" not in request.json:
@@ -175,9 +194,5 @@ def get_entity_neighbour():
     return result
 
 
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-
