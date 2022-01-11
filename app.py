@@ -14,10 +14,15 @@ def test():
     return "Status:\tOK", 200
 
 
-def get_uri_list(index_name, field_name='entity'):
+def get_uri_list(index_name, field_name='entity', size=0):
     s = Search(using=es, index=index_name)
+    if size == 0:
+        response = s.scan()
+    else:
+        s = s[0:size]
+        response = s.execute()
     uri_list = []
-    for hit in s.scan():
+    for hit in response:
         uri_list.append(hit[field_name])
     result = {field_name + "list": uri_list}
     return result
@@ -67,7 +72,6 @@ def get_embeddings_neighbour(query_embedding, index_name, disttype="cosine"):
         results = []
         for i in range(max(first_n, len(hits))):
             results.append(hits[i]['_source'])
-        print(results)
         return results
     return None
 
@@ -133,26 +137,32 @@ def get_relation_embedding():
 @app.route('/get-all-entity', methods=['GET', 'POST'])
 @cross_origin()
 def get_all_entity():
+    size = 0
     if "indexname" not in request.json:
         return "Invalid parameters", 400
+    if "size" in request.json:
+        size = request.json['size']
     index_name = request.json["indexname"]
     settings = es.indices.get(index=index_name)
-    if settings[index_name]["mappings"]["properties"].get("entity") == None:
+    if settings[index_name]["mappings"]["properties"].get("entity") is None:
         return "Invalid Index Name", 400
-    entities = get_uri_list(index_name)
+    entities = get_uri_list(index_name, size=size)
     return entities
 
 
 @app.route('/get-all-relation', methods=['GET', 'POST'])
 @cross_origin()
 def get_all_relation():
+    size = 0
     if "indexname" not in request.json:
         return "Invalid parameters", 400
+    if "size" in request.json:
+        size = request.json['size']
     index_name = request.json["indexname"]
     settings = es.indices.get(index=index_name)
-    if settings[index_name]["mappings"]["properties"].get("relation") == None:
+    if settings[index_name]["mappings"]["properties"].get("relation") is None:
         return "Invalid Index Name", 400
-    relations = get_uri_list(index_name,'relation')
+    relations = get_uri_list(index_name, 'relation', size = size)
     return relations
 
 
@@ -192,6 +202,7 @@ def get_entity_neighbour():
         "neighbours": neighbours
     }
     return result
+
 
 @app.route('/get-relation-neighbour', methods=['GET', 'POST'])
 @cross_origin()
