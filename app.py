@@ -2,10 +2,13 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
+import json
 
 app = Flask(__name__)
 cors = CORS(app)
 es = Elasticsearch(["http://localhost:9200"])
+f = open('meta_data.json')
+meta_data = json.load(f)
 
 
 @app.route('/ping', methods=['GET'])
@@ -87,11 +90,18 @@ def get_index_list():
 @app.route('/get-index-info', methods=['GET', 'POST'])
 @cross_origin()
 def get_index_info():
+    index_meta_info = "No Information Available"
     if "indexname" not in request.json:
         return "Invalid parameters", 400
     index_name = request.json["indexname"]
+    if meta_data[index_name] is None:
+        index_meta_info = meta_data[index_name]
     settings = es.indices.get(index=index_name)
-    return settings
+    response = {
+        "Index Meta Info": index_meta_info,
+        "Index Config": settings[index_name]
+    }
+    return response
 
 
 @app.route('/get-entity-embedding', methods=['GET', 'POST'])
@@ -162,7 +172,7 @@ def get_all_relation():
     settings = es.indices.get(index=index_name)
     if settings[index_name]["mappings"]["properties"].get("relation") is None:
         return "Invalid Index Name", 400
-    relations = get_uri_list(index_name, 'relation', size = size)
+    relations = get_uri_list(index_name, 'relation', size=size)
     return relations
 
 
