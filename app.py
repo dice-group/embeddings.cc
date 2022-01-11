@@ -18,7 +18,7 @@ def get_uri_list(index_name, field_name='entity'):
     s = Search(using=es, index=index_name)
     uri_list = []
     for hit in s.scan():
-        list.append(hit[field_name])
+        list.append(hit['embeddings'])
     result = {field_name + "list": uri_list}
     return result
 
