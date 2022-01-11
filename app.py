@@ -156,7 +156,7 @@ def get_all_relation():
     return relations
 
 
-@app.route('/get-entity-embedding-neighbour', methods=['GET', 'POST'])
+@app.route('/get-embedding-neighbour', methods=['GET', 'POST'])
 @cross_origin()
 def get_entity_embedding_neighbour():
     dist = "cosine"
@@ -166,9 +166,6 @@ def get_entity_embedding_neighbour():
         dist = request.json["distmetric"]
     embedding = request.json["embedding"]
     index_name = request.json["indexname"]
-    settings = es.indices.get(index=index_name)
-    if settings[index_name]["mappings"]["properties"].get("entity") == None:
-        return "Invalid Index Name", 400
     neighbours = get_embeddings_neighbour(embedding, index_name, dist)
     result = {
         "neighbours": neighbours
