@@ -158,7 +158,7 @@ def get_all_relation():
 
 @app.route('/get-embedding-neighbour', methods=['GET', 'POST'])
 @cross_origin()
-def get_entity_embedding_neighbour():
+def get_embedding_neighbour():
     dist = "cosine"
     if "embedding" not in request.json:
         return "Invalid parameters", 400
@@ -176,15 +176,38 @@ def get_entity_embedding_neighbour():
 @app.route('/get-entity-neighbour', methods=['GET', 'POST'])
 @cross_origin()
 def get_entity_neighbour():
+    dist = "cosine"
     if "entity" not in request.json:
         return "Invalid parameters", 400
     entity = request.json["entity"]
     index_name = request.json["indexname"]
+    if "distmetric" in request.json:
+        dist = request.json["distmetric"]
     settings = es.indices.get(index=index_name)
     if settings[index_name]["mappings"]["properties"].get("entity") == None:
         return "Invalid Index Name", 400
     embedding = get_embeddings(entity, index_name)[0]['embeddings']
-    neighbours = get_embeddings_neighbour(embedding, index_name)
+    neighbours = get_embeddings_neighbour(embedding, index_name, dist)
+    result = {
+        "neighbours": neighbours
+    }
+    return result
+
+@app.route('/get-relation-neighbour', methods=['GET', 'POST'])
+@cross_origin()
+def get_relation_neighbour():
+    dist = "cosine"
+    if "relation" not in request.json:
+        return "Invalid parameters", 400
+    relation = request.json["relation"]
+    index_name = request.json["indexname"]
+    if "distmetric" in request.json:
+        dist = request.json["distmetric"]
+    settings = es.indices.get(index=index_name)
+    if settings[index_name]["mappings"]["properties"].get("relation") == None:
+        return "Invalid Index Name", 400
+    embedding = get_embeddings(relation, index_name, 'relation')[0]['embeddings']
+    neighbours = get_embeddings_neighbour(embedding, index_name, dist)
     result = {
         "neighbours": neighbours
     }
