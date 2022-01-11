@@ -94,7 +94,7 @@ def get_index_info():
     if "indexname" not in request.json:
         return "Invalid parameters", 400
     index_name = request.json["indexname"]
-    if meta_data[index_name] is None:
+    if index_name in meta_data:
         index_meta_info = meta_data[index_name]
     settings = es.indices.get(index=index_name)
     response = {
