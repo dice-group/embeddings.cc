@@ -96,4 +96,5 @@ curl -X GET http://unikge.cs.upb.de:5001/get-index-info -H "Content-Type: applic
 ```
 
 These APIs can be accessed from http://unikge.cs.upb.de:5001/ on UPB network for now.  
-Data available in the indexes is documented in the [wiki](https://github.com/dice-group/kg-embedding-service/wiki/Indexes-unikge.cs.upb.de).
+Data available in the indexes is documented in the [wiki](https://github.com/dice-group/kg-embedding-service/wiki/Indexes-unikge.cs.upb.de).  
+A python implementation is available at [Universal_Embeddings: kg-embedding-service.py](https://github.com/dice-group/Universal_Embeddings/blob/main/kg-embedding-service.py), and a description in the [wiki](https://github.com/dice-group/Universal_Embeddings/wiki/KG-embedding-service).
