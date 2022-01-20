@@ -6,7 +6,7 @@ import json
 
 app = Flask(__name__)
 cors = CORS(app)
-es = Elasticsearch(["http://localhost:9200"])
+es = Elasticsearch(["http://172.18.0.1:9200"])
 f = open('meta_data.json')
 meta_data = json.load(f)
 
