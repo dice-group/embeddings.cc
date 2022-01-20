@@ -38,10 +38,22 @@ This repo has APIs the can be used to access embeddings for KGE entities. The em
     
    Run Create_relation_index_tsv.py using nohup Python3 -u Create_entity_index_tsv.py &
 ```
-4. Start the service 
+4. Start the service
+
 ```
-Run command : nohup Python3 -u run.py & 
+With Docker
+
+Build the docker image:
+Run command : docker build . -t embeddingservice
+Deploy the docker stack:
+Run command :  docker stack deploy --compose-file docker-compose.yml embedding-service
+
+Wihtout Docker 
+
+Change the ES uri host from "172.18.0.1" to "localhost"
+Run command : nohup python3 -u run.py &
 ```
+
 ###  List of APIs
 
 
