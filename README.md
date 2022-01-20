@@ -3,6 +3,45 @@
 This repo has APIs the can be used to access embeddings for KGE entities. The embeddings are indexed on Elasticsearch server. 
 <br><br>
 
+###  Installations and index creation
+
+1. Install Elastic Search 7.16 or above.
+   Installation information is available on https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+```
+   wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+   sudo apt-get install apt-transport-https
+   echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list 
+   sudo apt-get update && sudo apt-get install elasticsearch
+   sudo -i service elasticsearch start
+```
+2. Start Elastic Search server
+```
+   sudo -i service elasticsearch start
+```
+3. Create indexes using tsv embedding files
+```
+   Use Create_entity_index_tsv.py to create indexes for entity embedding files
+   
+   Change the following parameter in the Create_entity_index_tsv.py file.
+   "index_name" : Name of the index (User's choice)
+   "data_path" : Path to the embedding .tsv file
+   "dim" : Number of dimension in the embedding vector
+   
+   Run Create_entity_index_tsv.py using nohup Python3 -u Create_entity_index_tsv.py &
+   
+   Use Create_relation_index_tsv.py to create indexes for relation embedding files
+   
+   Change the following parameter in the Create_entity_index_tsv.py file.
+   "index_name" : Name of the index (User's choice)
+   "data_path" : Path to the embedding .tsv file
+   "dim" : Number of dimension in the embedding vector
+    
+   Run Create_relation_index_tsv.py using nohup Python3 -u Create_entity_index_tsv.py &
+```
+4. Start the service 
+```
+Run command : nohup Python3 -u run.py & 
+```
 ###  List of APIs
 
 
