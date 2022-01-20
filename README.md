@@ -16,8 +16,21 @@ Request Body: NA
 curl -X GET http://unikge.cs.upb.de:5001/get-index-list
 
 ```
-
-#### 2. Get entity embeddings
+#### 2. Get index information
+This API takes an index name and returns the all available information about the index(settings and mapping) 
+```
+         URL: /get-index-info
+      METHOD: GET
+Request Body: {
+                  "indexname": Name of the index
+              }
+Sample request body:
+{
+    "indexname" : "shallom_dbpedia_index"
+}
+curl -X GET http://unikge.cs.upb.de:5001/get-index-info -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index"}'
+```
+#### 3. Get entity embeddings
 This API takes a list of entities and index name as input and returns the embeddings of the given entities in response. It returns embeddings of first 10 unique entities and ignores the rest. 
 ```
          URL: /get-entity-embedding
@@ -34,15 +47,60 @@ Sample request body:
 curl -X GET http://unikge.cs.upb.de:5001/get-entity-embedding -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","entities" : ["/resource/Boeing_747_hull_losses"]}'
 ```
 
-#### 3. Get neighbour entities and their embedding for an embedding vector
+#### 4. Get relation embeddings
+This API takes a list of relations and index name as input and returns the embeddings of the given realtions in response. It returns embeddings of first 10 unique relations and ignores the rest. 
+```
+         URL: /get-relation-embedding
+      METHOD: GET
+Request Body: {
+                  "relations": Array of entities,
+                  "indexname": Name of the index
+              }
+Sample request body:
+{
+    "indexname":"shallom_dbpedia_index",
+    "relations" : ["/resource/Boeing_747_hull_losses"]
+}
+curl -X GET http://unikge.cs.upb.de:5001/get-relation-embedding -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","relations" : ["/resource/Boeing_747_hull_losses"]}'
+```
+
+#### 5. Get all entities
+This API returns list of entities of an index. 
+```
+         URL: /get-all-entity
+      METHOD: POST
+Request Body: {
+                  "indexname": Name of the index,
+                  "size" : Number of entities to search (Optional,Default : All)
+              }
+
+curl -X GET http://unikge.cs.upb.de:5001/get-all-entity -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","size" : 10}'
+
+```
+
+#### 6. Get all relations
+This API returns list of relations of an index. 
+```
+         URL: /get-all-relation
+      METHOD: POST
+Request Body: {
+                  "indexname": Name of the index,
+                  "size" : Number of relations to search (Optional,Default : All)
+              }
+
+curl -X GET http://unikge.cs.upb.de:5001/get-all-relation -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","size" : 10}'
+
+```
+
+#### 7. Get neighbour entities/relations for an embedding vector
 This API returns the 10 nearest neighbour of an embedding based on cosine distance.
 ```
-         URL: /get-entity-embedding-neighbour
+         URL: /get-embedding-neighbour
        METHOD: GET
 Request Body: {
                   "indexname": Name of the index,
                   "embedding": Emdebbing vector,
-                  "distmetric: Distance measure for neighbour search (Default : Cosine)                  
+                  "distmetric: Distance measure for neighbour search (Optional,Default : Cosine)                  
               }
 Supported distance measures:
          Cosine Similarity : "cosine"
@@ -56,44 +114,51 @@ Sample request body:
         -0.027576402,... 0.010766734],
     "distmetric":"cosine"
 }
-curl -X GET http://unikge.cs.upb.de:5001/get-entity-embedding-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","embedding" : [0.02233588,
+curl -X GET http://unikge.cs.upb.de:5001/get-embedding-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","embedding" : [0.02233588,
         0.010766734,
         0.02364266,
         -0.027576402,... 0.010766734],
     "distmetric":"cosine"}'
 ```
 
-#### 4. Get neighbour entities and their embedding using entity name
+
+
+#### 8. Get neighbour entities and their embedding using entity uri
 This API returns the 10 nearest neighbour of an entity based on cosine distance.
 ```
          URL: /get-entity-neighbour
        METHOD: GET
 Request Body: {
                   "indexname": Name of the index,
-                  "entity": Entity resource name
-                  
+                  "entity": Entity URI,
+                  "distmetric: Distance measure for neighbour search (Optional,Default : Cosine)
               }
 Sample request body:
 {
     "indexname":"shallom_dbpedia_index",
-    "entity" : "/resource/Boeing_747_hull_losses"
+    "entity" : "/resource/Boeing_747_hull_losses",
+    "distmetric":"cosine"    
 }
-curl -X GET http://unikge.cs.upb.de:5001/get-entity-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","entity" : "/resource/Boeing_747_hull_losses"}'
+curl -X GET http://unikge.cs.upb.de:5001/get-entity-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","entity" : "/resource/Boeing_747_hull_losses","distmetric":"cosine"}'
 ```
-#### 5. Get index information
-This API takes an index name and returns the all available information about the index(settings and mapping) 
+#### 9. Get neighbour realtions and their embedding using relation uri
+This API returns the 10 nearest neighbour of an entity based on cosine distance.
 ```
-         URL: /get-index-info
-      METHOD: GET
+         URL: /get-relation-neighbour
+       METHOD: GET
 Request Body: {
-                  "indexname": Name of the index
+                  "indexname": Name of the index,
+                  "relation": Relation URI,
+                  "distmetric: Distance measure for neighbour search (Optional,Default : Cosine)
               }
 Sample request body:
 {
-    "indexname" : "shallom_dbpedia_index"
+    "indexname":"shallom_dbpedia_index",
+    "relation" : "/resource/Boeing_747_hull_losses",
+    "distmetric":"cosine"    
 }
-curl -X GET http://unikge.cs.upb.de:5001/get-index-info -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index"}'
-```
+curl -X GET http://unikge.cs.upb.de:5001/get-relation-neighbour -H "Content-Type: application/json" -d '{"indexname":"shallom_dbpedia_index","relation" : "/resource/Boeing_747_hull_losses","distmetric":"cosine"}'
+
 
 These APIs can be accessed from http://unikge.cs.upb.de:5001/ on UPB network for now.  
 Data available in the indexes is documented in the [wiki](https://github.com/dice-group/kg-embedding-service/wiki/Indexes-unikge.cs.upb.de).  
