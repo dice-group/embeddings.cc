@@ -4,5 +4,5 @@ Flask-Cors==3.0.10
 jproperties==2.1.1
 requests==2.26.0
 uWSGI==2.0.19.1
-dask==2021.10.0
+dask==2022.02.0
 elasticsearch-dsl==7.4.0
