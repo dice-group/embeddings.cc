@@ -10,10 +10,10 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc)
 
 ### Index API (for universal embeddings developers)
 
-- An API to create Elasticsearch indexes and to add data.
-- Use the python file [embeddings_cc_index.py](api/embeddings_cc_index.py) to access the API
-- Usage examples are provided in [embeddings_cc_index_examples.py](api/embeddings_cc_index_examples.py).
-- TODO: Add documents
+- Use the Index API to create Elasticsearch indexes and to add data.
+- The API can easily accessed via a [python file](api/embeddings_cc_index.py). Just download it.
+- Usage examples are provided in an [example python file](api/embeddings_cc_index_examples.py).
+
 
 ### System administration
 

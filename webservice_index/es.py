@@ -4,7 +4,7 @@ from flask import current_app, g
 
 def get_es():
     if 'es' not in g:
-        g.es = Elasticsearch(current_app.config['ES_HOST'])
+        g.es = Elasticsearch(current_app.config['ES_HOST'], http_compress=True)
     return g.es
 
 

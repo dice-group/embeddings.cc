@@ -23,10 +23,25 @@ if False:
 
 # Creates an index
 if False:
-    response = embeddings_cc_index.create_index(password, 'index_test', 50, number_of_shards=5)
+    response = embeddings_cc_index.create_index(password, 'index_test', 10, number_of_shards=5)
     print(response.status_code, response.text)
 
 # Deletes an index
 if False:
     response = embeddings_cc_index.delete_index(password, 'index_test')
+    print(response.status_code, response.text)
+
+# Adds embeddings
+# Data is transformed to JSON, so tuples and lists are handled equally.
+# Important: Split your data into multiple requests and wait for a response
+# before adding additional data. A request could take e.g. 50,000 items.
+if False:
+    embeddings = [('http://example.com/0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+                  ('http://example.com/1', [1, 2, 3, 4, 5, 6, 7, 8, 9, 0])]
+    response = embeddings_cc_index.add(password, 'index_test', embeddings)
+    print(response.status_code, response.text)
+if False:
+    embeddings = [['http://example.com/2', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
+                  ['http://example.com/3', [3, 4, 5, 6, 7, 8, 9, 0, 1, 2]]]
+    response = embeddings_cc_index.add(password, 'index_test', embeddings)
     print(response.status_code, response.text)

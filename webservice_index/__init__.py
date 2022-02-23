@@ -58,7 +58,7 @@ def create_app(test_config=None):
 
         index_config = {
             'settings': {
-                'number_of_shards': number_of_shards,                              # TODO is 5 the best parameter?
+                'number_of_shards': number_of_shards,
                 'number_of_replicas': 1
             },
             'mappings': {
@@ -67,7 +67,7 @@ def create_app(test_config=None):
                         'type': 'keyword'
                     },
                     'entity': {
-                        'type': 'keyword'                              # TODO Why same id and entity?
+                        'type': 'keyword'
                     },
                     'embeddings': {
                         'type': 'dense_vector',
@@ -91,32 +91,37 @@ def create_app(test_config=None):
 
         return es.get_es().indices.delete(index)
 
-    # @app.route('/add_docs', methods=['GET'])                               # TODO POST
-    # @cross_origin()
-    # def add_docs():
-    #     if not security.check_password(request.args.get('password')):
-    #         return 'Unauthorized', 401
-    #
-    #     if 'index' not in request.args or not request.args.get('index'):
-    #         return 'Missing parameter index', 422
-    #     else:
-    #         index = request.args.get('index')
-    #
-    #     if 'docs' not in request.args or not request.args.get('docs'):
-    #         return 'Missing parameter docs', 422
-    #     else:
-    #         docs = request.json['docs']
-    #
-    #     for doc in docs:
-    #         print(doc)
-    #
-    #     return 'cool'
+    @app.route('/add', methods=['POST'])
+    @cross_origin()
+    def add():
+        if not security.check_password(request.json['password']):
+            return 'Unauthorized', 401
 
+        if not request.json:
+            return 'Missing json data', 422
 
+        if 'index' not in request.json:
+            return 'Missing parameter index', 422
+        else:
+            index = request.json['index']
 
+        if 'docs' not in request.json:
+            return 'Missing parameter docs', 422
+        else:
+            docs = request.json['docs']
 
+        documents = []
+        for doc in docs:
+            documents.append({
+                "index": {
+                    "_index": index
+                }
+            })
+            documents.append({
+                'entity': doc[0],
+                'embeddings': doc[1]
+            })
 
-
-
+        return es.get_es().bulk(index=index, body=documents)
 
     return app

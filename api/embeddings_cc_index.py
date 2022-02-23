@@ -25,3 +25,7 @@ class EmbeddingsCcIndex():
 
     def delete_index(self, password, index):
         return httpx.post(self.webservice_url + '/delete_index', params={'password':password, 'index':index})
+
+    def add(self, password, index, docs):
+        data = json.JSONEncoder().encode({'password':password, 'index':index, 'docs':docs})
+        return httpx.post(self.webservice_url + '/add', data=data, headers=self.headers_json)
