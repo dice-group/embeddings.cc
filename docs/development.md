@@ -27,6 +27,8 @@
   `flask run`
 - [http://localhost:5000/ping](http://localhost:5000/ping)
 - [http://localhost:5000/get_indexes?password=](http://localhost:5000/get_indexes?password=)
+- [http://localhost:5000/create_index?password=&index_name=&dimensions=&number_of_shards=5](http://localhost:5000/create_index?password=&index_name=&dimensions=&number_of_shards=5)
+- [http://localhost:5000/delete_index?password=&index_name=](http://localhost:5000/delete_index?password=&index_name=)
 
 ## Misc
 
