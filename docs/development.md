@@ -15,6 +15,11 @@
 - [Flask 1.1.x Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/)
     - [Application Setup](https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/) (config)
 
+## API
+
+- [HTTPX - A next-generation HTTP client for Python](https://www.python-httpx.org/)
+- [json - JSON encoder and decoder](https://docs.python.org/3/library/json.html)
+
 ## Start Elasticsearch
 
 - `sudo systemctl start elasticsearch.service`
@@ -22,6 +27,7 @@
 
 ## Start webservices
 
+- Preparation: Copy [config.py](../config.py) to instance/config.py
 - Start:  
   `export FLASK_APP=webservice_index`  
   `flask run`

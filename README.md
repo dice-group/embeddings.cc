@@ -7,4 +7,12 @@
 
 ## Documentation
 
+### Index API
+
+- An API to create Elasticsearch indexes and to add data.
+- Use the python file [embeddings_cc_index.py](api/embeddings_cc_index.py) to access the API
+- Usage examples are provided in [embeddings_cc_index_examples.py](api/embeddings_cc_index_examples.py).
+
+### Development
+
 - [development](docs/development.md)

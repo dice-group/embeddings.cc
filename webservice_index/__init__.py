@@ -30,7 +30,7 @@ def create_app(test_config=None):
     def ping():
         return 'Status: OK', 200
 
-    @app.route('/get_indexes', methods=['GET'])                               # TODO POST
+    @app.route('/get_indexes', methods=['POST'])
     @cross_origin()
     def get_indexes():
         if not security.check_password(request.args.get('password')):
@@ -38,16 +38,16 @@ def create_app(test_config=None):
 
         return es.get_es().indices.get_alias("*")
 
-    @app.route('/create_index', methods=['GET'])                               # TODO POST
+    @app.route('/create_index', methods=['POST'])
     @cross_origin()
     def create_index():
         if not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
 
-        if 'index_name' not in request.args or not request.args.get('index_name'):
-            return 'Missing parameter index_name', 422
+        if 'index' not in request.args or not request.args.get('index'):
+            return 'Missing parameter index', 422
         else:
-            index_name = request.args.get('index_name')
+            index = request.args.get('index')
 
         if 'dimensions' not in request.args or not request.args.get('dimensions'):
             return 'Missing parameter dimensions', 422
@@ -76,20 +76,20 @@ def create_app(test_config=None):
                 }
             }
         }
-        return es.get_es().indices.create(index_name, body=index_config)
+        return es.get_es().indices.create(index, body=index_config)
 
-    @app.route('/delete_index', methods=['GET'])                               # TODO POST
+    @app.route('/delete_index', methods=['POST'])
     @cross_origin()
     def delete_index():
         if not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
 
-        if 'index_name' not in request.args or not request.args.get('index_name'):
-            return 'Missing parameter index_name', 422
+        if 'index' not in request.args or not request.args.get('index'):
+            return 'Missing parameter index', 422
         else:
-            index_name = request.args.get('index_name')
+            index = request.args.get('index')
 
-        return es.get_es().indices.delete(index_name)
+        return es.get_es().indices.delete(index)
 
     # @app.route('/add_docs', methods=['GET'])                               # TODO POST
     # @cross_origin()
@@ -97,10 +97,10 @@ def create_app(test_config=None):
     #     if not security.check_password(request.args.get('password')):
     #         return 'Unauthorized', 401
     #
-    #     if 'index_name' not in request.args or not request.args.get('index_name'):
-    #         return 'Missing parameter index_name', 422
+    #     if 'index' not in request.args or not request.args.get('index'):
+    #         return 'Missing parameter index', 422
     #     else:
-    #         index_name = request.args.get('index_name')
+    #         index = request.args.get('index')
     #
     #     if 'docs' not in request.args or not request.args.get('docs'):
     #         return 'Missing parameter docs', 422
