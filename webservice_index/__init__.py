@@ -91,4 +91,32 @@ def create_app(test_config=None):
 
         return es.get_es().indices.delete(index_name)
 
+    # @app.route('/add_docs', methods=['GET'])                               # TODO POST
+    # @cross_origin()
+    # def add_docs():
+    #     if not security.check_password(request.args.get('password')):
+    #         return 'Unauthorized', 401
+    #
+    #     if 'index_name' not in request.args or not request.args.get('index_name'):
+    #         return 'Missing parameter index_name', 422
+    #     else:
+    #         index_name = request.args.get('index_name')
+    #
+    #     if 'docs' not in request.args or not request.args.get('docs'):
+    #         return 'Missing parameter docs', 422
+    #     else:
+    #         docs = request.json['docs']
+    #
+    #     for doc in docs:
+    #         print(doc)
+    #
+    #     return 'cool'
+
+
+
+
+
+
+
+
     return app
