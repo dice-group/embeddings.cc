@@ -100,6 +100,9 @@ def create_app(test_config=None):
         else:
             index = request.args.get('index')
 
+        if "security" in index: 
+            return 'Not allowed to delete security', 422
+
         try:
             return es.get_es().indices.delete(index)
         except ElasticsearchException as e:
@@ -123,6 +126,9 @@ def create_app(test_config=None):
             return 'Missing parameter docs', 422
         else:
             docs = request.json['docs']
+
+        if len(docs) > 50000:
+            return 'Too many records', 413
 
         documents = []
         for doc in docs:

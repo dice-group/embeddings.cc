@@ -32,7 +32,7 @@ if True:
         print(statusCode)
 
 # Returns webservice response containing existing Elasticsearch indexes.
-if False:
+if True:
     response = embeddings_cc_index.get_indexes(password)
     print(response.status_code, response.text)
 
@@ -49,7 +49,7 @@ if False:
 # Adds embeddings.
 # Data is transformed to JSON, so tuples and lists are handled equally.
 # Important: Split your data into multiple requests and wait for a response
-# before adding additional data. A request could take e.g. 50,000 items.
+# before adding additional data. A request can take max 50,000 items.
 if False:
     embeddings = [('http://example.com/0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
                   ('http://example.com/1', [1, 2, 3, 4, 5, 6, 7, 8, 9, 0])]
@@ -63,5 +63,5 @@ if False:
 
 # Searches for an entity in Elasticsearch and returns related embeddings.
 if False:
-    response = embeddings_cc_index.get_embeddings('index_test', 'http://example.com/1')
+    response = embeddings_cc_index.get_embeddings('index_test', 'http://example.com/0')
     print(response.status_code, response.text)

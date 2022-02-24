@@ -52,8 +52,10 @@ class EmbeddingsCcIndex():
         Adds embeddings.
         Data is transformed to JSON, so tuples and lists are handled equally.
         Important: Split your data into multiple requests and wait for a response
-        before adding additional data. A request could take e.g. 50,000 items.
+        before adding additional data. A request can take max 50,000 items.
         """
+        if len(docs) > 50000:
+            raise IndexError('Too many records')
         data = json.JSONEncoder().encode({'password': password, 'index': index, 'docs': docs})
         return httpx.post(self.webservice_url + '/add', data=data, headers=self.headers_json)
 

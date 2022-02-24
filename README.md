@@ -1,12 +1,8 @@
 # Universal Knowledge Graph Embeddings
 
-This repository contains code to run [embeddings.cc](https://embeddings.cc)
+This repository contains code to run embeddings.cc
 
 ## Documentation
-
-### Embeddings API (for users)
-
-- TODO
 
 ### Index API (for universal embeddings developers)
 
@@ -14,11 +10,10 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc)
 - The API is only available in UPB network (use VPN).
 - The API can easily accessed via a [python file](api/embeddings_cc_index.py).
 - Usage examples are provided in an [example python file](api/embeddings_cc_index_examples.py).
-
+- To check, if the webservice and Elasticsearch are running, use the [ping webservice](http://embeddings.cs.uni-paderborn.de:8008/ping).
 
 ### System administration
 
-- [Python development](docs/python.md)
-- [Virtual machine](docs/vm.md)
+- [Virtual machine](docs/vm.md) (Installation instructions)
+- [Python development](docs/python.md) (Used python modules)
 - Note: This is an extension of [kg-embedding-service](https://github.com/dice-group/kg-embedding-service). Additional code can be found there.
-- TODO: Close [Issue 14 Data creation webservice](https://github.com/dice-group/kg-embedding-service/issues/14) and [Issue 1 Data creation webservice](https://github.com/dice-group/embeddings.cc/issues/1)

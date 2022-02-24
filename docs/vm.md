@@ -34,15 +34,52 @@
     - `sudo /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`
     - Inserted same password
 
+## Packages installation
+
+- Anaconda
+    - Source: [https://docs.anaconda.com/anaconda/install/linux/](https://docs.anaconda.com/anaconda/install/linux/)
+    - `wget https://repo.anaconda.com/archive/Anaconda3-2021.11-Linux-x86_64.sh`
+    - `sudo bash Anaconda3-2021.11-Linux-x86_64.sh`
+    - Directory: `/opt/anaconda3`
+    - Output: `modified /root/.bashrc`
+
+## Webservice installation
+
+- Copy code
+    - `./scripts/vm-push.sh`
+    - `sudo mv /tmp/embeddings.cc/ /opt/embeddings.cc/`
+- Anaconda environment
+    - `conda create --name embeddings`
+    - **`. /opt/anaconda3/etc/profile.d/conda.sh`**
+    - `conda activate embeddings`
+- Python modules
+    - `cd /opt/embeddings.cc/`
+    -  `pip3 install -r requirements.txt`
+- Webservice configuration
+    - `python3 /opt/embeddings.cc/scripts/generate-salt-password.py XXX`
+    - `cp /opt/embeddings.cc/config.py /opt/embeddings.cc/instance/config.py`
+    - Inserted salt, hash and es-password
+- Start webserver
+    -  `export FLASK_APP=webservice_index`
+    -  `export FLASK_RUN_PORT=8008`
+    -  `flask run --host=0.0.0.0`
+    - [http://embeddings.cs.uni-paderborn.de:8008/ping](http://embeddings.cs.uni-paderborn.de:8008/ping) --> Status: OK :)
+
+## Webservice start
+
+- `screen -r webservice-index`
+- `. /opt/bashrc.sh`
+- `cd /opt/embeddings.cc/`
+- `. /opt/anaconda3/etc/profile.d/conda.sh`
+- `conda activate embeddings`
+-  `export FLASK_APP=webservice_index`
+-  `export FLASK_RUN_PORT=8008`
+-  `flask run --host=0.0.0.0`
 
 ## Misc
 
-- [Kerberos Single-Sign-On](https://hilfe.uni-paderborn.de/Single-Sign-On_einrichten_unter_Linux)
-    - `kinit <imt-username>`
+- Initialize bash (prompt and anaconda): **`. /opt/bashrc.sh`**
+- [Kerberos Single-Sign-On](https://hilfe.uni-paderborn.de/Single-Sign-On_einrichten_unter_Linux): `kinit <imt-username>`
 - Prompt (see [wiki.ubuntuusers.de](https://wiki.ubuntuusers.de/Bash/Prompt/)):  
   `PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '`
-    - Put it in script, execute it using: `. ./opt/prompt.sh`
-- Start flask (dev mode, in-build webserver)
-    - `export FLASK_APP=webservice_index`
-    - `export FLASK_RUN_PORT=8008`
-    - `flask run`
+
