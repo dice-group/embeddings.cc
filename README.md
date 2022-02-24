@@ -11,7 +11,8 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc)
 ### Index API (for universal embeddings developers)
 
 - Use the Index API to create Elasticsearch indexes and to add data.
-- The API can easily accessed via a [python file](api/embeddings_cc_index.py). Just download it.
+- The API is only available in UPB network (use VPN).
+- The API can easily accessed via a [python file](api/embeddings_cc_index.py).
 - Usage examples are provided in an [example python file](api/embeddings_cc_index_examples.py).
 
 

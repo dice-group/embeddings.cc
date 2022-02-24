@@ -4,6 +4,7 @@
 - IP: `131.234.28.19`
 - Created: 2022-02-22
 - OS: Debian GNU/Linux 11 (bullseye) (`cat /etc/*-release`)
+- Ports open: 443/tcp, 8443/tcp 
 - Hardware:
     - CPU: 4x Intel(R) Xeon(R) CPU E5-2695 v3 @ 2.30GHz (`cat /proc/cpuinfo`)
     - Memory: 32 GB (`free -h`)
@@ -28,6 +29,11 @@
 ## Misc
 
 - [Kerberos Single-Sign-On](https://hilfe.uni-paderborn.de/Single-Sign-On_einrichten_unter_Linux)
+    - `kinit <imt-username>`
 - Prompt (see [wiki.ubuntuusers.de](https://wiki.ubuntuusers.de/Bash/Prompt/)):  
   `PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '`
     - Put it in script, execute it using: `. ./opt/prompt.sh`
+- Start flask (dev mode, in-build webserver)
+    - `export FLASK_APP=webservice_index`
+    - `export FLASK_RUN_PORT=8008`
+    - `flask run`

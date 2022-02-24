@@ -1,37 +1,52 @@
 # Examples for embeddings.cc index API
 # https://github.com/dice-group/embeddings.cc
+#
+# For local tests use: python3 api/embeddings_cc_index_examples.py <PASSWORD> http://127.0.0.1:8008
 
 import sys
 from embeddings_cc_index import EmbeddingsCcIndex
 
-# Get password form CLI
+# Get password and webservice URL form CLI
+webservice_url = None
+if len(sys.argv) > 2:
+    webservice_url = sys.argv[2]
 if len(sys.argv) > 1:
     password = sys.argv[1]
+else:
+    print('Please provide a password')
+    sys.exit(1)
 
 # Create instance
-embeddings_cc_index = EmbeddingsCcIndex(webservice_url='http://127.0.0.1:5000/')
+embeddings_cc_index = EmbeddingsCcIndex(webservice_url=webservice_url)
 
-# Returns true, if status code 200 is returned
-if False:
-    response = embeddings_cc_index.ping(seconds=1)
-    print(type(response), response)
+# Ping webservice
+if True:
+    statusCode = embeddings_cc_index.ping(seconds=1)
+    if statusCode == 502:
+        print('502: Webservice unavailable')
+        sys.exit(1)
+    elif statusCode == 503:
+        print('503: Elasticsearch service unavailable')
+        sys.exit(1)
+    else:
+        print(statusCode)
 
-# Returns existing indexes
-if False:
+# Returns webservice response containing existing Elasticsearch indexes.
+if True:
     response = embeddings_cc_index.get_indexes(password)
     print(response.status_code, response.text)
 
-# Creates an index
+# Creates an Elasticsearch index and returns Elasticsearch API response.
 if False:
     response = embeddings_cc_index.create_index(password, 'index_test', 10, number_of_shards=5)
     print(response.status_code, response.text)
 
-# Deletes an index
+# Deletes an Elasticsearch index and returns Elasticsearch API response.
 if False:
     response = embeddings_cc_index.delete_index(password, 'index_test')
     print(response.status_code, response.text)
 
-# Adds embeddings
+# Adds embeddings.
 # Data is transformed to JSON, so tuples and lists are handled equally.
 # Important: Split your data into multiple requests and wait for a response
 # before adding additional data. A request could take e.g. 50,000 items.

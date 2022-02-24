@@ -1,6 +1,10 @@
 import os
+import traceback
 from flask import Flask, request
 from flask_cors import cross_origin
+from elasticsearch import ElasticsearchException
+from . import security
+from . import es
 
 
 def create_app(test_config=None):
@@ -20,23 +24,25 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import security
-
-    from . import es
     es.init_app(app)
 
     @app.route('/ping', methods=['GET'])
     @cross_origin()
     def ping():
-        return 'Status: OK', 200
+        if not es.get_es().ping():
+            return 'Elasticsearch service unavailable', 503
+        else:
+            return 'Status: OK', 200
 
     @app.route('/get_indexes', methods=['POST'])
     @cross_origin()
     def get_indexes():
         if not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
-
-        return es.get_es().indices.get_alias("*")
+        try:
+            return es.get_es().indices.get_alias("*")
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
 
     @app.route('/create_index', methods=['POST'])
     @cross_origin()
@@ -76,7 +82,11 @@ def create_app(test_config=None):
                 }
             }
         }
-        return es.get_es().indices.create(index, body=index_config)
+
+        try:
+            return es.get_es().indices.create(index, body=index_config)
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
 
     @app.route('/delete_index', methods=['POST'])
     @cross_origin()
@@ -89,7 +99,10 @@ def create_app(test_config=None):
         else:
             index = request.args.get('index')
 
-        return es.get_es().indices.delete(index)
+        try:
+            return es.get_es().indices.delete(index)
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
 
     @app.route('/add', methods=['POST'])
     @cross_origin()
@@ -122,6 +135,9 @@ def create_app(test_config=None):
                 'embeddings': doc[1]
             })
 
-        return es.get_es().bulk(index=index, body=documents)
+        try:
+            return es.get_es().bulk(index=index, body=documents)
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
 
     return app
