@@ -32,7 +32,7 @@ if True:
         print(statusCode)
 
 # Returns webservice response containing existing Elasticsearch indexes.
-if True:
+if False:
     response = embeddings_cc_index.get_indexes(password)
     print(response.status_code, response.text)
 
@@ -59,4 +59,9 @@ if False:
     embeddings = [['http://example.com/2', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
                   ['http://example.com/3', [3, 4, 5, 6, 7, 8, 9, 0, 1, 2]]]
     response = embeddings_cc_index.add(password, 'index_test', embeddings)
+    print(response.status_code, response.text)
+
+# Searches for an entity in Elasticsearch and returns related embeddings.
+if False:
+    response = embeddings_cc_index.get_embeddings('index_test', 'http://example.com/1')
     print(response.status_code, response.text)

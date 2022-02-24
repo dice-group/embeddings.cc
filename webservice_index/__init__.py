@@ -1,5 +1,6 @@
 import os
 import traceback
+import json
 from flask import Flask, request
 from flask_cors import cross_origin
 from elasticsearch import ElasticsearchException
@@ -139,5 +140,36 @@ def create_app(test_config=None):
             return es.get_es().bulk(index=index, body=documents)
         except ElasticsearchException as e:
             return traceback.format_exc(), 503
+
+    @app.route('/get_embeddings', methods=['GET'])
+    @cross_origin()
+    def get_embeddings():
+
+        if 'index' not in request.args or not request.args.get('index'):
+            return 'Missing parameter index', 422
+        else:
+            index = request.args.get('index')
+
+        if 'entity' not in request.args or not request.args.get('entity'):
+            return 'Missing parameter entity', 422
+        else:
+            entity = request.args.get('entity')
+
+        response = es.get_es().search(index=index, body={
+            'query': {
+                'match': {
+                    'entity': entity
+                }
+            }
+        })
+
+        results = {}
+        for hit in response['hits']['hits']:
+            entity = hit['_source']['entity']
+            embeddings = hit['_source']['embeddings']
+            if entity not in results:
+                results[entity] = []
+            results[entity].append(embeddings)
+        return json.JSONEncoder().encode(results)
 
     return app

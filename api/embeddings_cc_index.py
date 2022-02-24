@@ -56,3 +56,9 @@ class EmbeddingsCcIndex():
         """
         data = json.JSONEncoder().encode({'password': password, 'index': index, 'docs': docs})
         return httpx.post(self.webservice_url + '/add', data=data, headers=self.headers_json)
+
+    def get_embeddings(self, index, entity):
+        """
+        Searches for an entity in Elasticsearch and returns related embeddings.
+        """
+        return httpx.get(self.webservice_url + '/get_embeddings', params={'index': index, 'entity': entity})
