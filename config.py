@@ -1,6 +1,10 @@
 # This file contains public configuration (do not insert passwords etc.)
 # Copy this file into the 'instance' directory to enable usage.
-ES_HOST = 'http://localhost:9200/'
+
+# Elasticsearch
+ES_HOST     = 'http://localhost:9200/'
+ES_USER     = 'elastic'
+ES_PASSWORD = ''
 
 # Password salt. generate with: print(os.urandom(32))
 SALT = b'@\x16\xf8]OY\xdfGn\x81\xb2E/?\xeb\xd5\\ll\xb5\x9eUF\xb5\t\xfc\xfe"\xf4#T\xc3'
