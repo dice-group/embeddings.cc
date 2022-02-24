@@ -24,6 +24,15 @@
 - Start
     - `sudo systemctl start elasticsearch.service`
     - `curl -X GET "127.0.0.1:9200/?pretty"` (Returns output after execution of previous command)
+- Enable security
+    - `sudo nano /etc/elasticsearch/elasticsearch.yml`
+    - `# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/security-minimal-setup.html`
+    - `xpack.security.enabled: true`
+    - `discovery.type: single-node`
+    - `sudo systemctl restart elasticsearch.service`
+- Set passwords
+    - `sudo /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`
+    - Inserted same password
 
 
 ## Misc
