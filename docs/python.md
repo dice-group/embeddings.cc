@@ -1,11 +1,15 @@
 # Python development
 
-## Elasticsearch (7.16.0)
+## Elasticsearch
+
+- [Text similarity search with vector fields](https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch)
+
+## Elasticsearch Python (7.16.0)
 
 - [Elasticsearch Python Client 7.16](https://www.elastic.co/guide/en/elasticsearch/client/python-api/7.16/index.html)
 - [Python Elasticsearch Client v7.16.0](https://elasticsearch-py.readthedocs.io/en/v7.16.0/)
 
-## Elasticsearch DSL (7.4.0)
+## Elasticsearch Python DSL (7.4.0)
 
 - [Elasticsearch DSL v7.4.0](https://elasticsearch-dsl.readthedocs.io/en/v7.4.0/)
 

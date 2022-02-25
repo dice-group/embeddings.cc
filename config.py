@@ -5,6 +5,7 @@
 ES_HOST     = 'http://localhost:9200/'
 ES_USER     = 'elastic'
 ES_PASSWORD = ''
+ES_INDEX    = ''
 
 # Webservice password.
 # Generate with scripts/generate-salt-password.py

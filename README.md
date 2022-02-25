@@ -4,6 +4,19 @@ This repository contains code to run embeddings.cc
 
 ## Documentation
 
+### Public API (for users)
+
+- /api/v1/ping
+    - Returns 200 if the system is running
+- /api/v1/get_entities
+    - Returns up to 10 entities
+- /api/v1/get_embedding
+    - Parameter: entity
+    - Returns embedding
+- /api/v1/get_similar
+    - Parameter: embedding
+    - Returns similar embeddings
+
 ### Index API (for universal embeddings developers)
 
 - Use the Index API to create Elasticsearch indexes and to add data.
