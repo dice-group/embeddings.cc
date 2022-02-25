@@ -35,10 +35,26 @@ def create_app(test_config=None):
         else:
             return 'Status: OK', 200
 
+    @app.route('/count', methods=['GET'])
+    @cross_origin()
+    def count():
+        if not request.args.get('password') or not security.check_password(request.args.get('password')):
+            return 'Unauthorized', 401
+
+        if 'index' not in request.args or not request.args.get('index'):
+            return 'Missing parameter index', 422
+        else:
+            index = request.args.get('index')
+
+        try:
+            return es.get_es().cat.count(index)
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
+
     @app.route('/get_indexes', methods=['POST'])
     @cross_origin()
     def get_indexes():
-        if not security.check_password(request.args.get('password')):
+        if not request.args.get('password') or not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
         try:
             return es.get_es().indices.get_alias("*")
@@ -48,7 +64,7 @@ def create_app(test_config=None):
     @app.route('/create_index', methods=['POST'])
     @cross_origin()
     def create_index():
-        if not security.check_password(request.args.get('password')):
+        if not request.args.get('password') or not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
 
         if 'index' not in request.args or not request.args.get('index'):
@@ -92,7 +108,7 @@ def create_app(test_config=None):
     @app.route('/delete_index', methods=['POST'])
     @cross_origin()
     def delete_index():
-        if not security.check_password(request.args.get('password')):
+        if not request.args.get('password') or not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
 
         if 'index' not in request.args or not request.args.get('index'):
@@ -111,7 +127,7 @@ def create_app(test_config=None):
     @app.route('/add', methods=['POST'])
     @cross_origin()
     def add():
-        if not security.check_password(request.json['password']):
+        if not request.args.get('password') or not security.check_password(request.json['password']):
             return 'Unauthorized', 401
 
         if not request.json:
