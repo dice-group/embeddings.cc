@@ -46,7 +46,9 @@
 ## Webservice installation
 
 - Copy code
+    - `kinit wilke`
     - `./scripts/vm-push.sh`
+    - `ssh wilke@embeddings.cs.upb.de`
     - `sudo mv /tmp/embeddings.cc/ /opt/embeddings.cc/`
 - Anaconda environment
     - `conda create --name embeddings`
@@ -58,7 +60,7 @@
 - Webservice configuration
     - `python3 /opt/embeddings.cc/scripts/generate-salt-password.py XXX`
     - `cp /opt/embeddings.cc/config.py /opt/embeddings.cc/instance/config.py`
-    - Inserted salt, hash and es-password
+    - Inserted salt, hash and es-config
 - Start webserver
     -  `export FLASK_APP=webservice_index`
     -  `export FLASK_RUN_PORT=8008`
@@ -74,6 +76,17 @@
 - `conda activate embeddings`
 -  `export FLASK_APP=webservice_index`
 -  `export FLASK_RUN_PORT=8008`
+-  `flask run --host=0.0.0.0`
+
+### Public webservice:
+
+- `screen -r webservice`
+- `. /opt/bashrc.sh`
+- `cd /opt/embeddings.cc/`
+- `. /opt/anaconda3/etc/profile.d/conda.sh`
+- `conda activate embeddings`
+-  `export FLASK_APP=webservice`
+-  `export FLASK_RUN_PORT=8443`
 -  `flask run --host=0.0.0.0`
 
 ## Misc
