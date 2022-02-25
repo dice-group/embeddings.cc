@@ -1,10 +1,9 @@
 import os
 import traceback
 import ast
-from flask import Flask, request, current_app, jsonify
+from flask import Flask, request, current_app, jsonify, render_template
 from flask_cors import cross_origin
 from elasticsearch import ElasticsearchException
-from . import security
 from . import es
 
 
@@ -57,5 +56,42 @@ def create_app(test_config=None):
         else:
             embedding = ast.literal_eval(request.args.get('embedding'))
         return jsonify(es.get_similar(current_app.config['ES_INDEX'], embedding))
+
+    @app.route('/')
+    def index():
+        entities = ''
+        entity = ''
+        if 'get_entities' in request.args and request.args.get('get_entities'):
+            entity = request.args.get('entity')
+            entities_results = es.get_entities(current_app.config['ES_INDEX'], max=10)
+            for entities_result in entities_results:
+                entities += entities_result + '\n'
+            if len(entities_results) > 0:
+                entity = entities_results[0]
+
+        if 'entity' in request.args and request.args.get('entity'):
+            entity = request.args.get('entity')
+
+        embeddings = ''
+        embedding = ''
+        if 'entity' in request.args and request.args.get('entity'):
+            embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entity)
+            for embeddings_result in embeddings_results:
+                embeddings += str(embeddings_result) + '\n'
+            if len(embeddings_results) >= 1:
+                embedding = embeddings_results[0]
+
+        similar_embeddings = ''
+        if 'embedding' in request.args and request.args.get('embedding'):
+            embedding = ast.literal_eval(request.args.get('embedding'))
+            similar_embeddings = ''
+            for e in es.get_similar(current_app.config['ES_INDEX'], embedding):
+                print(e)
+                similar_embeddings += e[0] + '  '
+                similar_embeddings += str(e[1]) + '\n'
+
+        return render_template('index.htm', entities=entities,
+                               entity=entity, embeddings=embeddings,
+                               embedding=embedding, similar_embeddings=similar_embeddings)
 
     return app
