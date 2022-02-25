@@ -38,9 +38,6 @@ def create_app(test_config=None):
     @app.route('/count', methods=['GET'])
     @cross_origin()
     def count():
-        if not request.args.get('password') or not security.check_password(request.args.get('password')):
-            return 'Unauthorized', 401
-
         if 'index' not in request.args or not request.args.get('index'):
             return 'Missing parameter index', 422
         else:
