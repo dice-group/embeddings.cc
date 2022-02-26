@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<title>Universal Knowledge Graph Embeddings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+<!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
+<!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
+<style>
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #000;
+    cursor: default;
+}
+#container {
+    max-width: 800px;
+    margin: auto;
+    padding-bottom: 50px;
+}
+h1 {
+    font-size: 2.8em;
+    margin-bottom: 0px;
+}
+h2 {
+    font-size: 1.8em;
+    padding-top: 10px;
+    margin-bottom: 0px;
+}
+textarea {
+    width: 97%;
+    height: 100px;
+    padding: 8px;
+    white-space: pre;
+    font-family: monospace;
+    border: 1px solid #bbb;
+    background: #fafafa;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #000;
+}
+textarea:empty { display: none }
+input {
+    padding: 8px;
+    border: 1px solid #000;
+}
+input[type=text] {
+    width: 50%;
+    font-family: monospace;
+    background: #e5f2f8;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 11px;
+}
+input:hover[type=text] {
+    background: #f1f6db;
+}
+input[type=submit] {
+    width: 200px;
+    background: #a9d4e8;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+}
+input:hover[type=submit] {
+    background: #d1e28a;
+}
+</style>
+</head>
+<body>
+<div id="container">
+
+<h1>Universal Knowledge Graph Embeddings</h1>
+
+<h2 id="entities">Get entities</h2>
+
+<p>Gets example identifiers of available entities.</p>
+
+<form action="/#entities">
+<input type="submit" value="Get entities" name="get_entities" autofocus><br /><br />
+<textarea readonly>{{ entities }}</textarea>
+</form>
+
+<h2 id="embeddings">Get embeddings</h2>
+
+<p>Takes an entity identifier and gets related embeddings.</p>
+
+<form action="/#embeddings">
+<input type="submit" value="Get embeddings">
+<input type="text" name="entity" value="{{ entity }}"><br /><br />
+<textarea readonly>{{ embeddings }}</textarea>
+</form>
+
+<h2 id="similar">Get similar embeddings</h2>
+
+<p>Takes embeddings and gets similar embeddings based on cosine similarity.</p>
+
+<form action="/#similar">
+<input type="submit" value="Get similar embeddings">
+<input type="text" name="embedding" value="{{ embedding }}"><br /><br />
+<textarea readonly style="height:200px">{{ similar_embeddings }}</textarea>
+</form>
+
+</div>
+</body>
+</html>

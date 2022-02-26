@@ -64,7 +64,9 @@ def get_similar(index, embedding):
     })
     hits = response['hits']['hits']
 
+    print(hits)
+
     results = []
     for hit in hits:
-        results.append((hit['_source']['entity'], hit['_source']['embeddings']))
+        results.append((hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
     return results

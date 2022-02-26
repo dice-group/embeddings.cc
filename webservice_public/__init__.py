@@ -63,7 +63,7 @@ def create_app(test_config=None):
         entity = ''
         if 'get_entities' in request.args and request.args.get('get_entities'):
             entity = request.args.get('entity')
-            entities_results = es.get_entities(current_app.config['ES_INDEX'], max=10)
+            entities_results = es.get_entities(current_app.config['ES_INDEX'], max=5)
             for entities_result in entities_results:
                 entities += entities_result + '\n'
             if len(entities_results) > 0:
@@ -86,9 +86,10 @@ def create_app(test_config=None):
             embedding = ast.literal_eval(request.args.get('embedding'))
             similar_embeddings = ''
             for e in es.get_similar(current_app.config['ES_INDEX'], embedding):
-                print(e)
-                similar_embeddings += e[0] + '  '
-                similar_embeddings += str(e[1]) + '\n'
+
+                similar_embeddings += str("{:.4f}".format(round(e[0], 4))) + '  '
+                similar_embeddings += e[1] + '  '
+                similar_embeddings += str(e[2]) + '\n'
 
         return render_template('index.htm', entities=entities,
                                entity=entity, embeddings=embeddings,
