@@ -6,4 +6,4 @@ if ! test -f "README.md"; then
     exit
 fi
 
-rsync -aP --exclude={'.git','instance','__pycache__','.*'} ./ wilke@embeddings.cs.uni-paderborn.de:/tmp/embeddings.cc
+rsync -aP --exclude={'instance','__pycache__','.*'} ./ wilke@embeddings.cs.uni-paderborn.de:/tmp/embeddings.cc

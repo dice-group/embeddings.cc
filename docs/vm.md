@@ -49,7 +49,11 @@
     - `kinit wilke`
     - `./scripts/vm-push.sh`
     - `ssh wilke@embeddings.cs.upb.de`
+    - `. /opt/bashrc.sh`
     - `sudo mv /tmp/embeddings.cc/ /opt/embeddings.cc/`
+    - `mkdir /opt/embeddings.cc/instance`
+    - `cp /opt/embeddings.cc/config.py /opt/`
+    - `ln -s /opt/config.py /opt/embeddings.cc/instance/config.py`
 - Anaconda environment
     - `conda create --name embeddings`
     - **`. /opt/anaconda3/etc/profile.d/conda.sh`**
@@ -85,7 +89,7 @@
 - `cd /opt/embeddings.cc/`
 - `. /opt/anaconda3/etc/profile.d/conda.sh`
 - `conda activate embeddings`
--  `export FLASK_APP=webservice`
+-  `export FLASK_APP=webservice_public`
 -  `export FLASK_RUN_PORT=8443`
 -  `flask run --host=0.0.0.0`
 

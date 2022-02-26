@@ -87,11 +87,11 @@ if False:
 # Line format: http://dbpedia.org/resource/E734345,0.4001125,[...],-0.015108802
 #
 # Note: Adding 1,000 embeddings takes around 15 seconds
-# time python3 api/embeddings_cc_index_examples.py <PASSWORD>                -> 7m47,509s (Reading/parsing: 0m33,909s)
+# time python3 api/embeddings_cc_index_examples.py <PASSWORD>                -> 7m47,509s (Reading/parsing: ~33s)
 # time python3 api/embeddings_cc_index_examples.py 123 http://127.0.0.1:8008 -> 2m10,133s
 if False:
     csv_file = '/tmp/Shallom_entity_embeddings.csv'
-    es_index = 'dbpedia_en_fr_15k_v2_shallom'
+    es_index = 'dbpedia_en_fr_15k_v2_shallom___'
     max_docs = 100 * 1000
 
     # Delete index
