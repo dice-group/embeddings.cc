@@ -2,7 +2,9 @@
 
 ## Elasticsearch
 
-- [Text similarity search with vector fields](https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch)
+- [ES blog: Text similarity search with vector fields](https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch)
+- [ES blog: How many shards should I have in my Elasticsearch cluster?](https://www.elastic.co/blog/how-many-shards-should-i-have-in-my-elasticsearch-cluster)
+- [Elasticsearch Guide [7.16] » How to » Size your shards](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/size-your-shards.html)
 
 ## Elasticsearch Python (7.16.0)
 

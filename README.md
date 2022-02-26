@@ -25,6 +25,16 @@ This repository contains code to run embeddings.cc and [embeddings.cs.upb.de](ht
 - Usage examples are provided in an [example python file](api/embeddings_cc_index_examples.py).
 - To check, if the webservice and Elasticsearch are running, use the [ping webservice](http://embeddings.cs.uni-paderborn.de:8008/ping).
 
+| Webservice      | Method | Parameters                          |
+|-----------------|--------|-------------------------------------|
+| /ping           | GET    | -                                   |
+| /count          | GET    | index                               |
+| /get_embeddings | GET    | index, entity                       |
+| /get_indexes    | POST   | password                            |
+| /create_index   | POST   | password, index, dimensions, shards |
+| /delete_index   | POST   | password, index                     |
+| /add            | POST   | password, index, docs               |
+
 ### System administration
 
 - [Virtual machine](docs/vm.md) (Installation instructions)

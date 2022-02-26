@@ -27,6 +27,8 @@ def create_app(test_config=None):
 
     es.init_app(app)
 
+    # ----------| GET requests without password |-----------------------------------------------------------------------
+
     @app.route('/ping', methods=['GET'])
     @cross_origin()
     def ping():
@@ -47,6 +49,39 @@ def create_app(test_config=None):
             return es.get_es().cat.count(index)
         except ElasticsearchException as e:
             return traceback.format_exc(), 503
+
+    @app.route('/get_embeddings', methods=['GET'])
+    @cross_origin()
+    def get_embeddings():
+
+        if 'index' not in request.args or not request.args.get('index'):
+            return 'Missing parameter index', 422
+        else:
+            index = request.args.get('index')
+
+        if 'entity' not in request.args or not request.args.get('entity'):
+            return 'Missing parameter entity', 422
+        else:
+            entity = request.args.get('entity')
+
+        response = es.get_es().search(index=index, body={
+            'query': {
+                'match': {
+                    'entity': entity
+                }
+            }
+        })
+
+        results = {}
+        for hit in response['hits']['hits']:
+            entity = hit['_source']['entity']
+            embeddings = hit['_source']['embeddings']
+            if entity not in results:
+                results[entity] = []
+            results[entity].append(embeddings)
+        return json.JSONEncoder().encode(results)
+
+    # ----------| POST requests with password |-------------------------------------------------------------------------
 
     @app.route('/get_indexes', methods=['POST'])
     @cross_origin()
@@ -74,7 +109,7 @@ def create_app(test_config=None):
         else:
             dimensions = request.args.get('dimensions')
 
-        number_of_shards = request.args.get('number_of_shards', 5)
+        number_of_shards = request.args.get('shards', 5)
 
         index_config = {
             'settings': {
@@ -113,7 +148,7 @@ def create_app(test_config=None):
         else:
             index = request.args.get('index')
 
-        if "security" in index: 
+        if "security" in index:
             return 'Not allowed to delete security', 422
 
         try:
@@ -124,11 +159,13 @@ def create_app(test_config=None):
     @app.route('/add', methods=['POST'])
     @cross_origin()
     def add():
-        if not request.args.get('password') or not security.check_password(request.json['password']):
-            return 'Unauthorized', 401
-
         if not request.json:
             return 'Missing json data', 422
+
+        if 'password' not in request.json:
+            return 'Missing parameter password', 422
+        elif not security.check_password(request.json['password']):
+            return 'Unauthorized', 401
 
         if 'index' not in request.json:
             return 'Missing parameter index', 422
@@ -159,36 +196,5 @@ def create_app(test_config=None):
             return es.get_es().bulk(index=index, body=documents)
         except ElasticsearchException as e:
             return traceback.format_exc(), 503
-
-    @app.route('/get_embeddings', methods=['GET'])
-    @cross_origin()
-    def get_embeddings():
-
-        if 'index' not in request.args or not request.args.get('index'):
-            return 'Missing parameter index', 422
-        else:
-            index = request.args.get('index')
-
-        if 'entity' not in request.args or not request.args.get('entity'):
-            return 'Missing parameter entity', 422
-        else:
-            entity = request.args.get('entity')
-
-        response = es.get_es().search(index=index, body={
-            'query': {
-                'match': {
-                    'entity': entity
-                }
-            }
-        })
-
-        results = {}
-        for hit in response['hits']['hits']:
-            entity = hit['_source']['entity']
-            embeddings = hit['_source']['embeddings']
-            if entity not in results:
-                results[entity] = []
-            results[entity].append(embeddings)
-        return json.JSONEncoder().encode(results)
 
     return app
