@@ -61,6 +61,13 @@
 - Python modules
     - `cd /opt/embeddings.cc/`
     -  `pip3 install -r requirements.txt`
+    -  `conda install --file requirements.txt`
+        -   PackagesNotFoundError: The following packages are not available from current channels:
+             - elasticsearch==7.16.0
+             - flask==1.1.4
+    -  `conda install -c conda-forge --file requirements.txt`
+        -  ImportError: cannot import name 'soft_unicode' from 'markupsafe'
+    -  `pip install markupsafe==2.0.1`
 - Webservice configuration
     - `python3 /opt/embeddings.cc/scripts/generate-salt-password.py XXX`
     - `cp /opt/embeddings.cc/config.py /opt/embeddings.cc/instance/config.py`
@@ -73,7 +80,7 @@
 
 ## Webservice start
 
-- `screen -r webservice-index`
+- `screen -S webservice-index`
 - `. /opt/bashrc.sh`
 - `cd /opt/embeddings.cc/`
 - `. /opt/anaconda3/etc/profile.d/conda.sh`
@@ -82,23 +89,16 @@
 -  `export FLASK_RUN_PORT=8008`
 -  `flask run --host=0.0.0.0`
 
-### Public webservice:
+### Public webservice start:
 
-- `screen -r webservice`
+- `screen -S webservice-public`
 - `. /opt/bashrc.sh`
 - `cd /opt/embeddings.cc/`
-- `. /opt/anaconda3/etc/profile.d/conda.sh`
-- `conda activate embeddings`
--  `export FLASK_APP=webservice_public`
--  `export FLASK_RUN_PORT=8443`
--  `flask run --host=0.0.0.0`
-
-### uWSGI
-
 - `uwsgi --plugin python3 -H /opt/anaconda3 --mount /=webservice_public/wsgi.py --socket /tmp/embeddingscc.sock --chmod-socket=666 --thunder-lock --enable-threads`
 
 ### nginx
 
+- `sudo cp -r /etc/ssl/private/ /opt/cert/`
 - https://wiki.ubuntuusers.de/nginx/
 - `sudo apt-get install nginx`
 - `sudo unlink /etc/nginx/sites-enabled/default`
@@ -106,17 +106,30 @@
 
 ```
 server {
-
   listen 80 default_server;
   listen [::]:80 default_server;
-
   location / { try_files $uri @embeddings; }
   location @embeddings {
     include uwsgi_params;
     uwsgi_pass unix:/tmp/embeddingscc.sock;
   }
-
 }
+
+server {
+  listen 8443 ssl default_server;
+  listen [::]:8443 ssl default_server;
+  ssl_certificate /opt/cert/embeddings.cs.uni-paderborn.de.pem;
+  ssl_certificate_key /opt/cert/embeddings.cs.uni-paderborn.de.key;
+  server_name embeddings.cs.uni-paderborn.de;
+  location / { try_files $uri @embeddings; }
+  location @embeddings {
+    include uwsgi_params;
+    uwsgi_pass unix:/tmp/embeddingscc.sock;
+  }
+  # Redirect, if HTTP protocol used
+  error_page 497 https://$host:$server_port$request_uri;
+}
+
 ```
 
 - `sudo ln -s /etc/nginx/sites-available/embeddings /etc/nginx/sites-enabled/`
@@ -128,4 +141,3 @@ server {
 - [Kerberos Single-Sign-On](https://hilfe.uni-paderborn.de/Single-Sign-On_einrichten_unter_Linux): `kinit <imt-username>`
 - Prompt (see [wiki.ubuntuusers.de](https://wiki.ubuntuusers.de/Bash/Prompt/)):  
   `PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '`
-
