@@ -93,6 +93,35 @@
 -  `export FLASK_RUN_PORT=8443`
 -  `flask run --host=0.0.0.0`
 
+### uWSGI
+
+- `uwsgi --plugin python3 -H /opt/anaconda3 --mount /=webservice_public/wsgi.py --socket /tmp/embeddingscc.sock --chmod-socket=666 --thunder-lock --enable-threads`
+
+### nginx
+
+- https://wiki.ubuntuusers.de/nginx/
+- `sudo apt-get install nginx`
+- `sudo unlink /etc/nginx/sites-enabled/default`
+- `sudo nano /etc/nginx/sites-available/embeddings`
+
+```
+server {
+
+  listen 80 default_server;
+  listen [::]:80 default_server;
+
+  location / { try_files $uri @embeddings; }
+  location @embeddings {
+    include uwsgi_params;
+    uwsgi_pass unix:/tmp/embeddingscc.sock;
+  }
+
+}
+```
+
+- `sudo ln -s /etc/nginx/sites-available/embeddings /etc/nginx/sites-enabled/`
+- `sudo nginx -s reload`
+
 ## Misc
 
 - Initialize bash (prompt and anaconda): **`. /opt/bashrc.sh`**

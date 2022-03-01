@@ -17,9 +17,12 @@
 
 ## Flask (1.1.4)
 
+- [Flask 1.1.x](https://flask.palletsprojects.com/en/1.1.x/)
 - [Flask 1.1.x API](https://flask.palletsprojects.com/en/1.1.x/api/)
+- [Flask 1.1.x Deployment Options](https://flask.palletsprojects.com/en/1.1.x/deploying/)
+- [Flask 1.1.x uWSGI](https://flask.palletsprojects.com/en/1.1.x/deploying/uwsgi/)
 - [Flask 1.1.x Tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/)
-    - [Application Setup](https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/) (config)
+- [Flask 1.1.x Tutorial Application Setup](https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/) (config)
 
 ## API
 
