@@ -1,6 +1,6 @@
 # Universal Knowledge Graph Embeddings
 
-This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/)
+This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/).
 
 ## Documentation
 
@@ -33,8 +33,9 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ### System administration
 
-![components](docs/components.svg "components")
-
 - [Virtual machine](docs/vm.md) (Installation and deployment)
-- [Python development](docs/python.md) (Used python modules)
+- [VM nginx](docs/vm-nginx-certbot.md) (webserver configuration)
+- [Development](docs/development.md) (Used python modules)
 - Note: This is an extension of [kg-embedding-service](https://github.com/dice-group/kg-embedding-service)
+
+![components](docs/components.svg "components")

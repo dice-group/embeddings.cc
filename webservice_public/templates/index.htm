@@ -9,8 +9,10 @@
 <!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
 <!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
 <style>
-body {
+* {
     font-family: 'Roboto Condensed', sans-serif;
+}
+body {
     color: #000;
     cursor: default;
 }
@@ -32,7 +34,6 @@ textarea {
     width: 97%;
     height: 100px;
     padding: 8px;
-    white-space: pre;
     font-family: monospace;
     border: 1px solid #bbb;
     background: #fafafa;
@@ -77,7 +78,7 @@ input:hover[type=submit] {
 
 <p>Gets identifiers of example entities.</p>
 
-<form action="/#entities">
+<form action="/" method="post">
 <input type="submit" value="Get entities" name="get_entities"><br /><br />
 <textarea readonly>{{ entities }}</textarea>
 </form>
@@ -86,7 +87,7 @@ input:hover[type=submit] {
 
 <p>Takes an entity identifier and gets related embeddings.</p>
 
-<form action="/#embeddings">
+<form action="/#embeddings" method="post">
 <input type="submit" value="Get embeddings">
 <input type="text" name="entity" value="{{ entity }}"><br /><br />
 <textarea readonly>{{ embeddings }}</textarea>
@@ -96,10 +97,10 @@ input:hover[type=submit] {
 
 <p>Takes embeddings and gets similar embeddings based on cosine similarity.</p>
 
-<form action="/#similar">
+<form action="/#similar" method="post">
 <input type="submit" value="Get similar embeddings">
 <input type="text" name="embedding" value="{{ embedding }}"><br /><br />
-<textarea readonly style="height:200px">{{ similar_embeddings }}</textarea>
+<textarea readonly style="height:200px; white-space:pre">{{ similar_embeddings }}</textarea>
 </form>
 
 </div>

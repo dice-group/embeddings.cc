@@ -29,7 +29,11 @@ def init_app(app):
 
 
 def get_entities(index, max=10):
-    response = get_es().search(index=index, query={"match_all": {}})
+    response = get_es().search(index=index, query={
+        "function_score": {
+            "query": {"match_all": {}},
+            "random_score": {}
+        }})
     entities = []
     for i, hit in enumerate(response['hits']['hits']):
         entities.append(hit['_source']['entity'])

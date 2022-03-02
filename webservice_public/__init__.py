@@ -57,42 +57,44 @@ def create_app(test_config=None):
             embedding = ast.literal_eval(request.args.get('embedding'))
         return jsonify(es.get_similar(current_app.config['ES_INDEX'], embedding))
 
-    @app.route('/')
+    @app.route('/', methods=['GET', 'POST'])
     def index():
         entities = ''
         entity = ''
-        if 'get_entities' in request.args and request.args.get('get_entities'):
-            entity = request.args.get('entity')
-            entities_results = es.get_entities(current_app.config['ES_INDEX'], max=5)
-            for entities_result in entities_results:
-                entities += entities_result + '\n'
-            if len(entities_results) > 0:
-                entity = entities_results[0]
-
-        if 'entity' in request.args and request.args.get('entity'):
-            entity = request.args.get('entity')
-
         embeddings = ''
         embedding = ''
-        if 'entity' in request.args and request.args.get('entity'):
-            embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entity)
-            for embeddings_result in embeddings_results:
-                embeddings += str(embeddings_result) + '\n'
-            if len(embeddings_results) >= 1:
-                embedding = embeddings_results[0]
-
         similar_embeddings = ''
-        if 'embedding' in request.args and request.args.get('embedding'):
-            embedding = ast.literal_eval(request.args.get('embedding'))
-            similar_embeddings = ''
-            for e in es.get_similar(current_app.config['ES_INDEX'], embedding):
+        if request.method == 'POST':
 
-                similar_embeddings += str("{:.4f}".format(round(e[0], 4))) + '  '
-                similar_embeddings += e[1] + '  '
-                similar_embeddings += str(e[2]) + '\n'
+            # First form: Set entities and entity
+            if 'get_entities' in request.values:
+                entities_results = es.get_entities(current_app.config['ES_INDEX'], max=5)
+                for entities_result in entities_results:
+                    entities += entities_result + '\n'
+                if len(entities_results) > 0:
+                    entity = entities_results[0]
 
-        return render_template('index.htm', entities=entities,
-                               entity=entity, embeddings=embeddings,
-                               embedding=embedding, similar_embeddings=similar_embeddings)
+            # Second form: Set embeddings and embedding
+            if 'entity' in request.values:
+                entity = request.values['entity']
+                embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entity)
+                for embeddings_result in embeddings_results:
+                    embeddings += str(embeddings_result) + '\n'
+                if len(embeddings_results) >= 1:
+                    embedding = embeddings_results[0]
+
+            # Third form: Set similar embeddings
+            if 'embedding' in request.values:
+                embedding = ast.literal_eval(request.values['embedding'])
+                similar_embeddings = ''
+                for e in es.get_similar(current_app.config['ES_INDEX'], embedding):
+                    similar_embeddings += str("{:.4f}".format(round(e[0], 4))) + '  '
+                    similar_embeddings += e[1] + '  '
+                    similar_embeddings += str(e[2]) + '\n'
+
+        return render_template('index.htm',
+                               entities=entities, entity=entity,
+                               embeddings=embeddings, embedding=embedding,
+                               similar_embeddings=similar_embeddings)
 
     return app
