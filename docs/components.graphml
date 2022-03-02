@@ -13,7 +13,7 @@
   <key attr.name="description" attr.type="string" for="edge" id="d9"/>
   <key for="edge" id="d10" yfiles.type="edgegraphics"/>
   <graph edgedefault="directed" id="G">
-    <data key="d0"/>
+    <data key="d0" xml:space="preserve"/>
     <node id="n0">
       <data key="d6">
         <y:ShapeNode>
@@ -72,37 +72,26 @@
     <node id="n5">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="307.6328125" x="406.2773984375" y="236.8115234375"/>
+          <y:Geometry height="38.376953125" width="353.2328124999999" x="383.4773984375" y="236.8115234375"/>
           <y:Fill color="#A9C9E8" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="278.521484375" x="14.5556640625" xml:space="preserve" y="4.0">http://embeddings.cs.upb.de:8008<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-          <y:Shape type="rectangle"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="278.521484375" x="37.355664062499955" xml:space="preserve" y="4.0">http://embeddings.cs.upb.de:8008<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="parallelogram"/>
         </y:ShapeNode>
       </data>
     </node>
     <node id="n6">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="307.6328125" x="406.2773984375" y="299.8115234375"/>
+          <y:Geometry height="38.376953125" width="353.2328124999999" x="383.4773984375" y="299.8115234375"/>
           <y:Fill color="#C8E28A" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="258.775390625" x="24.4287109375" xml:space="preserve" y="4.0">http://embeddings.cs.upb.de:80<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-          <y:Shape type="rectangle"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="258.775390625" x="47.228710937499955" xml:space="preserve" y="4.0">http://embeddings.cs.upb.de:80<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="parallelogram"/>
         </y:ShapeNode>
       </data>
     </node>
     <node id="n7">
-      <data key="d6">
-        <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="238.677734375" x="31.127007812499983" y="299.8115234375"/>
-          <y:Fill color="#E28A8A" transparent="false"/>
-          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="199.693359375" x="19.4921875" xml:space="preserve" y="4.0">http://embeddings.cc:80<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-          <y:Shape type="rectangle"/>
-        </y:ShapeNode>
-      </data>
-    </node>
-    <node id="n8">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="38.376953125" width="307.6328125" x="406.2773984375" y="362.8115234375"/>
@@ -113,7 +102,7 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n9">
+    <node id="n8">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="38.376953125" width="307.6328125" x="406.2773984375" y="425.8115234375"/>
@@ -124,10 +113,10 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n10">
+    <node id="n9">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="238.677734375" x="31.127007812499983" y="425.8115234375"/>
+          <y:Geometry height="38.376953125" width="238.677734375" x="137.59966406249998" y="425.8115234375"/>
           <y:Fill color="#C8E28A" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="218.677734375" x="10.0" xml:space="preserve" y="4.0">https://embeddings.cc:443<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -135,7 +124,7 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n11">
+    <node id="n10">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="38.376953125" width="146.24609375" x="743.9102109375" y="173.8115234375"/>
@@ -146,10 +135,10 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n12">
+    <node id="n11">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="264.4296875" x="18.251031249999983" y="368.1884765625"/>
+          <y:Geometry height="38.376953125" width="264.4296875" x="137.59966406249998" y="362.8115234375"/>
           <y:Fill color="#FFFFFF" transparent="false"/>
           <y:BorderStyle hasColor="false" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="244.4296875" x="10.0" xml:space="preserve" y="4.0">website and public webservice<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -157,10 +146,10 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n13">
+    <node id="n12">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="213.404296875" x="131.26372656249998" y="236.8115234375"/>
+          <y:Geometry height="38.376953125" width="213.404296875" x="137.59966406249998" y="299.8115234375"/>
           <y:Fill color="#FFFFFF" transparent="false"/>
           <y:BorderStyle hasColor="false" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="193.404296875" x="10.0" xml:space="preserve" y="4.0">for Let’s Encrypt certbot<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -168,21 +157,21 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n14">
+    <node id="n13">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="38.376953125" x="406.2773984375" y="514.6845703125"/>
+          <y:Geometry height="38.376953125" width="38.376953125" x="406.2773984375" y="503.6845703125"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="48.306640625" x="42.376953125" xml:space="preserve" y="4.0">HTTP<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.5" offsetX="4.0" offsetY="4.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-          <y:Shape type="rectangle"/>
+          <y:Shape type="parallelogram"/>
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n15">
+    <node id="n14">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="38.376953125" x="285.7413984374999" y="514.6845703125"/>
+          <y:Geometry height="38.376953125" width="38.376953125" x="285.7413984374999" y="503.6845703125"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="58.66796875" x="42.376953125" xml:space="preserve" y="4.0">HTTPS<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.5" offsetX="4.0" offsetY="4.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -190,10 +179,10 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n16">
+    <node id="n15">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="38.376953125" x="510.8133984374999" y="514.6845703125"/>
+          <y:Geometry height="38.376953125" width="38.376953125" x="510.8133984374999" y="503.6845703125"/>
           <y:Fill color="#C8E28A" transparent="false"/>
           <y:BorderStyle color="#C8E28A" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="81.392578125" x="42.376953125" xml:space="preserve" y="4.0">Open port<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.5" offsetX="4.0" offsetY="4.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -201,10 +190,10 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n17">
+    <node id="n16">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="38.376953125" x="649.5197187499999" y="514.6845703125"/>
+          <y:Geometry height="38.376953125" width="38.376953125" x="649.5197187499999" y="503.6845703125"/>
           <y:Fill color="#A9C9E8" transparent="false"/>
           <y:BorderStyle color="#A9C9E8" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="104.888671875" x="42.376953125" xml:space="preserve" y="4.0">UPB network<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.5" offsetX="4.0" offsetY="4.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -212,21 +201,10 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n18">
+    <node id="n17">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="213.404296875" x="31.12700781249997" y="173.8115234375"/>
-          <y:Fill color="#FFFFFF" transparent="false"/>
-          <y:BorderStyle hasColor="false" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="140.591796875" x="36.40625" xml:space="preserve" y="4.0">required? (TODO)<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="-0.5" nodeRatioX="0.0" nodeRatioY="-0.5" offsetX="0.0" offsetY="4.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-          <y:Shape type="rectangle"/>
-        </y:ShapeNode>
-      </data>
-    </node>
-    <node id="n19">
-      <data key="d6">
-        <y:ShapeNode>
-          <y:Geometry height="38.376953125" width="38.376953125" x="816.7333984375" y="514.6845703125"/>
+          <y:Geometry height="38.376953125" width="38.376953125" x="816.7333984375" y="503.6845703125"/>
           <y:Fill color="#DBDCDB" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="168.1015625" x="42.376953125" xml:space="preserve" y="4.0">Software component<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="-0.5" labelRatioY="-0.5" nodeRatioX="0.5" nodeRatioY="-0.5" offsetX="4.0" offsetY="4.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
@@ -234,7 +212,7 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n20">
+    <node id="n18">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="38.376953125" width="170.71875" x="543.1914609375" y="173.8115234375"/>
@@ -245,7 +223,7 @@
         </y:ShapeNode>
       </data>
     </node>
-    <node id="n21">
+    <node id="n19">
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="38.376953125" width="100.259765625" x="406.2773984375" y="173.8115234375"/>
@@ -309,14 +287,14 @@
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="delta"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="166.696044921875" y="-2.000010479891216">
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="161.59918212890625" y="-2.000010479891216">
             <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
           </y:EdgeLabel>
           <y:Arc height="1.5237588741001673E-5" ratio="1.2407987526330544E-7" type="fixedRatio"/>
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e4" source="n8" target="n4">
+    <edge id="e4" source="n7" target="n4">
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="153.77785205841064" sy="0.0" tx="0.0" ty="0.0">
@@ -329,33 +307,20 @@
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e5" source="n7" target="n6">
-      <data key="d10">
-        <y:ArcEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
-            <y:Point x="355.27984619140625" y="319.0"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="delta"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.408203125" x="7.907957397460905" xml:space="preserve" y="10.0">A-record to IP<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="10.0" distanceToCenter="false" position="right" ratio="0.5" segment="0"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
-          <y:Arc height="1.2706645975413267E-5" ratio="1.2407987526330544E-7" type="fixedRatio"/>
-        </y:ArcEdge>
-      </data>
-    </edge>
-    <edge id="e6" source="n10" target="n9">
+    <edge id="e5" source="n9" target="n8">
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="-0.0" tx="12.5556640625" ty="1.5">
-            <y:Point x="361.55767822265625" y="445.75"/>
+            <y:Point x="414.79400634765625" y="445.75"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="delta"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.408203125" x="12.527472054067744" xml:space="preserve" y="10.443954101369968">A-record to IP<y:LabelModel><y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/></y:LabelModel><y:ModelParameter><y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="10.0" distanceToCenter="false" position="right" ratio="0.5" segment="0"/></y:ModelParameter><y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
-          <y:Arc height="1.3096204384055454E-5" ratio="1.2407987526330544E-7" type="fixedRatio"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto Condensed" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="30.376953125" horizontalTextPosition="center" iconTextGap="4" modelName="free" modelPosition="anywhere" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.408203125" x="-42.997711181640625" xml:space="preserve" y="14.99444580078125">A-record to IP<y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/></y:EdgeLabel>
+          <y:Arc height="9.793454410100821E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e7" source="n11" target="n20">
+    <edge id="e6" source="n10" target="n18">
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="-0.0" tx="0.0" ty="0.0">
@@ -370,22 +335,22 @@
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e8" source="n12" target="n10">
+    <edge id="e7" source="n11" target="n9">
       <data key="d10">
         <y:ArcEdge>
-          <y:Path sx="0.0" sy="-0.0" tx="0.0" ty="-0.0">
-            <y:Point x="150.46588134765625" y="416.1884765625"/>
+          <y:Path sx="-13.38170781249994" sy="-0.6275999999999158" tx="0.0" ty="-0.0">
+            <y:Point x="256.6856689453125" y="413.18621826171875"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="none"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="-2.000000054863989" y="7.401702880859375">
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="-1.8905083822562574" y="11.7735595703125">
             <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
           </y:EdgeLabel>
-          <y:Arc height="1.7874650666271918E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
+          <y:Arc height="1.9737883576453896E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e9" source="n6" target="n4">
+    <edge id="e8" source="n6" target="n4">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -397,7 +362,7 @@
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e10" source="n9" target="n4">
+    <edge id="e9" source="n8" target="n4">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -410,22 +375,22 @@
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e11" source="n13" target="n6">
+    <edge id="e10" source="n12" target="n6">
       <data key="d10">
         <y:ArcEdge>
-          <y:Path sx="106.7021484375" sy="0.0" tx="-135.10084927083312" ty="-7.054599999999482">
-            <y:Point x="384.83050537109375" y="283.97271728515625"/>
+          <y:Path sx="106.7021484375" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="455.54888916015625" y="319.0"/>
           </y:Path>
           <y:LineStyle color="#000000" type="dashed" width="1.0"/>
           <y:Arrows source="none" target="none"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="22.643734619140616" y="15.164088615156686">
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="14.236712402343755" y="-2.0">
             <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
           </y:EdgeLabel>
-          <y:Arc height="3.036470161532634E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
+          <y:Arc height="6.485960511781741E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e12" source="n4" target="n3">
+    <edge id="e11" source="n4" target="n3">
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -437,22 +402,7 @@
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e13" source="n18" target="n7">
-      <data key="d10">
-        <y:ArcEdge>
-          <y:Path sx="-24.086022705078108" sy="2.7608687500004407" tx="-34.847749833333154" ty="0.5108687500004407">
-            <y:Point x="114.6806411743164" y="257.6358642578125"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="dashed" width="1.0"/>
-          <y:Arrows source="none" target="none"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="-1.5862299074996997" y="25.3084716796875">
-            <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
-          </y:EdgeLabel>
-          <y:Arc height="3.83916176360799E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
-        </y:ArcEdge>
-      </data>
-    </edge>
-    <edge id="e14" source="n21" target="n20">
+    <edge id="e12" source="n19" target="n18">
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -467,18 +417,18 @@
         </y:ArcEdge>
       </data>
     </edge>
-    <edge id="e15" source="n20" target="n5">
+    <edge id="e13" source="n18" target="n5">
       <data key="d10">
         <y:ArcEdge>
-          <y:Path sx="0.0" sy="0.0" tx="68.54574447916696" ty="-3.3111312499994483">
-            <y:Point x="628.59521484375" y="222.8444366455078"/>
+          <y:Path sx="0.0" sy="0.0" tx="69.64411035156252" ty="7.22112550400027">
+            <y:Point x="629.1444091796875" y="228.11056518554688"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="delta"/>
-          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="-1.9805954005742024" y="11.058952331542969">
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Roboto" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="centered" modelPosition="center" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="-1.7915083508150929" y="10.33319091796875">
             <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
           </y:EdgeLabel>
-          <y:Arc height="1.8515490864956519E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
+          <y:Arc height="2.178568593080854E-6" ratio="1.2407987526330544E-7" type="fixedRatio"/>
         </y:ArcEdge>
       </data>
     </edge>

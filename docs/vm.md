@@ -96,44 +96,9 @@
 - `cd /opt/embeddings.cc/`
 - `uwsgi --plugin python3 -H /opt/anaconda3 --mount /=webservice_public/wsgi.py --socket /tmp/embeddingscc.sock --chmod-socket=666 --thunder-lock --enable-threads`
 
-### nginx
+### nginx / certbot / Let’s Encrypt
 
-- `sudo cp -r /etc/ssl/private/ /opt/cert/`
-- https://wiki.ubuntuusers.de/nginx/
-- `sudo apt-get install nginx`
-- `sudo unlink /etc/nginx/sites-enabled/default`
-- `sudo nano /etc/nginx/sites-available/embeddings`
-
-```
-server {
-  listen 80 default_server;
-  listen [::]:80 default_server;
-  location / { try_files $uri @embeddings; }
-  location @embeddings {
-    include uwsgi_params;
-    uwsgi_pass unix:/tmp/embeddingscc.sock;
-  }
-}
-
-server {
-  listen 8443 ssl default_server;
-  listen [::]:8443 ssl default_server;
-  ssl_certificate /opt/cert/embeddings.cs.uni-paderborn.de.pem;
-  ssl_certificate_key /opt/cert/embeddings.cs.uni-paderborn.de.key;
-  server_name embeddings.cs.uni-paderborn.de;
-  location / { try_files $uri @embeddings; }
-  location @embeddings {
-    include uwsgi_params;
-    uwsgi_pass unix:/tmp/embeddingscc.sock;
-  }
-  # Redirect, if HTTP protocol used
-  error_page 497 https://$host:$server_port$request_uri;
-}
-
-```
-
-- `sudo ln -s /etc/nginx/sites-available/embeddings /etc/nginx/sites-enabled/`
-- `sudo nginx -s reload`
+- See [vm-nginx-certbot.md](vm-nginx-certbot.md)
 
 ## Misc
 

@@ -1,6 +1,6 @@
 # Universal Knowledge Graph Embeddings
 
-This repository contains code to run embeddings.cc and [embeddings.cs.upb.de](http://embeddings.cs.upb.de:8443/)
+This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/)
 
 ## Documentation
 
@@ -32,6 +32,8 @@ This repository contains code to run embeddings.cc and [embeddings.cs.upb.de](ht
 | /add            | POST   | password, index, docs               |
 
 ### System administration
+
+![components](docs/components.svg "components")
 
 - [Virtual machine](docs/vm.md) (Installation and deployment)
 - [Python development](docs/python.md) (Used python modules)
