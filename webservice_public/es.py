@@ -28,21 +28,19 @@ def init_app(app):
     app.teardown_appcontext(close_es)
 
 
-def get_entities(index, max=10):
-    response = get_es().search(index=index, query={
+def get_random_entities(index, size=10):
+    response = get_es().search(index=index, size=size, query={
         "function_score": {
             "query": {"match_all": {}},
             "random_score": {}
         }})
     entities = []
-    for i, hit in enumerate(response['hits']['hits']):
+    for hit in response['hits']['hits']:
         entities.append(hit['_source']['entity'])
-        if i + 1 >= max:
-            break
     return entities
 
 
-def get_embeddings_multi(index, entities):
+def get_embeddings(index, entities):
     request = []
     for entity in entities:
         req_head = {'index': index}
@@ -58,19 +56,11 @@ def get_embeddings_multi(index, entities):
     return results
 
 
-def get_embeddings(index, entity):
-    response = get_es().search(index=index, query={"match": {
-        'entity': entity
-    }})
-    embeddings = []
-    for hit in response['hits']['hits']:
-        embeddings.append(hit['_source']['embeddings'])
-    return embeddings
-
-
-def get_similar(index, embedding):
-    response = get_es().search(index=index, body={
-        "query": {
+def get_similar_embeddings(index, embeddings):
+    request = []
+    for embedding in embeddings:
+        req_head = {'index': index}
+        req_body = {"query": {
             "script_score": {
                 "query": {"match_all": {}},
                 "script": {
@@ -80,13 +70,11 @@ def get_similar(index, embedding):
                     }
                 }
             }
-        }
-    })
-    hits = response['hits']['hits']
-
-    print(hits)
-
+        }}
+        request.extend([req_head, req_body])
+    response = get_es().msearch(body=request)
     results = []
-    for hit in hits:
-        results.append((hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
+    for resp in response['responses']:
+        for hit in resp['hits']['hits']:
+            results.append((hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
     return results

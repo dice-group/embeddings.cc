@@ -33,37 +33,52 @@ def create_app(test_config=None):
         else:
             return 'Status: OK', 200
 
-    @app.route('/api/v1/get_entities', methods=['GET'])
+    @app.route('/api/v1/get_random_entities', methods=['POST'])
     @cross_origin()
-    def get_entities():
-        return jsonify(es.get_entities(current_app.config['ES_INDEX'], max=10))
+    def get_random_entities():
+        size = 10
+        if 'size' in request.values:
+            size = int(request.values['size'])
+        if size < 1 or size > 1000:
+            return 'Incorrect value for parameter: size', 422
+        return jsonify(es.get_random_entities(current_app.config['ES_INDEX'], size=size))
 
-    @app.route('/api/v1/get_embedding', methods=['GET'])
-    @cross_origin()
-    def get_embedding():
-        if 'entity' not in request.args or not request.args.get('entity'):
-            return 'Missing parameter entity', 422
-        else:
-            entity = request.args.get('entity')
-        return jsonify(es.get_embeddings(current_app.config['ES_INDEX'], entity))
-
-    @app.route('/api/v1/get_embeddings', methods=['GET'])
+    @app.route('/api/v1/get_embeddings', methods=['POST'])
     @cross_origin()
     def get_embeddings():
-        if 'entities' not in request.args or not request.args.get('entities'):
-            return 'Missing parameter entities', 422
+        if 'entities' not in request.json or not request.json['entities']:
+            return 'Missing parameter: entities', 422
         else:
-            entities = request.args.get('entities')
-        return jsonify(es.get_embeddings_multi(current_app.config['ES_INDEX'], entities=['http://dbpedia.org/resource/E377636','http://dbpedia.org/resource/E817071']))               # TODO
+            entities = request.json['entities']
+        if len(entities) > 1000:
+            return 'Incorrect value for parameter: entities', 422
+        return jsonify(es.get_embeddings(current_app.config['ES_INDEX'], entities=entities))
 
-    @app.route('/api/v1/get_similar', methods=['GET'])
+    @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
     @cross_origin()
-    def get_similar():
-        if 'embedding' not in request.args or not request.args.get('embedding'):
-            return 'Missing parameter embedding', 422
+    def get_similar_embeddings():
+        if 'embeddings' not in request.json or not request.json.get('embeddings'):
+            return 'Missing parameter: embeddings', 422
         else:
-            embedding = ast.literal_eval(request.args.get('embedding'))
-        return jsonify(es.get_similar(current_app.config['ES_INDEX'], embedding))
+            embeddings = request.json['embeddings']
+        if len(embeddings) > 1000:
+            return 'Incorrect value for parameter: embeddings', 422
+        for i, embedding in enumerate(embeddings):
+            if current_app.config['ES_DIMENSIONS'] != len(embedding):
+                return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
+                       str(current_app.config['ES_DIMENSIONS']) + ') for embeddings index: ' + str(i), 422
+        return jsonify(es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings))
+
+    @app.route('/api/v1/get_similar_entities', methods=['POST'])
+    @cross_origin()
+    def get_similar_entities():
+        embeddings = []
+        for tup in get_embeddings().json:
+            embeddings.append(tup[1])
+        results = []
+        for trip in es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings):
+            results.append((trip[0], trip[1]))
+        return jsonify(results)
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -76,7 +91,7 @@ def create_app(test_config=None):
 
             # First form: Set entities and entity
             if 'get_entities' in request.values:
-                entities_results = es.get_entities(current_app.config['ES_INDEX'], max=5)
+                entities_results = es.get_random_entities(current_app.config['ES_INDEX'], size=5)
                 for entities_result in entities_results:
                     entities += entities_result + '\n'
                 if len(entities_results) > 0:
@@ -86,18 +101,18 @@ def create_app(test_config=None):
             # Second form: Set embeddings and embedding
             if 'entity' in request.values and request.values['entity']:
                 entity = request.values['entity']
-                embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entity)
+                embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], [entity])
                 for embeddings_result in embeddings_results:
-                    embeddings += str(embeddings_result) + '\n'
+                    embeddings += str(embeddings_result[1]) + '\n'
                 if len(embeddings_results) >= 1:
-                    embedding = embeddings_results[0]
+                    embedding = embeddings_results[0][1]
                 embeddings = embeddings.rstrip()
 
             # Third form: Set similar embeddings
             if 'embedding' in request.values and request.values['embedding'].startswith('['):
                 embedding = ast.literal_eval(request.values['embedding'])
                 if len(embedding) == current_app.config['ES_DIMENSIONS']:
-                    results = es.get_similar(current_app.config['ES_INDEX'], embedding)
+                    results = es.get_similar_embeddings(current_app.config['ES_INDEX'], [embedding])
                     length = 0
                     for result in results:
                         if len(result[1]) > length:
