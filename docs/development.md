@@ -1,6 +1,6 @@
 # Development
 
-## Configuration
+## Local configuration
 
 - Set up a local system similar to the [VM](vm.md).
 - To start the components, use these commands:
@@ -20,6 +20,20 @@ flask run
 export FLASK_APP=webservice_index
 export FLASK_RUN_PORT=8008  # or another port
 ```
+
+## Deployment
+
+- `kinit wilke`
+- Copy code to /tmp:  
+  `./scripts/vm-push.sh`
+- `ssh wilke@embeddings.cs.upb.de`
+- `. /opt/bashrc.sh`
+- Move directory to /opt. **Do not overwrite** running code!  
+  `sudo mv /tmp/embeddings.cc/ /opt/embeddings.cc/`
+- `mkdir /opt/embeddings.cc/instance`
+- `ln -s /opt/config.py /opt/embeddings.cc/instance/config.py`
+- Stop running instance at start new one at:  
+  `screen -r webservice-public`
 
 ## Python
 

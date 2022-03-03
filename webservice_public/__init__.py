@@ -85,7 +85,7 @@ def create_app(test_config=None):
                 entities = entities.rstrip()
 
             # Second form: Set embeddings and embedding
-            if 'entity' in request.values:
+            if 'entity' in request.values and request.values['entity']:
                 entity = request.values['entity']
                 embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entity)
                 for embeddings_result in embeddings_results:
@@ -95,19 +95,20 @@ def create_app(test_config=None):
                 embeddings = embeddings.rstrip()
 
             # Third form: Set similar embeddings
-            if 'embedding' in request.values:
+            if 'embedding' in request.values and request.values['embedding'].startswith('['):
                 embedding = ast.literal_eval(request.values['embedding'])
-                similar_embeddings = ''
-                results = es.get_similar(current_app.config['ES_INDEX'], embedding)
-                length = 0
-                for result in results:
-                    if len(result[1]) > length:
-                        length = len(result[1])
-                for result in results:
-                    similar_embeddings += result[1].ljust(length) + '  '
-                    similar_embeddings += str("{:.4f}".format(round(result[0], 4))) + '  '
-                    similar_embeddings += str(result[2]) + '\n'
-                similar_embeddings = similar_embeddings.rstrip()
+                if len(embedding) == current_app.config['ES_DIMENSIONS']:
+                    results = es.get_similar(current_app.config['ES_INDEX'], embedding)
+                    length = 0
+                    for result in results:
+                        if len(result[1]) > length:
+                            length = len(result[1])
+                    similar_embeddings = ''
+                    for result in results:
+                        similar_embeddings += result[1].ljust(length) + '  '
+                        similar_embeddings += str("{:.4f}".format(round(result[0], 4))) + '  '
+                        similar_embeddings += str(result[2]) + '\n'
+                    similar_embeddings = similar_embeddings.rstrip()
 
         return render_template('index.htm',
                                entities=entities, entity=entity,
