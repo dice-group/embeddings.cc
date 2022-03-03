@@ -42,6 +42,22 @@ def get_entities(index, max=10):
     return entities
 
 
+def get_embeddings_multi(index, entities):
+    request = []
+    for entity in entities:
+        req_head = {'index': index}
+        req_body = {'query': {"match": {
+            'entity': entity
+        }}}
+        request.extend([req_head, req_body])
+    response = get_es().msearch(body=request)
+    results = []
+    for resp in response['responses']:
+        for hit in resp['hits']['hits']:
+            results.append((hit['_source']['entity'], hit['_source']['embeddings']))
+    return results
+
+
 def get_embeddings(index, entity):
     response = get_es().search(index=index, query={"match": {
         'entity': entity

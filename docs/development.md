@@ -4,7 +4,7 @@
 
 - Set up a local system similar to the [VM](vm.md).
 - To start the components, use these commands:
-- 
+
 ```bash
 # Start Elasticsearch
 sudo systemctl start elasticsearch.service
@@ -51,3 +51,5 @@ export FLASK_RUN_PORT=8008  # or another port
 - [ES blog: Text similarity search with vector fields](https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch)
 - [ES blog: How many shards should I have in my Elasticsearch cluster?](https://www.elastic.co/blog/how-many-shards-should-i-have-in-my-elasticsearch-cluster)
 - [Elasticsearch Guide [7.16] » How to » Size your shards](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/size-your-shards.html)
+- [Elasticsearch Guide [7.16] » REST APIs](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/rest-apis.html)
+- [Elasticsearch Guide [7.16] » REST APIs » Document APIs](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/docs.html)

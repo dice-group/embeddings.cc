@@ -19,6 +19,7 @@ body {
 #container {
     max-width: 800px;
     margin: auto;
+    padding: 0px;
     padding-bottom: 50px;
 }
 h1 {
@@ -30,39 +31,59 @@ h2 {
     padding-top: 10px;
     margin-bottom: 0px;
 }
+p {    
+    line-height: 1.5;
+}
 textarea {
-    width: 97%;
+    width: 95%;
     height: 100px;
     padding: 8px;
-    font-family: monospace;
-    border: 1px solid #bbb;
-    background: #fafafa;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
     font-family: 'Roboto Mono', monospace;
-    font-size: 11px;
     line-height: 1.5;
-    color: #000;
+    font-size: .8em;
+    outline: none;
 }
 textarea:empty { display: none }
+textarea {
+    scrollbar-color: #bbb #f5f5f5;
+}
+textarea::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+textarea::-webkit-scrollbar-thumb {
+    background: #bbb;
+}
+textarea::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
 input {
+    margin: 0px;
     padding: 8px;
     border: 1px solid #000;
+    outline: none;
 }
 input[type=text] {
+    margin-right: 5px;
     width: 50%;
     font-family: monospace;
     background: #e5f2f8;
     font-family: 'Roboto Mono', monospace;
-    font-size: 11px;
+    font-size: .8em;
 }
 input:hover[type=text] {
     background: #f1f6db;
 }
 input[type=submit] {
-    width: 200px;
+    margin-bottom: 5px;
+    width: 180px;
     background: #a9d4e8;
-    border-radius: 3px;
     font-weight: bold;
     cursor: pointer;
+    font-size: .9em;
+    padding-bottom: 7px;
 }
 input:hover[type=submit] {
     background: #d1e28a;
@@ -74,12 +95,18 @@ input:hover[type=submit] {
 
 <h1>Universal Knowledge Graph Embeddings</h1>
 
+<p>
+This site provides Knowledge Graph Embeddings as open web services.
+The services are the result of the article <em>Universal Knowledge Graph Embeddings</em>.
+Once the review of the article is complete, additional details will be provided here.
+</p>
+
 <h2 id="entities">Get entities</h2>
 
 <p>Gets identifiers of example entities.</p>
 
 <form action="/" method="post">
-<input type="submit" value="Get entities" name="get_entities"><br /><br />
+<input type="submit" value="Get entities" name="get_entities">
 <textarea readonly>{{ entities }}</textarea>
 </form>
 
@@ -88,9 +115,8 @@ input:hover[type=submit] {
 <p>Takes an entity identifier and gets related embeddings.</p>
 
 <form action="/#embeddings" method="post">
-<input type="submit" value="Get embeddings">
-<input type="text" name="entity" value="{{ entity }}"><br /><br />
-<textarea readonly>{{ embeddings }}</textarea>
+<input type="text" name="entity" value="{{ entity }}"><input type="submit" value="Get embeddings">
+<textarea readonly style="height:210px">{{ embeddings }}</textarea>
 </form>
 
 <h2 id="similar">Get similar embeddings</h2>
@@ -98,9 +124,8 @@ input:hover[type=submit] {
 <p>Takes embeddings and gets similar embeddings based on cosine similarity.</p>
 
 <form action="/#similar" method="post">
-<input type="submit" value="Get similar embeddings">
-<input type="text" name="embedding" value="{{ embedding }}"><br /><br />
-<textarea readonly style="height:200px; white-space:pre">{{ similar_embeddings }}</textarea>
+<input type="text" name="embedding" value="{{ embedding }}"><input type="submit" value="Get similar embeddings">
+<textarea readonly style="height:210px; white-space:pre">{{ similar_embeddings }}</textarea>
 </form>
 
 </div>
