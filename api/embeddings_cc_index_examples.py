@@ -8,6 +8,11 @@ import sys
 import ast
 from embeddings_cc_index import EmbeddingsCcIndex
 
+# Configuration
+es_index = 'index_test'
+#es_index = 'dbpedia_en_fr_15k_v2_shallom___'
+#es_index = 'dbpedia_en_fr_100k_v2_v_1-1_shallom___'
+
 # Get password form CLI
 if len(sys.argv) > 1:
     password = sys.argv[1]
@@ -39,12 +44,12 @@ if True:
 
 # Returns number of documents in Elasticsearch index.
 if False:
-    response = embeddings_cc_index.count('index_test')
+    response = embeddings_cc_index.count(es_index)
     print(response.status_code, response.text)
 
 # Searches for an entity in Elasticsearch and returns related embeddings.
 if False:
-    response = embeddings_cc_index.get_embeddings('index_test', 'http://example.com/0')
+    response = embeddings_cc_index.get_embeddings(es_index, 'http://example.com/0')
     print(response.status_code, response.text)
 
 # ----------| POST requests with password |-----------------------------------------------------------------------------
@@ -56,12 +61,12 @@ if True:
 
 # Creates an Elasticsearch index and returns Elasticsearch API response.
 if False:
-    response = embeddings_cc_index.create_index(password, 'index_test', 10, shards=5)
+    response = embeddings_cc_index.create_index(password, es_index, 10, shards=5)
     print(response.status_code, response.text)
 
 # Deletes an Elasticsearch index and returns Elasticsearch API response.
 if False:
-    response = embeddings_cc_index.delete_index(password, 'index_test')
+    response = embeddings_cc_index.delete_index(password, es_index)
     print(response.status_code, response.text)
 
 # Adds data.
@@ -72,13 +77,13 @@ if False:
     embeddings = [('http://example.com/0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
                   ('http://example.com/1', [1, 2, 3, 4, 5, 6, 7, 8, 9, 0])]
     print(embeddings)
-    response = embeddings_cc_index.add(password, 'index_test', embeddings)
+    response = embeddings_cc_index.add(password, es_index, embeddings)
     print(response.status_code, response.text)
 if False:
     embeddings = [['http://example.com/2', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
                   ['http://example.com/3', [3, 4, 5, 6, 7, 8, 9, 0, 1, 2]]]
     print(embeddings)
-    response = embeddings_cc_index.add(password, 'index_test', embeddings)
+    response = embeddings_cc_index.add(password, es_index, embeddings)
     print(response.status_code, response.text)
 
 # Add data of a CSV file
@@ -90,16 +95,17 @@ if False:
 # time python3 api/embeddings_cc_index_examples.py <PASSWORD>                -> 7m47,509s (Reading/parsing: ~33s)
 # time python3 api/embeddings_cc_index_examples.py 123 http://127.0.0.1:8008 -> 2m10,133s
 if False:
-    csv_file = '/tmp/Shallom_entity_embeddings.csv'
-    es_index = 'dbpedia_en_fr_15k_v2_shallom___'
+    #csv_file = '/tmp/Shallom_entity_embeddings.csv'
+    csv_file = '/home/adi/Downloads/Shallom-OpenEA_V1.1_DBpedia_EN_FR_100K_V2/Shallom_entity_embeddings.csv'
     max_docs = 100 * 1000
+    dimensions = 25
 
     # Delete index
     response = embeddings_cc_index.delete_index(password, es_index)
     print(response.status_code, response.text)
 
     # Create index
-    response = embeddings_cc_index.create_index(password, es_index, 300, shards=5)
+    response = embeddings_cc_index.create_index(password, es_index, dimensions, shards=5)
     print(response.status_code, response.text)
 
     # Add data
@@ -127,6 +133,9 @@ if False:
             # Print dimensions
             if i == 1:
                 print('Dimensions:', data[1].count(',') + 1)
+            # Skip URIs with comma
+            if data[0].startswith('"'):
+                continue
             # Collect data
             embeddings.append([data[0], ast.literal_eval('[' + data[1] + ']')])
             # Add data
