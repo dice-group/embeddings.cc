@@ -3,7 +3,6 @@ import traceback
 import ast
 from flask import Flask, request, current_app, jsonify, render_template
 from flask_cors import cross_origin
-from elasticsearch import ElasticsearchException
 from . import es
 
 
