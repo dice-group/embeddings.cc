@@ -41,6 +41,7 @@ if False:
     else:
         print('Error:', response.text)
 
+
 if False:
     import httpx
     response = httpx.post('http://127.0.0.1:1337/api/v1/get_similar_entities', json={'entities': ['http://dbpedia.org/resource/E523529', 'http://dbpedia.org/resource/E977559']})
@@ -50,8 +51,56 @@ if False:
         print('Error:', response.text)
 
 
+# Speed test (local machine)
+# 1000 get_random_entities:     1.2 - 1.5 seconds
+# 1000 get_embeddings:          2.2 seconds
+# 1000 get_similar_embeddings: 28 seconds, timeout had to be increased
+#  100 get_similar_embeddings:  2.8 seconds
+# 1000 get_similar_entities:   24 seconds, timeout had to be increased
+#  100 get_similar_entities:    2.4 seconds
+if False:
+    config_size = 10
+    import httpx
+    import time
 
+    start_time = time.time()
+    response = httpx.post('http://127.0.0.1:1337/api/v1/get_random_entities', json={'size': config_size})
+    print("%s seconds" % (time.time() - start_time))
+    if response.status_code == 200:
+        entity_identifiers = response.json()
+        print(len(entity_identifiers))
+    else:
+        print('Error:', response.text)
 
+    #time.sleep(5)
+    start_time = time.time()
+    response = httpx.post('http://127.0.0.1:1337/api/v1/get_embeddings', json={'entities': entity_identifiers})
+    print("%s seconds" % (time.time() - start_time))
+    embeddings = []
+    for item in response.json():
+        embeddings.append(item[1])
+    if response.status_code == 200:
+        print(len(embeddings))
+    else:
+        print('Error:', response.text)
 
+    #time.sleep(5)
+    start_time = time.time()
+    response = httpx.post('http://127.0.0.1:1337/api/v1/get_similar_embeddings', json={'embeddings': embeddings}, timeout=500)
+    print("%s seconds" % (time.time() - start_time))
+    if response.status_code == 200:
+        #print()
+        print(len(response.json()))
+    else:
+        print('Error:', response.text)
 
+    #time.sleep(5)
+    start_time = time.time()
+    response = httpx.post('http://127.0.0.1:1337/api/v1/get_similar_entities', json={'entities': entity_identifiers}, timeout=500)
+    print("%s seconds" % (time.time() - start_time))
+    if response.status_code == 200:
+        print(len(response.json()))
+        #print(response.json()[0])
+    else:
+        print('Error:', response.text)
 

@@ -42,7 +42,7 @@ def create_app(test_config=None):
                 size = int(request.json['size'])
             except ValueError:
                 return 'Incorrect type for parameter: size', 415
-        if size < 1 or size > 1000:
+        if size < 1 or size > 100:
             return 'Incorrect value for parameter: size', 422
         return jsonify(es.get_random_entities(current_app.config['ES_INDEX'], size=size))
 
@@ -53,7 +53,7 @@ def create_app(test_config=None):
             return 'Missing parameter: entities', 422
         else:
             entities = request.json['entities']
-        if len(entities) > 1000:
+        if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
         return jsonify(es.get_embeddings(current_app.config['ES_INDEX'], entities=entities))
 
@@ -64,7 +64,7 @@ def create_app(test_config=None):
             return 'Missing parameter: embeddings', 422
         else:
             embeddings = request.json['embeddings']
-        if len(embeddings) > 1000:
+        if len(embeddings) > 100:
             return 'Incorrect value for parameter: embeddings', 422
         for i, embedding in enumerate(embeddings):
             if current_app.config['ES_DIMENSIONS'] != len(embedding):

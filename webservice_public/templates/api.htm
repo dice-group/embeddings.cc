@@ -12,8 +12,8 @@
 <!-- https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest -->
 <script>
 function apiCall(httpMethod, path, parameters, inputId, resultId) {
-    var domain = 'http://localhost:1337'
-//    var domain = 'https://embeddings.cc'
+//    var domain = 'http://localhost:1337'
+    var domain = 'https://embeddings.cc'
     var xhr = new XMLHttpRequest();
     xhr.open(httpMethod, domain + path, true);
     xhr.setRequestHeader("Content-type", "application/json");
@@ -266,7 +266,7 @@ if httpx.get('https://embeddings.cc/api/v1/ping').status_code == 200:
  </tr>
  <tr>
   <td>Parameter</td>
-  <td><em>size</em> { default: 10, max: 1000, format: JSON }</td>
+  <td><em>size</em> { default: 10, max: 100, format: JSON }</td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -322,7 +322,7 @@ else:
  </tr>
  <tr>
   <td>Parameter</td>
-  <td><em>entities</em> { value: list of entity identifiers, max: 1000, format: JSON }</td>
+  <td><em>entities</em> { value: list of entity identifiers, max: 100, format: JSON }</td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -383,7 +383,7 @@ else:
  </tr>
  <tr>
   <td>Parameter</td>
-  <td><em>embeddings</em> { value: list of embeddings, max: 1000, format: JSON }</td>
+  <td><em>embeddings</em> { value: list of embeddings, max: 100, format: JSON }</td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -444,7 +444,7 @@ else:
  </tr>
  <tr>
   <td>Parameter</td>
-  <td><em>embeddings</em> { value: list of entity identifiers, max: 1000, format: JSON }</td>
+  <td><em>embeddings</em> { value: list of entity identifiers, max: 100, format: JSON }</td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -492,8 +492,8 @@ else:
 <script src="/static/prism.js"></script>
 <script>
 function initialize_parameters(httpMethod, path, parameters) {
-    var domain = 'http://localhost:1337'
-//    var domain = 'https://embeddings.cc'
+//    var domain = 'http://localhost:1337'
+    var domain = 'https://embeddings.cc'
     var xhr = new XMLHttpRequest();
     xhr.open(httpMethod, domain + path, true);
     xhr.setRequestHeader("Content-type", "application/json");
