@@ -74,7 +74,7 @@ def get_similar_embeddings(index, embeddings):
         request.extend([req_head, req_body])
     response = get_es().msearch(body=request)
     results = []
-    for resp in response['responses']:
+    for i, resp in enumerate(response['responses']):
         for hit in resp['hits']['hits']:
-            results.append((hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
+            results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
     return results

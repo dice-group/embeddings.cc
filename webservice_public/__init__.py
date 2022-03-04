@@ -1,7 +1,7 @@
 import os
 import traceback
 import ast
-from flask import Flask, request, current_app, jsonify, render_template
+from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from . import es
 
@@ -80,7 +80,7 @@ def create_app(test_config=None):
             embeddings.append(tup[1])
         results = []
         for trip in es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings):
-            results.append((trip[0], trip[1]))
+            results.append((trip[0], trip[1], trip[2]))
         return jsonify(results)
 
     @app.route('/', methods=['GET', 'POST'])
@@ -118,13 +118,13 @@ def create_app(test_config=None):
                     results = es.get_similar_embeddings(current_app.config['ES_INDEX'], [embedding])
                     length = 0
                     for result in results:
-                        if len(result[1]) > length:
-                            length = len(result[1])
+                        if len(result[2]) > length:
+                            length = len(result[2])
                     similar_embeddings = ''
                     for result in results:
-                        similar_embeddings += result[1].ljust(length) + '  '
-                        similar_embeddings += str("{:.4f}".format(round(result[0], 4))) + '  '
-                        similar_embeddings += str(result[2]) + '\n'
+                        similar_embeddings += result[2].ljust(length) + '  '
+                        similar_embeddings += str("{:.4f}".format(round(result[1], 4))) + '  '
+                        similar_embeddings += str(result[3]) + '\n'
                     similar_embeddings = similar_embeddings.rstrip()
 
         return render_template('index.htm',
@@ -135,5 +135,10 @@ def create_app(test_config=None):
     @app.route('/api', methods=['GET'])
     def api():
         return render_template('api.htm')
+
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(os.path.join(app.root_path, 'static'),
+                                   'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
     return app
