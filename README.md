@@ -4,15 +4,6 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ## Documentation
 
-### Public API (for users)
-
-| Webservice            | Method | Parameters |
-|-----------------------|--------|------------|
-| /api/v1/ping          | GET    | -          |
-| /api/v1/get_entities  | GET    | -          |
-| /api/v1/get_embedding | GET    | entity     |
-| /api/v1/get_similar   | GET    | embedding  |
-
 ### Index API (for universal embeddings developers)
 
 - Use the Index API to create Elasticsearch indexes and to add data.
