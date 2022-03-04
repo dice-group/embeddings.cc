@@ -37,8 +37,11 @@ def create_app(test_config=None):
     @cross_origin()
     def get_random_entities():
         size = 10
-        if 'size' in request.values:
-            size = int(request.values['size'])
+        if 'size' in request.json and request.json['size']:
+            try:
+                size = int(request.json['size'])
+            except ValueError:
+                return 'Incorrect type for parameter: size', 415
         if size < 1 or size > 1000:
             return 'Incorrect value for parameter: size', 422
         return jsonify(es.get_random_entities(current_app.config['ES_INDEX'], size=size))
@@ -128,5 +131,9 @@ def create_app(test_config=None):
                                entities=entities, entity=entity,
                                embeddings=embeddings, embedding=embedding,
                                similar_embeddings=similar_embeddings)
+
+    @app.route('/api', methods=['GET'])
+    def api():
+        return render_template('api.htm')
 
     return app
