@@ -29,4 +29,4 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 - [Development](docs/development.md) (Used python modules)
 - Note: This is an extension of [kg-embedding-service](https://github.com/dice-group/kg-embedding-service)
 
-![components](docs/components.svg "components")
+![components](docs/images/components.svg "components")

@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="380.60189"
-     inkscape:cy="963.18856"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="342.25006"
+     inkscape:cy="856.38726"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -47,11 +47,15 @@
      inkscape:snap-intersection-paths="true"
      inkscape:snap-smooth-nodes="true"
      inkscape:snap-midpoints="true"
-     inkscape:pagecheckerboard="false"
+     inkscape:pagecheckerboard="true"
      inkscape:showpageshadow="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:snap-global="false">
+     inkscape:snap-global="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-page="true">
     <sodipodi:guide
        position="34.826432,163.12574"
        orientation="0,-1"
@@ -736,7 +740,7 @@
        aria-label="embeddings.cc"
        id="text1141"
        style="font-style:normal;font-weight:normal;font-size:9.29636px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.23241"
-       transform="translate(53.036309,42.637352)">
+       transform="translate(40.214256,24.856703)">
       <path
          d="m 37.011304,186.71041 q -0.989553,0 -1.543341,-0.5901 -0.553787,-0.5901 -0.553787,-1.68859 v -0.39038 q 0,-1.16204 0.508395,-1.793 0.508395,-0.63095 1.457096,-0.63095 0.926004,0 1.393546,0.59464 0.467541,0.5901 0.47662,1.75214 v 0.63096 h -2.555591 q 0.02723,0.54471 0.240579,0.7989 0.213344,0.24966 0.65819,0.24966 0.644572,0 1.075799,-0.4403 l 0.503856,0.77621 q -0.236041,0.32682 -0.685425,0.53109 -0.449385,0.19972 -0.975937,0.19972 z m -0.807984,-3.01405 h 1.284605 v -0.11802 q -0.0091,-0.44031 -0.145256,-0.66727 -0.136177,-0.22696 -0.472081,-0.22696 -0.335904,0 -0.490238,0.24058 -0.149794,0.24058 -0.17703,0.77167 z"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Roboto Condensed';-inkscape-font-specification:'Roboto Condensed,  Bold';stroke-width:0.23241"
@@ -792,7 +796,7 @@
     </g>
     <g
        id="g1205"
-       transform="translate(53.036309,42.637352)">
+       transform="translate(40.214256,24.856703)">
       <path
          id="rect1143"
          style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.23204;paint-order:fill markers stroke;stop-color:#000000"
@@ -842,5 +846,12 @@
          style="fill:#a93983;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.40698;paint-order:fill markers stroke;stop-color:#000000"
          d="m 30.714804,178.48981 h 2.5 v 1.15755 h -2.5 z" />
     </g>
+    <rect
+       style="fill:#00ff00;fill-rule:evenodd;stroke-width:1.93066;paint-order:fill markers stroke;stop-color:#000000"
+       id="rect3086"
+       width="1.4676052"
+       height="2.1425641"
+       x="131.24704"
+       y="207.94933" />
   </g>
 </svg>
