@@ -6,201 +6,64 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+<link href="/static/embeddings_cc.css" rel="stylesheet" />
 <link href="/static/prism.min.css" rel="stylesheet" />
 <!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
 <!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
 <!-- https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest -->
-<script>
-function apiCall(httpMethod, path, parameters, inputId, resultId) {
-//    var domain = 'http://localhost:1337'
-    var domain = 'https://embeddings.cc'
-    var xhr = new XMLHttpRequest();
-    xhr.open(httpMethod, domain + path, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.onreadystatechange = function() {
-
-        // Success
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-
-            // Display input parameters
-            if(inputId != null) {
-                document.getElementById(inputId).parentElement.parentElement.parentElement.style.display = "table-row";
-                if (path == '/api/v1/get_similar_embeddings') {
-                    document.getElementById(inputId).innerHTML = JSON.stringify(parameters).replace(/\],\[/g,'\],\n\[').trim();
-                } else {
-                    document.getElementById(inputId).innerHTML = JSON.stringify(parameters, null, 2);
-                }
-                Prism.highlightElement(document.getElementById(inputId))
-            }
-            document.getElementById(resultId).parentElement.parentElement.parentElement.style.display = "table-row";
-
-            // Display result
-            if (path == '/api/v1/ping') {
-                document.getElementById(resultId).innerHTML = xhr.responseText;
-            } else if (path == '/api/v1/get_embeddings' || path == '/api/v1/get_similar_embeddings' || path == '/api/v1/get_similar_entities') {
-                document.getElementById(resultId).innerHTML = JSON.stringify(JSON.parse(xhr.responseText)).replace(/\],\[/g,'\],\n\[').trim();
-            } else {
-                document.getElementById(resultId).innerHTML = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
-            }
-            Prism.highlightElement(document.getElementById(resultId))
-
-        // Error
-        } else if (this.readyState === XMLHttpRequest.DONE) {
-            //console.log(xhr.responseText);
-
-            // Display input parameters
-            if(inputId != null) {
-                document.getElementById(inputId).parentElement.parentElement.parentElement.style.display = "table-row";
-                document.getElementById(inputId).innerHTML = JSON.stringify(parameters, null, 2);
-                Prism.highlightElement(document.getElementById(inputId))
-            }
-
-            // Display result
-            document.getElementById(resultId).parentElement.parentElement.parentElement.style.display = "table-row";
-            document.getElementById(resultId).innerHTML = 'Error: ' + xhr.responseText;
-
-        // Interim
-        } else {
-            //console.log("[Not Done] " + xhr.responseText);
-        }
-    }
-    xhr.send(JSON.stringify(parameters));
-}
-</script>
 
 <style>
-html {
-    font-family: 'Roboto Condensed', sans-serif;
-}
-body {
-    color: #000;
-}
-a {
-    color: #007eb9;
-}
-#container {
-    max-width: 800px;
-    margin: auto;
-    padding: 0px;
-    padding-bottom: 50px;
-}
-h1 {
-    font-size: 2.8em;
-    margin-bottom: 0px;
-}
-h2 {
-    font-size: 1.8em;
-    padding-top: 15px;
-    margin-bottom: 0px;
-}
-p {    
-    line-height: 1.5;
-}
-pre {
-    margin: 0px;
-    font-family: 'Roboto Mono', monospace;
-}
-code {
-    font-family: 'Roboto Mono', monospace;
-    font-size: .8em;
-}
-ul {
-    line-height: 1.5;
-}
-table {
-    width: 100%;
-    margin: 20px 0px;
-    table-layout: fixed;
-    border-spacing: 0;
-}
-tr {
-}
-tr:nth-child(odd) {
-    background: #f8f8f8;
-}
-td {
-    padding: 4px 10px;
-    vertical-align: top;
-}
-td.title {
-    width: 20%;
-}
 tr.test-input {
     display: none;
 }
 tr.test-result {
     display: none;
 }
-td.code {
-    overflow-x: auto;
-    max-width: 80%;
-    scrollbar-color: #bbb #f5f5f5;
-}
-td.code::-webkit-scrollbar {
-    width: 15px;
-    height: 15px;
-}
-td.code::-webkit-scrollbar-thumb {
-    background: #bbb;
-}
-td.code::-webkit-scrollbar-track {
-    background: #f5f5f5;
+
+td.title {
+    width: 20%;
 }
 td:nth-child(1) {  
     font-weight: bold
 }
-input {
-    margin: 0px;
-    padding: 8px;
-    border: 1px solid #000;
-    outline: none;
-}
+
 input[type=text] {
-    margin-right: 5px;
-    background: #e5f2f8;
-    font-family: 'Roboto Mono', monospace;
-    font-size: .8em;
+    width: 180px;
 }
-input:hover[type=text] {
-    background: #f1f6db;
-}
-input[type=submit] {
-    margin-bottom: 5px;
-    background: #a9d4e8;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: .9em;
-    padding-bottom: 7px;
-}
-input:hover[type=submit] {
-    background: #d1e28a;
-}
+
 textarea {
-    width: 100%;
-    height: 100px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    background: #e5f2f8;
-    font-family: 'Roboto Mono', monospace;
-    line-height: 1.5;
-    font-size: .8em;
-    outline: none;
+    width: 96%;
+}
+
+pre[class*=language-] {
+    padding-bottom: 5px;
+}
+
+pre {
+    scrollbar-color: #ccc #f5f5f5;
+}
+pre::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+pre::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+pre::-webkit-scrollbar-track {
+    background: #f5f5f5;
 }
 </style>
+
 </head>
 <body>
 <div id="container">
 
-<h1>Universal Knowledge Graph Embeddings</h1>
-
-<div style="margin-top:20px">
-<a href="/">Home</a> &nbsp;&bullet;&nbsp;
+<div id="nav">
+<a href="/">Home</a>
 <a href="/api">API</a>
 </div>
 
-
-
-<h2>API methods</h2>
+<h1>API: Web services</h1>
 
 <ul>
  <li><a href="#ping">/api/v1/ping</a></li>
@@ -343,7 +206,7 @@ else:
  <tr>
   <td>Test</td>
   <td>
-   <form onsubmit="apiCall('POST', '/api/v1/get_embeddings', {entities:JSON.parse(document.getElementById('get_embeddings_parameters').value)}, 'get_embeddings_input', 'get_embeddings_result'); return false">
+   <form onsubmit="apiCallParse('POST', '/api/v1/get_embeddings', 'entities', 'get_embeddings_parameters', 'get_embeddings_input', 'get_embeddings_result'); return false">
     <textarea id="get_embeddings_parameters">
 [
   "http://example.org/1", 
@@ -404,7 +267,7 @@ else:
  <tr>
   <td>Test</td>
   <td>
-   <form onsubmit="apiCall('POST', '/api/v1/get_similar_embeddings', {embeddings:JSON.parse(document.getElementById('get_similar_embeddings_parameters').value)}, 'get_similar_embeddings_input', 'get_similar_embeddings_result'); return false">
+   <form onsubmit="apiCallParse('POST', '/api/v1/get_similar_embeddings', 'embeddings', 'get_similar_embeddings_parameters', 'get_similar_embeddings_input', 'get_similar_embeddings_result'); return false">
     <textarea id="get_similar_embeddings_parameters">
 [
   [], 
@@ -465,7 +328,8 @@ else:
  <tr>
   <td>Test</td>
   <td>
-   <form onsubmit="apiCall('POST', '/api/v1/get_similar_entities', {entities:JSON.parse(document.getElementById('get_similar_entities_parameters').value)}, 'get_similar_entities_input', 'get_similar_entities_result'); return false">
+   <form onsubmit="apiCallParse('POST', '/api/v1/get_similar_entities', 'entities', 'get_similar_entities_parameters', 'get_similar_entities_input', 'get_similar_entities_result'); return false">
+
     <textarea id="get_similar_entities_parameters">
 [
   "http://example.org/1", 
@@ -490,31 +354,8 @@ else:
 
 </div>
 <script src="/static/prism.js"></script>
+<script src="/static/api.js"></script>
 <script>
-function initialize_parameters(httpMethod, path, parameters) {
-//    var domain = 'http://localhost:1337'
-    var domain = 'https://embeddings.cc'
-    var xhr = new XMLHttpRequest();
-    xhr.open(httpMethod, domain + path, true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            if (path == '/api/v1/get_random_entities') {
-                document.getElementById('get_embeddings_parameters').innerHTML = xhr.responseText;
-                document.getElementById('get_similar_entities_parameters').innerHTML = xhr.responseText;
-                initialize_parameters('POST', '/api/v1/get_embeddings', {entities:JSON.parse(xhr.responseText)})
-            } else if (path == '/api/v1/get_embeddings') {
-                var embeddings = [];
-                JSON.parse(xhr.responseText).forEach(element => embeddings.push(element[1]));
-                document.getElementById('get_similar_embeddings_parameters').innerHTML = JSON.stringify(embeddings).replace(/\],\[/g,'\],\n\[').trim();
-            }
-        } else if (this.readyState === XMLHttpRequest.DONE) {
-            console.log(xhr.responseText);
-        } 
-    }
-    xhr.send(JSON.stringify(parameters));
-}
-
 window.onload = function () {
     initialize_parameters('POST', '/api/v1/get_random_entities', {"size":"2"})
 }

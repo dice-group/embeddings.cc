@@ -6,101 +6,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+<link href="/static/embeddings_cc.css" rel="stylesheet" />
 <!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
 <!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
-<style>
-* {
-    font-family: 'Roboto Condensed', sans-serif;
-}
-body {
-    color: #000;
-    cursor: default;
-}
-a {
-    color: #007eb9;
-}
-#container {
-    max-width: 800px;
-    margin: auto;
-    padding: 0px;
-    padding-bottom: 50px;
-}
-h1 {
-    font-size: 2.8em;
-    margin-bottom: 0px;
-}
-h2 {
-    font-size: 1.8em;
-    padding-top: 10px;
-    margin-bottom: 0px;
-}
-p {    
-    line-height: 1.5;
-}
-textarea {
-    width: 95%;
-    height: 100px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
-    font-family: 'Roboto Mono', monospace;
-    line-height: 1.5;
-    font-size: .8em;
-    outline: none;
-}
-textarea:empty { display: none }
-textarea {
-    scrollbar-color: #bbb #f5f5f5;
-}
-textarea::-webkit-scrollbar {
-    width: 15px;
-    height: 15px;
-}
-textarea::-webkit-scrollbar-thumb {
-    background: #bbb;
-}
-textarea::-webkit-scrollbar-track {
-    background: #f5f5f5;
-}
-input {
-    margin: 0px;
-    padding: 8px;
-    border: 1px solid #000;
-    outline: none;
-}
-input[type=text] {
-    margin-right: 5px;
-    width: 50%;
-    background: #e5f2f8;
-    font-family: 'Roboto Mono', monospace;
-    font-size: .8em;
-}
-input:hover[type=text] {
-    background: #f1f6db;
-}
-input[type=submit] {
-    margin-bottom: 5px;
-    width: 180px;
-    background: #a9d4e8;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: .9em;
-    padding-bottom: 7px;
-}
-input:hover[type=submit] {
-    background: #d1e28a;
-}
-</style>
 </head>
 <body>
 <div id="container">
 
-<h1>Universal Knowledge Graph Embeddings</h1>
-
-<div style="margin-top:20px">
-<a href="/">Home</a> &nbsp;&bullet;&nbsp;
+<div id="nav">
+<a href="/">Home</a>
 <a href="/api">API</a>
 </div>
+
+<h1>Knowledge Graph Embeddings</h1>
 
 <!--
 <p>
@@ -110,30 +28,32 @@ Once the review of the article is complete, additional details will be provided 
 </p>
 -->
 
-<h2 id="entities">Get entities</h2>
+<h2 id="entities" style="margin-top:0px">Entities</h2>
 
 <p>Gets identifiers of example entities.</p>
 
 <form action="/" method="post">
-<input type="submit" value="Get entities" name="get_entities">
+<input type="submit" value="Get random entities" name="get_entities">
 <textarea readonly>{{ entities }}</textarea>
 </form>
 
-<h2 id="embeddings">Get embeddings</h2>
+<h2 id="embeddings">Embeddings</h2>
 
 <p>Takes an entity identifier and gets related embeddings.</p>
 
 <form action="/#embeddings" method="post">
-<input type="text" name="entity" value="{{ entity }}"><input type="submit" value="Get embeddings">
+<input type="text" name="entity" value="{{ entity }}">
+<input type="submit" value="Get embeddings">
 <textarea readonly style="height:210px">{{ embeddings }}</textarea>
 </form>
 
-<h2 id="similar">Get similar embeddings</h2>
+<h2 id="similar">Similar Embeddings</h2>
 
 <p>Takes embeddings and gets similar embeddings based on cosine similarity.</p>
 
 <form action="/#similar" method="post">
-<input type="text" name="embedding" value="{{ embedding }}"><input type="submit" value="Get similar embeddings">
+<input type="text" name="embedding" value="{{ embedding }}">
+<input type="submit" value="Get similar embeddings">
 <textarea readonly style="height:210px; white-space:pre">{{ similar_embeddings }}</textarea>
 </form>
 
