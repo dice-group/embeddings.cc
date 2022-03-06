@@ -1,6 +1,7 @@
 import os
 import traceback
 import ast
+import json
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from . import es
@@ -75,9 +76,17 @@ def create_app(test_config=None):
     @app.route('/api/v1/get_similar_entities', methods=['POST'])
     @cross_origin()
     def get_similar_entities():
+        if 'entities' not in request.json or not request.json['entities']:
+            return 'Missing parameter: entities', 422
+        else:
+            entities = request.json['entities']
+        if len(entities) > 100:
+            return 'Incorrect value for parameter: entities', 422
+
         embeddings = []
-        for tup in get_embeddings().json:
+        for tup in es.get_embeddings(current_app.config['ES_INDEX'], entities=entities):
             embeddings.append(tup[1])
+
         results = []
         for trip in es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings):
             results.append((trip[0], trip[1], trip[2]))
@@ -85,52 +94,41 @@ def create_app(test_config=None):
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
-        entities = ''
+        entities = []
         entity = ''
         embeddings = ''
-        embedding = ''
-        similar_embeddings = ''
+        similar_entities = []
         if request.method == 'POST':
 
             # First form: Set entities and entity
             if 'get_entities' in request.values:
-                entities_results = es.get_random_entities(current_app.config['ES_INDEX'], size=5)
-                for entities_result in entities_results:
-                    entities += entities_result + '\n'
-                if len(entities_results) > 0:
-                    entity = entities_results[0]
-                entities = entities.rstrip()
+                entities = es.get_random_entities(current_app.config['ES_INDEX'], size=9)
+                entity = entities[0]
 
             # Second form: Set embeddings and embedding
             if 'entity' in request.values and request.values['entity']:
                 entity = request.values['entity']
                 embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], [entity])
-                for embeddings_result in embeddings_results:
-                    embeddings += str(embeddings_result[1]) + '\n'
-                if len(embeddings_results) >= 1:
-                    embedding = embeddings_results[0][1]
-                embeddings = embeddings.rstrip()
+                if len(embeddings_results) > 0:
+                    embeddings = embeddings_results[0][1]
 
             # Third form: Set similar embeddings
-            if 'embedding' in request.values and request.values['embedding'].startswith('['):
-                embedding = ast.literal_eval(request.values['embedding'])
-                if len(embedding) == current_app.config['ES_DIMENSIONS']:
-                    results = es.get_similar_embeddings(current_app.config['ES_INDEX'], [embedding])
-                    length = 0
-                    for result in results:
-                        if len(result[2]) > length:
-                            length = len(result[2])
-                    similar_embeddings = ''
-                    for result in results:
-                        similar_embeddings += result[2].ljust(length) + '  '
-                        similar_embeddings += str("{:.4f}".format(round(result[1], 4))) + '  '
-                        similar_embeddings += str(result[3]) + '\n'
-                    similar_embeddings = similar_embeddings.rstrip()
+            if 'similarity' in request.values and request.values['similarity']:
+                entity = request.values['similarity']
+                embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entities=[entity])
+                if len(embeddings_results) > 0:
+                    similar_entities = []
+                    for tup in es.get_similar_embeddings(current_app.config['ES_INDEX'],
+                                                         embeddings=[embeddings_results[0][1]]):
+                        title = tup[2]
+                        if 'dbpedia.org/resource/' in title:
+                            title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
+                        similar_entities.append((str("{:.4f}".format(round(tup[1], 4))),
+                                                 tup[2],
+                                                 title))
 
-        return render_template('index.htm',
-                               entities=entities, entity=entity,
-                               embeddings=embeddings, embedding=embedding,
-                               similar_embeddings=similar_embeddings)
+        return render_template('index.htm', entities=entities, entity=entity,
+                               embeddings=embeddings, similar_entities=similar_entities)
 
     @app.route('/api', methods=['GET'])
     def api():

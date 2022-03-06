@@ -9,6 +9,18 @@
 <link href="/static/embeddings_cc.css" rel="stylesheet" />
 <!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
 <!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
+<style>
+span.entity {
+    background: #fae082;
+    display: inline-block;
+    padding: 5px 8px;
+    margin: 3px 3px 0 0;
+    border: 1px solid #000;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: .9em;
+}
+</style>
 </head>
 <body>
 <div id="container">
@@ -30,32 +42,44 @@ Once the review of the article is complete, additional details will be provided 
 
 <h2 id="entities" style="margin-top:0px">Entities</h2>
 
+<!--
 <p>Gets identifiers of example entities.</p>
+-->
 
 <form action="/" method="post">
 <input type="submit" value="Get random entities" name="get_entities">
-<textarea readonly>{{ entities }}</textarea>
 </form>
+{% for e in entities %}<span class="entity" onclick="document.getElementById('entity').value=this.innerHTML;document.getElementById('similarity').value=this.innerHTML">{{ e }}</span>{% endfor %}
+
 
 <h2 id="embeddings">Embeddings</h2>
 
+<!--
 <p>Takes an entity identifier and gets related embeddings.</p>
+-->
 
 <form action="/#embeddings" method="post">
-<input type="text" name="entity" value="{{ entity }}">
+<input type="text" name="entity" id="entity" value="{{ entity }}">
 <input type="submit" value="Get embeddings">
 <textarea readonly style="height:210px">{{ embeddings }}</textarea>
 </form>
 
-<h2 id="similar">Similar Embeddings</h2>
 
+<h2 id="similar">Similar Entities</h2>
+
+<!--
 <p>Takes embeddings and gets similar embeddings based on cosine similarity.</p>
+-->
 
 <form action="/#similar" method="post">
-<input type="text" name="embedding" value="{{ embedding }}">
-<input type="submit" value="Get similar embeddings">
-<textarea readonly style="height:210px; white-space:pre">{{ similar_embeddings }}</textarea>
+<input type="text" name="similarity" id="similarity" value="{{ entity }}">
+<input type="submit" value="Get similar entities">
 </form>
+<ul>
+{% for e in similar_entities %}
+    <li>{{ e[0] }} <a target="_blank" href="{{ e[1] }}">{{ e[2] }}</a></li>
+{% endfor %}
+</ul>
 
 </div>
 </body>
