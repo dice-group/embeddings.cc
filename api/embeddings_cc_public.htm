@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>☎ embeddings.cc API</title>
+  <script>
+function apiCall(httpMethod, base, path, params) {
+    var url = base + path;
+    document.getElementById('request').innerHTML = httpMethod + "\n" + url + "\n" + params;
+    var xhr = new XMLHttpRequest();
+    xhr.open(httpMethod, url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            try {
+                document.getElementById('result').innerHTML = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
+            } catch (e) {
+                document.getElementById('result').innerHTML = xhr.responseText;  
+            } 
+        } else if (this.readyState === XMLHttpRequest.DONE) {
+            document.getElementById('result').innerHTML = xhr.responseText;
+        }
+    }
+    if (params) {
+        xhr.send(params);
+    } else {
+        xhr.send();
+    }
+}
+  </script>
+ </head>
+ <body style="font-family:sans-serif">
+  <div style="max-width:800px;margin:0 auto">
+   <form onsubmit="apiCall(document.getElementById('method').value, document.getElementById('base').value, document.getElementById('path').value, document.getElementById('params').value); return false">
+    <select id="method" size="2" style="width:100%;padding:10px">
+        <option value="POST" selected>POST</option>
+        <option value="GET">GET</option>
+    </select>
+    <select id="base" size="3" style="width:100%;padding:10px">
+        <option value="https://embeddings.cc" selected>https://embeddings.cc</option>
+        <option value="https://embeddings.cs.upb.de:8443">https://embeddings.cs.upb.de:8443</option>
+        <option value="http://127.0.0.1:1337">http://127.0.0.1:1337</option>
+    </select>
+    <input type="text" id="path" list="paths" style="width:100%;padding:10px">
+    <datalist id="paths">
+      <option value="/api/v1/ping">
+      <option value="/api/v1/get_random_entities">
+      <option value="/api/v1/get_entities">
+      <option value="/api/v1/get_embeddings">
+      <option value="/api/v1/get_similar_embeddings">
+      <option value="/api/v1/get_similar_entities">
+      <option value="">
+    </datalist>
+    <textarea id="params" style="width:100%;height:120px;padding:10px">
+{
+  "size": "3"
+}
+    </textarea>
+    APIS:
+    <a href="https://embeddings.cc/api" target="_blank">embeddings.cc</a> -
+    <a href="https://embeddings.cs.upb.de:8443/api" target="_blank">embeddings.cs.upb.de:8443</a> -
+    <a href="http://127.0.0.1:1337/api" target="_blank">127.0.0.1:1337</a>
+    <input type="submit" value="Send request" style="width:100%;padding:10px">
+    <textarea id="request" style="width:100%;height:120px;padding:10px" readonly></textarea>
+    <textarea id="result" style="width:100%;height:120px;padding:10px" readonly></textarea>
+   </form>
+  </div>
+ </body>
+</html>

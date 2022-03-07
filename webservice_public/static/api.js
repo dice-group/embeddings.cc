@@ -1,5 +1,6 @@
 function apiCall(httpMethod, path, parameters, inputId, resultId) {
-    var domain = 'https://embeddings.cc'
+    var domain = window.location.origin;
+    //var domain = 'https://embeddings.cc';
     var xhr = new XMLHttpRequest();
     xhr.open(httpMethod, domain + path, true);
     xhr.setRequestHeader("Content-type", "application/json");
@@ -65,7 +66,8 @@ function apiCallParse(httpMethod, path, parameterName, parametersId, inputId, re
 }
 
 function initialize_parameters(httpMethod, path, parameters) {
-    var domain = 'https://embeddings.cc'
+    var domain = window.location.origin;
+    //var domain = 'https://embeddings.cc'
     var xhr = new XMLHttpRequest();
     xhr.open(httpMethod, domain + path, true);
     xhr.setRequestHeader("Content-type", "application/json");

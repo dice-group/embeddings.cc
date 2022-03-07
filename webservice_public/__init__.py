@@ -47,6 +47,27 @@ def create_app(test_config=None):
             return 'Incorrect value for parameter: size', 422
         return jsonify(es.get_random_entities(current_app.config['ES_INDEX'], size=size))
 
+    @app.route('/api/v1/get_entities', methods=['POST'])
+    @cross_origin()
+    def get_entities():
+        size = 100
+        offset = 0
+        if 'size' in request.json and request.json['size']:
+            try:
+                size = int(request.json['size'])
+            except ValueError:
+                return 'Incorrect type for parameter: size', 415
+        if size < 1 or size > 100:
+            return 'Incorrect value for parameter: size', 422
+        if 'offset' in request.json and request.json['offset']:
+            try:
+                offset = int(request.json['offset'])
+            except ValueError:
+                return 'Incorrect type for parameter: offset', 415
+        if offset < 0:
+            return 'Incorrect value for parameter: offset', 422
+        return jsonify(es.get_entities(current_app.config['ES_INDEX'], size=size, offset=offset))
+
     @app.route('/api/v1/get_embeddings', methods=['POST'])
     @cross_origin()
     def get_embeddings():

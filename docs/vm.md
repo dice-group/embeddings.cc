@@ -2,6 +2,7 @@
 
 - Hostname: `embeddings.cs.uni-paderborn.de`
 - IP: `131.234.28.19`
+- IPv6: `[::ffff:83ea:1c13]`
 - Created: 2022-02-22
 - OS: Debian GNU/Linux 11 (bullseye) (`cat /etc/*-release`)
 - Ports open: 443/tcp, 8443/tcp 

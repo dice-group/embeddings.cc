@@ -40,6 +40,17 @@ def get_random_entities(index, size=10):
     return entities
 
 
+def get_entities(index, size=100, offset=0):
+    response = get_es().search(index=index, size=size, body={
+        "from": offset, "size": size, "query": {"match_all": {}}
+    })
+    print(response)
+    entities = []
+    for hit in response['hits']['hits']:
+        entities.append(hit['_source']['entity'])
+    return entities
+
+
 def get_embeddings(index, entities):
     request = []
     for entity in entities:
