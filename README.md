@@ -4,13 +4,18 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ## Documentation
 
+### Public API (for users)
+
+- The API is documented at [embeddings.cc/api](https://embeddings.cc/api)
+- Additional examples are provided in [Python examples](api/embeddings_cc_public_examples.py) and [JavaScript HTML form](api/embeddings_cc_public.htm)
+
 ### Index API (for universal embeddings developers)
 
 - Use the Index API to create Elasticsearch indexes and to add data.
 - The API is only available in UPB network (use VPN).
-- The API can easily accessed via a [python file](api/embeddings_cc_index.py).
-- Usage examples are provided in an [example python file](api/embeddings_cc_index_examples.py).
-- To check, if the webservice and Elasticsearch are running, use the [ping webservice](http://embeddings.cs.uni-paderborn.de:8008/ping).
+- The API can easily accessed via the [API python file](api/embeddings_cc_index.py).
+- Usage examples are provided in the [examples python file](api/embeddings_cc_index_examples.py) and
+  in the [CSV example python file](api/embeddings_cc_index_csv.py).
 
 | Webservice      | Method | Parameters                          |
 |-----------------|--------|-------------------------------------|

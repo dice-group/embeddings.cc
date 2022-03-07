@@ -75,6 +75,7 @@ class EmbeddingsCcIndex():
         Data is transformed to JSON, so tuples and lists are handled equally.
         Important: Split your data into multiple requests and wait for a response
         before adding additional data. A request can take max 50,000 items.
+        Also important: Ensure the embeddings are in numeric format (not string).
         """
         if len(docs) > 50000:
             raise IndexError('Too many records')
