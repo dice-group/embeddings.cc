@@ -2,6 +2,7 @@ import os
 import traceback
 import ast
 import json
+import urllib.parse
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from . import es
@@ -120,20 +121,32 @@ def create_app(test_config=None):
         embeddings = ''
         similar_entities = []
         if request.method == 'POST':
+            matches = ["&amp;", "'"]
 
             # First form: Set entities and entity
             if 'get_entities' in request.values:
-                entities = es.get_random_entities(current_app.config['ES_INDEX'], size=9)
-                entity = entities[0]
+                entities_results = es.get_random_entities(current_app.config['ES_INDEX'], size=15)
+                for entities_result in entities_results:
+                    if any(x in entities_result for x in matches):
+                        continue
+                    
+                    title = entities_result       
+                    if 'fr.dbpedia.org/resource/' in title:
+                        title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)' 
+                    elif 'dbpedia.org/resource/' in title:
+                        title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
+                    entities.append((entities_result, title))
+                    
+                entity = entities[0][0]
 
-            # Second form: Set embeddings and embedding
+            # Third form: Set embeddings and embedding
             if 'entity' in request.values and request.values['entity']:
                 entity = request.values['entity']
                 embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], [entity])
                 if len(embeddings_results) > 0:
                     embeddings = embeddings_results[0][1]
 
-            # Third form: Set similar embeddings
+            # Second form: Set similar embeddings
             if 'similarity' in request.values and request.values['similarity']:
                 entity = request.values['similarity']
                 embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entities=[entity])
@@ -141,8 +154,13 @@ def create_app(test_config=None):
                     similar_entities = []
                     for tup in es.get_similar_embeddings(current_app.config['ES_INDEX'],
                                                          embeddings=[embeddings_results[0][1]]):
-                        title = tup[2]
-                        if 'dbpedia.org/resource/' in title:
+                        if any(x in tup[2] for x in matches):
+                            continue
+                        
+                        title = tup[2]      
+                        if 'fr.dbpedia.org/resource/' in title:
+                            title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)' 
+                        elif 'dbpedia.org/resource/' in title:
                             title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
                         similar_entities.append((str("{:.4f}".format(round(tup[1], 4))),
                                                  tup[2],
