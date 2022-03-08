@@ -27,7 +27,7 @@ class EmbeddingsCcIndex():
         """
         Returns:
         200: Success
-        502: Webservice unavailable
+        502: Webservice unavailable (also if not in UPB network, check VPN)
         503: Elasticsearch service unavailable
         """
         try:

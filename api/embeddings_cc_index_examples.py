@@ -35,7 +35,7 @@ print("webservice_url:", webservice_url)
 if True:
     statusCode = embeddings_cc_index.ping(seconds=1)
     if statusCode == 502:
-        print('502: Webservice unavailable')
+        print('502: Webservice unavailable (Check VPN)')
         sys.exit(1)
     elif statusCode == 503:
         print('503: Elasticsearch service unavailable')
