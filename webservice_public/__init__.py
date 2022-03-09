@@ -24,7 +24,7 @@ def create_app(test_config=None):
 
     es.init_app(app)
 
-    @app.route('/api/v1/ping', methods=['GET'])
+    @app.route('/api/v1/ping', methods=['GET', 'POST'])
     @cross_origin()
     def ping():
         log()
@@ -32,6 +32,12 @@ def create_app(test_config=None):
             return 'Status: Database unavailable', 503
         else:
             return 'Status: OK', 200
+
+    @app.route('/api/v1/get_size', methods=['POST'])
+    @cross_origin()
+    def get_size():
+        log()
+        return es.get_es().cat.count(current_app.config['ES_INDEX'])[2]
 
     @app.route('/api/v1/get_random_entities', methods=['POST'])
     @cross_origin()
@@ -57,7 +63,7 @@ def create_app(test_config=None):
                 size = int(request.json['size'])
             except ValueError:
                 return 'Incorrect type for parameter: size', 415
-        if size < 1 or size > 100:
+        if size < 1 or size > 10000:
             return 'Incorrect value for parameter: size', 422
         if 'offset' in request.json and request.json['offset']:
             try:

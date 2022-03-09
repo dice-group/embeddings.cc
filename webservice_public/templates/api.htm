@@ -31,6 +31,15 @@ input[type=text] {
     width: 180px;
 }
 
+input[type=number] {
+    background: #e5f2f8;
+    width: 180px;
+}
+
+input:hover[type=number] {
+    background: #f1f6db;
+}
+
 textarea {
     width: 96%;
 }
@@ -68,11 +77,15 @@ pre::-webkit-scrollbar-track {
 
 <ul>
  <li><a href="#ping">/api/v1/ping</a></li>
+ <li><a href="#get_size">/api/v1/get_size</a></li>
  <li><a href="#get_random_entities">/api/v1/get_random_entities</a></li>
+ <li><a href="#get_entities">/api/v1/get_entities</a></li>
  <li><a href="#get_embeddings">/api/v1/get_embeddings</a></li>
  <li><a href="#get_similar_embeddings">/api/v1/get_similar_embeddings</a></li>
  <li><a href="#get_similar_entities">/api/v1/get_similar_entities</a></li>
 </ul>
+
+
 
 <h2 id="ping">/api/v1/ping</h2>
 <table>
@@ -86,7 +99,7 @@ pre::-webkit-scrollbar-track {
  </tr>
  <tr>
   <td>HTTP method</td>
-  <td>GET</td>
+  <td>POST or GET</td>
  </tr>
  <tr>
   <td>Python code example</td>
@@ -108,6 +121,53 @@ if httpx.get('https://embeddings.cc/api/v1/ping').status_code == 200:
  <tr class="test-result">
   <td>Test result</td>
   <td class="code"><pre><code id="ping_result" class="language-json"></code></pre></td>
+ </tr>
+</table>
+
+
+
+<h2 id="get_size">/api/v1/get_size</h2>
+
+<table>
+ <tr>
+  <td class="title">Description</td>
+  <td>Gets number of available entities.</td>
+ </tr>
+ <tr>
+  <td class="title">URL</td>
+  <td>https://embeddings.cc/api/v1/get_size</td>
+ </tr>
+ <tr>
+  <td>HTTP method</td>
+  <td>POST</td>
+ </tr>
+ <tr>
+  <td>Returns</td>
+  <td>Number of available entities, format: text </td>
+ </tr>
+ <tr>
+  <td>Python code example</td>
+  <td class="code">
+<pre><code class="language-python">import httpx
+response = httpx.post('https://embeddings.cc/api/v1/get_size')
+if response.status_code == 200:
+    print(response.text)
+else:
+    print('Error:', response.text)
+</code></pre>
+</td>
+ </tr>
+ <tr>
+  <td>Test</td>
+  <td>
+   <form onsubmit="apiCall('POST', '/api/v1/get_size', {}, null, 'get_size_result'); return false">
+    <input type="submit" value="Test API method">
+   </form>
+  </td>
+ </tr>
+ <tr class="test-result">
+  <td>Test result</td>
+  <td class="code"><pre><code id="get_size_result" class="language-json"></code></pre></td>
  </tr>
 </table>
 
@@ -152,7 +212,7 @@ else:
   <td>Test</td>
   <td>
    <form onsubmit="apiCall('POST', '/api/v1/get_random_entities', {size:document.getElementById('get_random_entities_size').value}, 'get_random_entities_input', 'get_random_entities_result'); return false">
-    <input type="text" id="get_random_entities_size" value="10">
+    <input type="number" id="get_random_entities_size" value="10" min="1" max="100">
     <input type="submit" value="Test API method">
    </form>
   </td>
@@ -164,6 +224,66 @@ else:
  <tr class="test-result">
   <td>Test result</td>
   <td class="code"><pre><code id="get_random_entities_result" class="language-json"></code></pre></td>
+ </tr>
+</table>
+
+
+
+<h2 id="get_entities">/api/v1/get_entities</h2>
+
+<table>
+ <tr>
+  <td class="title">Description</td>
+  <td>Gets entities, starting from offset.</td>
+ </tr>
+ <tr>
+  <td class="title">URL</td>
+  <td>https://embeddings.cc/api/v1/get_entities</td>
+ </tr>
+ <tr>
+  <td>HTTP method</td>
+  <td>POST</td>
+ </tr>
+ <tr>
+  <td>Parameters</td>
+  <td>
+   <em>size</em> { default: 100, max: 10000, format: JSON } <br />
+   <em>offset</em> { default: 0, format: JSON }
+  </td>
+ </tr>
+ <tr>
+  <td>Returns</td>
+  <td>List of entity identifiers, format: JSON </td>
+ </tr>
+ <tr>
+  <td>Python code example</td>
+  <td class="code">
+<pre><code class="language-python">import httpx
+response = httpx.post('https://embeddings.cc/api/v1/get_entities', json={'size': 100, 'offset': 0})
+if response.status_code == 200:
+    print(response.json())
+else:
+    print('Error:', response.text)
+</code></pre>
+</td>
+ </tr>
+ <tr>
+  <td>Test</td>
+  <td>
+   <form onsubmit="apiCall('POST', '/api/v1/get_entities', {size:document.getElementById('get_entities_size').value, offset:document.getElementById('get_entities_offset').value}, 'get_entities_input', 'get_entities_result'); return false">
+    <input type="number" id="get_entities_size" value="100" min="1" max="1000">
+    <input type="number" id="get_entities_offset" value="0" min="0">
+    <input type="submit" value="Test API method">
+   </form>
+  </td>
+ </tr>
+ <tr class="test-input">
+  <td>Test input</td>
+  <td class="code"><pre><code id="get_entities_input" class="language-json"></code></pre></td>
+ </tr>
+ <tr class="test-result">
+  <td>Test result</td>
+  <td class="code"><pre><code id="get_entities_result" class="language-json"></code></pre></td>
  </tr>
 </table>
 

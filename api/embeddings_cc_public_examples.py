@@ -15,7 +15,25 @@ if False:
 
 if False:
     import httpx
+    response = httpx.post('http://127.0.0.1:1337/api/v1/get_size')
+    if response.status_code == 200:
+        print(response.text)
+    else:
+        print('Error:', response.text)
+
+
+if False:
+    import httpx
     response = httpx.post('http://127.0.0.1:1337/api/v1/get_random_entities', json={'size': 10})
+    if response.status_code == 200:
+        print(response.json())
+    else:
+        print('Error:', response.text)
+
+
+if False:
+    import httpx
+    response = httpx.post('http://127.0.0.1:1337/api/v1/get_entities', json={'size': 100, 'offset': 0})
     if response.status_code == 200:
         print(response.json())
     else:
