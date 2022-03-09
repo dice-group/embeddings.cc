@@ -4,6 +4,13 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ## Documentation
 
+### Hidden features
+
+- 💀 Please do not tell anyone! This is top secret! 💀
+- [https://embeddings.cc/?dev](https://embeddings.cc/?dev)
+- [https://embeddings.cc/usage](https://embeddings.cc/usage)
+- [https://embeddings.cc/news](https://embeddings.cc/news)
+
 ### Public API (for users)
 
 - The API is documented at [embeddings.cc/api](https://embeddings.cc/api)

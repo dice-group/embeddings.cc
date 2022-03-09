@@ -28,12 +28,13 @@ export FLASK_RUN_PORT=8008  # or another port
   `./scripts/vm-push.sh`
 - `ssh wilke@embeddings.cs.upb.de`
 - `. /opt/bashrc.sh`
-- Move directory to /opt. **Do not overwrite** running code!  
-  `sudo mv /tmp/embeddings.cc/ /opt/embeddings.cc/`
+- Move directory to /opt. **Do not overwrite** running code for one of the both webservices!  
+  `sudo mv /tmp/embeddings.cc/ /opt/embeddings_cc_x/`
 - `mkdir /opt/embeddings.cc/instance`
 - `ln -s /opt/config.py /opt/embeddings.cc/instance/config.py`
 - Stop running instance at start new one at:  
-  `screen -r webservice-public`
+  `screen -r webservice-public`  
+  `screen -r webservice-index`
 
 ## Python
 

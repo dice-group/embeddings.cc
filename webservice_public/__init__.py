@@ -125,6 +125,15 @@ def create_app(test_config=None):
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
+
+        # Add links to indices for developers
+        dev = ''
+        index = ''
+        if 'dev' in request.values:
+            dev = es.get_indices()
+        if 'index' in request.values:
+            index = request.values['index']
+
         entities = []
         entity = ''
         embeddings = ''
@@ -134,7 +143,7 @@ def create_app(test_config=None):
 
             # First form: Set entities and entity
             if 'get_entities' in request.values:
-                entities_results = es.get_random_entities(current_app.config['ES_INDEX'], size=15)
+                entities_results = es.get_random_entities(get_index(), size=15)
                 for entities_result in entities_results:
                     if any(x in entities_result for x in matches):
                         continue
@@ -153,17 +162,17 @@ def create_app(test_config=None):
             # Third form: Set embeddings and embedding
             if 'entity' in request.values and request.values['entity']:
                 entity = request.values['entity']
-                embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], [entity])
+                embeddings_results = es.get_embeddings(get_index(), [entity])
                 if len(embeddings_results) > 0:
                     embeddings = embeddings_results[0][1]
 
             # Second form: Set similar embeddings
             if 'similarity' in request.values and request.values['similarity']:
                 entity = request.values['similarity']
-                embeddings_results = es.get_embeddings(current_app.config['ES_INDEX'], entities=[entity])
+                embeddings_results = es.get_embeddings(get_index(), entities=[entity])
                 if len(embeddings_results) > 0:
                     similar_entities = []
-                    for tup in es.get_similar_embeddings(current_app.config['ES_INDEX'],
+                    for tup in es.get_similar_embeddings(get_index(),
                                                          embeddings=[embeddings_results[0][1]]):
                         if any(x in tup[2] for x in matches):
                             continue
@@ -181,7 +190,8 @@ def create_app(test_config=None):
 
         log()
         return render_template('index.htm', entities=entities, entity=entity,
-                               embeddings=embeddings, similar_entities=similar_entities)
+                               embeddings=embeddings, similar_entities=similar_entities,
+                               dev=dev, index=index)
 
     @app.route('/api', methods=['GET'])
     def api():
@@ -202,6 +212,12 @@ def create_app(test_config=None):
     def favicon():
         return send_from_directory(os.path.join(app.root_path, 'static'),
                                    'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+    def get_index():
+        if 'index' in request.values and request.values['index']:
+            return request.values['index']
+        else:
+            return current_app.config['ES_INDEX']
 
     def log():
         es.log(int(time.time()), request.remote_addr, request.path, request.args)

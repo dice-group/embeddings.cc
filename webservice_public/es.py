@@ -106,3 +106,9 @@ def get_log_paths():
         results[result['key']] = result['doc_count']
     results['total'] = response['hits']['total']['value']
     return sorted(results.items(), key=lambda x: x[1], reverse=True)
+
+
+def get_indices():
+    indices = list(get_es().indices.get_alias("*").keys())
+    indices.remove('logger')
+    return [x for x in indices if 'security' not in x]

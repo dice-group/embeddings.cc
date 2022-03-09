@@ -35,6 +35,15 @@ span.entity {
 
 <h1>Universal Knowledge Graph Embeddings</h1>
 
+{% if dev %}
+<!-- List of indices for developers -->
+<div style="padding:10px;border:1px solid #e97369;background:#fbe3e1;margin-bottom:10px">
+{% for index in dev %}
+    <a href="/?index={{ index }}">{{ index }}</a><br/>
+{% endfor %}
+</div>
+{% endif %}
+
 <!--
 <p>
 This site provides Knowledge Graph Embeddings as open web services.
@@ -53,6 +62,7 @@ Use the button below to get some examples.
 
 <form action="/" method="post">
 <input type="submit" value="Get random entities" name="get_entities">
+{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
 <p>
 {% for e in entities %}<span class="entity" onclick="document.getElementById('similarity').value='{{ e[0] }}';document.getElementById('entity').value='{{ e[0] }}'">{{ e[1] }}</span>{% endfor %}
@@ -69,6 +79,7 @@ Use the following form to find similar entities.
 <form action="/#similar" id="form_similar" method="post">
 <input type="text" name="similarity" id="similarity" value="{{ entity }}">
 <input type="submit" value="Get similar entities">
+{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
 <ul>
 {% for e in similar_entities %}
@@ -89,6 +100,7 @@ Use the form below to view an example.
 <input type="text" name="entity" id="entity" value="{{ entity }}">
 <input type="submit" value="Get embeddings">
 <textarea readonly style="height:210px">{{ embeddings }}</textarea>
+{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
 
 </div>
