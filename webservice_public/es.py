@@ -41,7 +41,7 @@ def get_random_entities(index, size=10):
 
 
 def get_entities(index, size=100, offset=0):
-    response = get_es().search(index=index, size=size, body={
+    response = get_es().search(index=index, body={
         "from": offset, "size": size, "query": {"match_all": {}}
     })
     entities = []

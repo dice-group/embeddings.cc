@@ -37,7 +37,8 @@ def create_app(test_config=None):
     @cross_origin()
     def get_size():
         log()
-        return es.get_es().cat.count(current_app.config['ES_INDEX'])[2]
+        count_string = es.get_es().cat.count(index=current_app.config['ES_INDEX'])
+        return count_string[count_string.rindex(' ')+1:]
 
     @app.route('/api/v1/get_random_entities', methods=['POST'])
     @cross_origin()
