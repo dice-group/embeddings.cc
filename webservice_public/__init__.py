@@ -1,8 +1,5 @@
 import os
-import traceback
-import ast
-import json
-import urllib.parse
+import time
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from . import es
@@ -30,6 +27,7 @@ def create_app(test_config=None):
     @app.route('/api/v1/ping', methods=['GET'])
     @cross_origin()
     def ping():
+        log()
         if not es.get_es().ping():
             return 'Status: Database unavailable', 503
         else:
@@ -46,6 +44,7 @@ def create_app(test_config=None):
                 return 'Incorrect type for parameter: size', 415
         if size < 1 or size > 100:
             return 'Incorrect value for parameter: size', 422
+        log()
         return jsonify(es.get_random_entities(current_app.config['ES_INDEX'], size=size))
 
     @app.route('/api/v1/get_entities', methods=['POST'])
@@ -67,6 +66,7 @@ def create_app(test_config=None):
                 return 'Incorrect type for parameter: offset', 415
         if offset < 0:
             return 'Incorrect value for parameter: offset', 422
+        log()
         return jsonify(es.get_entities(current_app.config['ES_INDEX'], size=size, offset=offset))
 
     @app.route('/api/v1/get_embeddings', methods=['POST'])
@@ -78,6 +78,7 @@ def create_app(test_config=None):
             entities = request.json['entities']
         if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
+        log()
         return jsonify(es.get_embeddings(current_app.config['ES_INDEX'], entities=entities))
 
     @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
@@ -93,6 +94,7 @@ def create_app(test_config=None):
             if current_app.config['ES_DIMENSIONS'] != len(embedding):
                 return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
                        str(current_app.config['ES_DIMENSIONS']) + ') for embeddings index: ' + str(i), 422
+        log()
         return jsonify(es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings))
 
     @app.route('/api/v1/get_similar_entities', methods=['POST'])
@@ -112,6 +114,7 @@ def create_app(test_config=None):
         results = []
         for trip in es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings):
             results.append((trip[0], trip[1], trip[2]))
+        log()
         return jsonify(results)
 
     @app.route('/', methods=['GET', 'POST'])
@@ -129,14 +132,14 @@ def create_app(test_config=None):
                 for entities_result in entities_results:
                     if any(x in entities_result for x in matches):
                         continue
-                    
-                    title = entities_result       
+
+                    title = entities_result
                     if 'fr.dbpedia.org/resource/' in title:
-                        title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)' 
+                        title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)'
                     elif 'dbpedia.org/resource/' in title:
                         title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
                     entities.append((entities_result, title))
-                    
+
                 entity = entities[0][0]
 
             # Third form: Set embeddings and embedding
@@ -156,26 +159,41 @@ def create_app(test_config=None):
                                                          embeddings=[embeddings_results[0][1]]):
                         if any(x in tup[2] for x in matches):
                             continue
-                        
-                        title = tup[2]      
+
+                        title = tup[2]
                         if 'fr.dbpedia.org/resource/' in title:
-                            title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)' 
+                            title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)'
                         elif 'dbpedia.org/resource/' in title:
                             title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
                         similar_entities.append((str("{:.4f}".format(round(tup[1], 4))),
                                                  tup[2],
                                                  title))
 
+        log()
         return render_template('index.htm', entities=entities, entity=entity,
                                embeddings=embeddings, similar_entities=similar_entities)
 
     @app.route('/api', methods=['GET'])
     def api():
+        log()
         return render_template('api.htm')
+
+    @app.route('/news', methods=['GET'])
+    def news():
+        log()
+        return render_template('news.htm')
+
+    @app.route('/usage', methods=['GET'])
+    def usage():
+        log()
+        return jsonify(es.get_log_paths())
 
     @app.route('/favicon.ico')
     def favicon():
         return send_from_directory(os.path.join(app.root_path, 'static'),
                                    'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+    def log():
+        es.log(int(time.time()), request.remote_addr, request.path, request.args)
 
     return app

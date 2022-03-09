@@ -44,7 +44,6 @@ def get_entities(index, size=100, offset=0):
     response = get_es().search(index=index, size=size, body={
         "from": offset, "size": size, "query": {"match_all": {}}
     })
-    print(response)
     entities = []
     for hit in response['hits']['hits']:
         entities.append(hit['_source']['entity'])
@@ -89,3 +88,21 @@ def get_similar_embeddings(index, embeddings):
         for hit in resp['hits']['hits']:
             results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
     return results
+
+
+def log(epoch_second, ip, path, parameters):
+    get_es().index(index='logger', body={
+        'date': epoch_second,
+        'ip': ip,
+        'path': path,
+        'parameters': parameters
+    })
+
+
+def get_log_paths():
+    response = get_es().search(index='logger', body={"aggs": {"paths": {"terms": {"field": "path"}}}})
+    results = {}
+    for result in response['aggregations']['paths']['buckets']:
+        results[result['key']] = result['doc_count']
+    results['total'] = response['hits']['total']['value']
+    return sorted(results.items(), key=lambda x: x[1], reverse=True)

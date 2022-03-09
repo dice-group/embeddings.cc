@@ -1,3 +1,13 @@
+# embeddings.cc create logging index
+# https://github.com/dice-group/embeddings.cc
+#
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/mapping-types.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/date.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/ip.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/flattened.html
+#
+# Usage:       python3 scripts/create-logger.py <PASSWORD>
+# Local usage: python3 scripts/create-logger.py <PASSWORD> http://127.0.0.1:8008
 import sys
 from elasticsearch import Elasticsearch
 
@@ -7,9 +17,11 @@ es_password = None
 es_index = 'logger'
 
 do_delete_index = False
-do_create_index = False
+do_create_index = True
 do_print_indexes = False
 do_add_data = False
+do_count = False
+do_search = False
 
 # Get password form CLI
 if len(sys.argv) > 1:
@@ -32,10 +44,6 @@ if do_delete_index:
 
 # Create index
 if do_create_index:
-    # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/mapping-types.html
-    # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/date.html
-    # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/ip.html
-    # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/array.html
     index_config = {
         'settings': {
             'number_of_shards': 2,
@@ -54,12 +62,12 @@ if do_create_index:
                     'type': 'keyword'
                 },
                 'parameters': {
-                    'type': 'keyword'
+                    'type': 'flattened'
                 }
             }
         }
     }
-    es.indices.create(es_index, body=index_config)
+    es.indices.create(index=es_index, body=index_config)
 
 # Print indexes
 if do_print_indexes:
@@ -71,13 +79,13 @@ if do_print_indexes:
 import socket
 import time
 
-ip = socket.gethostbyname(socket.gethostname())
-time = int(time.time())
-path = '/api/test/log/me'
-params = [['size', 100], ['offset', 0]]
-
 # Add data
 if do_add_data:
+    ip = socket.gethostbyname(socket.gethostname())
+    time = int(time.time())
+    path = '/api/test/log/me'
+    params = {'size': 100, 'offset': 0}
+
     es.index(es_index, body={
         'date': time,
         'ip': ip,
@@ -86,9 +94,11 @@ if do_add_data:
     })
 
 # Count docs
-print(es.count(index=es_index))
+if do_count:
+    print('count:', es.count(index=es_index))
 
 # Get docs
-print(es.search(index=es_index, body={"query": {"match_all": {}}})['hits']['hits'])
-
-# State: Works. Check filter of parameters
+if do_search:
+    print('search:', es.search(index=es_index, body={"query": {"match_all": {}}})['hits']['hits'])
+    print('search 2:', es.search(index=es_index, body={"query": {"term": {"parameters": 100}}})['hits']['hits'])
+    print('search 3:', es.search(index=es_index, body={"query": {"term": {"parameters.size": 100}}})['hits']['hits'])

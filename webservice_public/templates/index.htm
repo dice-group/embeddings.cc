@@ -72,7 +72,7 @@ Use the following form to find similar entities.
 </form>
 <ul>
 {% for e in similar_entities %}
-    <li>{{ e[0] }} <span class="entity" onclick="document.getElementById('similarity').value='{{ e[1] }}';document.getElementById('form_similar').submit()">{{ e[2] }}</span>(<a target="_blank" href="{{ e[1] }}">DBpedia</a>)</li>
+    <li>{{ e[0] }} <span class="entity" onclick="document.getElementById('similarity').value='{{ e[1] }}';document.getElementById('form_similar').submit()">{{ e[2] }}</span>(<a target="_blank" href="{{ e[1] }}">link</a>)</li>
 {% endfor %}
 </ul>
 
