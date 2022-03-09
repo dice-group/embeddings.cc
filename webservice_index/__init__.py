@@ -2,7 +2,7 @@ import os
 import traceback
 import json
 import numbers
-from flask import Flask, request
+from flask import Flask, request, current_app
 from flask_cors import cross_origin
 from elasticsearch import ElasticsearchException
 from . import security
@@ -149,8 +149,12 @@ def create_app(test_config=None):
         else:
             index = request.args.get('index')
 
-        if "security" in index:
-            return 'Not allowed to delete security', 422
+        if current_app.config['ES_INDEX'] == index:
+            return 'Not allowed to delete default index ' + current_app.config['ES_INDEX'], 422
+        elif index == "logger":
+            return 'Not allowed to delete index logger', 422
+        elif "security" in index:
+            return 'Not allowed to delete index security', 422
 
         try:
             return es.get_es().indices.delete(index)
