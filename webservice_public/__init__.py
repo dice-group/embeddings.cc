@@ -138,6 +138,8 @@ def create_app(test_config=None):
                         title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)'
                     elif 'dbpedia.org/resource/' in title:
                         title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
+                    elif 'http://caligraph.org/ontology/' in title:
+                        title = title[30 + title.index('http://caligraph.org/ontology/'):].replace('_', ' ')
                     entities.append((entities_result, title))
 
                 entity = entities[0][0]
@@ -165,6 +167,8 @@ def create_app(test_config=None):
                             title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)'
                         elif 'dbpedia.org/resource/' in title:
                             title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
+                        elif 'http://caligraph.org/ontology/' in title:
+                            title = title[30 + title.index('http://caligraph.org/ontology/'):].replace('_', ' ')
                         similar_entities.append((str("{:.4f}".format(round(tup[1], 4))),
                                                  tup[2],
                                                  title))
