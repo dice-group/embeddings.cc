@@ -1,6 +1,7 @@
 import os
 import traceback
 import json
+import numbers
 from flask import Flask, request
 from flask_cors import cross_origin
 from elasticsearch import ElasticsearchException
@@ -159,6 +160,9 @@ def create_app(test_config=None):
     @app.route('/add', methods=['POST'])
     @cross_origin()
     def add():
+        index_entity     = 0
+        index_embeddings = 1
+
         if not request.json:
             return 'Missing json data', 422
 
@@ -177,6 +181,10 @@ def create_app(test_config=None):
         else:
             docs = request.json['docs']
 
+        if len(docs) > 0:
+            if not isinstance(docs[0][index_embeddings][0], numbers.Number):
+                return 'Embeddings of first record not numeric', 422
+
         if len(docs) > 50000:
             return 'Too many records', 413
 
@@ -188,8 +196,8 @@ def create_app(test_config=None):
                 }
             })
             documents.append({
-                'entity': doc[0],
-                'embeddings': doc[1]
+                'entity': doc[index_entity],
+                'embeddings': doc[index_embeddings]
             })
 
         try:
