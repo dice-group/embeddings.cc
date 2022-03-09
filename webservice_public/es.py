@@ -109,6 +109,6 @@ def get_log_paths():
 
 
 def get_indices():
-    indices = list(get_es().indices.get_alias("*").keys())
+    indices = list(get_es().indices.get_alias().keys())
     indices.remove('logger')
     return [x for x in indices if 'security' not in x]
