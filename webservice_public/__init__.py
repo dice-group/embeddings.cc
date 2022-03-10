@@ -145,6 +145,13 @@ def create_app(test_config=None):
         if 'index' in request.values:
             index = request.values['index']
 
+        index_size = es.get_es().cat.count(index=get_index())
+        index_size = index_size[index_size.rindex(' ') + 1:]
+        index_size = f'{int(index_size):,}'
+
+        es.get_suggestions(get_index(), 'http://dbpedia.org/resource/mu')
+        es.get_suggestions(get_index(), 'http://dbpedia.org/resource/Mu')
+
         entities = []
         entity = ''
         embeddings = ''
@@ -202,7 +209,7 @@ def create_app(test_config=None):
         log()
         return render_template('index.htm', entities=entities, entity=entity,
                                embeddings=embeddings, similar_entities=similar_entities,
-                               dev=dev, index=index)
+                               dev=dev, index=index, index_size=index_size)
 
     @app.route('/api', methods=['GET'])
     def api():
