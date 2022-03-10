@@ -170,9 +170,9 @@ def create_app(test_config=None):
         if not request.json:
             return 'Missing json data', 422
 
-        if 'password' not in request.values:
+        if 'password' not in request.json:
             return 'Missing parameter password', 422
-        elif not security.check_password(request.values['password']):
+        elif not security.check_password(request.json['password']):
             return 'Unauthorized', 401
 
         if 'index' not in request.json:

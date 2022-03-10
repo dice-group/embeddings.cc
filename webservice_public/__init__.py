@@ -149,9 +149,6 @@ def create_app(test_config=None):
         index_size = index_size[index_size.rindex(' ') + 1:]
         index_size = f'{int(index_size):,}'
 
-        es.get_suggestions(get_index(), 'http://dbpedia.org/resource/mu')
-        es.get_suggestions(get_index(), 'http://dbpedia.org/resource/Mu')
-
         entities = []
         entity = ''
         embeddings = ''
