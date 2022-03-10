@@ -8,18 +8,21 @@ import sys
 from embeddings_cc_index import EmbeddingsCcIndex
 
 # Configuration
-es_index      = 'index_test'
+es_index = 'index_test'
+es_alias = 'index_test_alias'
 es_dimensions = 10
 
 # Execution
-do_ping           = True
-do_delete_index   = True
-do_create_index   = False
-do_print_indexes  = True
+do_ping = True
+do_delete_index = False
+do_create_index = False
+do_alias_delete = False
+do_alias_put = False
+do_print_indexes = True
 do_add_data_tuple = False
-do_add_data_list  = False
-do_count          = False
-do_search         = False
+do_add_data_list = False
+do_count = False
+do_search = False
 
 # Get password form CLI
 if len(sys.argv) > 1:
@@ -66,6 +69,16 @@ if do_delete_index:
 if do_create_index:
     response = embeddings_cc_index.create_index(password, es_index, es_dimensions, shards=5)
     print('create_index:', response.status_code, response.text)
+
+# Deletes an alias of an index.
+if do_alias_delete:
+    response = embeddings_cc_index.alias_delete(password, es_index, es_alias)
+    print('alias_delete:', response.status_code, response.text)
+
+# Adds an alias for an index.
+if do_alias_put:
+    response = embeddings_cc_index.alias_put(password, es_index, es_alias)
+    print('alias_put:', response.status_code, response.text)
 
 # Returns webservice response containing existing Elasticsearch indexes.
 if do_print_indexes:

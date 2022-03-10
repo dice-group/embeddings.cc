@@ -164,15 +164,15 @@ def create_app(test_config=None):
     @app.route('/add', methods=['POST'])
     @cross_origin()
     def add():
-        index_entity     = 0
+        index_entity = 0
         index_embeddings = 1
 
         if not request.json:
             return 'Missing json data', 422
 
-        if 'password' not in request.json:
+        if 'password' not in request.values:
             return 'Missing parameter password', 422
-        elif not security.check_password(request.json['password']):
+        elif not security.check_password(request.values['password']):
             return 'Unauthorized', 401
 
         if 'index' not in request.json:
@@ -206,6 +206,52 @@ def create_app(test_config=None):
 
         try:
             return es.get_es().bulk(index=index, body=documents)
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
+
+    @app.route('/alias_put', methods=['POST'])
+    @cross_origin()
+    def alias_put():
+        if 'password' not in request.values:
+            return 'Missing parameter password', 422
+        elif not security.check_password(request.values['password']):
+            return 'Unauthorized', 401
+
+        if 'index' not in request.values:
+            return 'Missing parameter index', 422
+        else:
+            index = request.values['index']
+
+        if 'alias' not in request.values:
+            return 'Missing parameter alias', 422
+        else:
+            alias = request.values['alias']
+
+        try:
+            return es.get_es().indices.put_alias(index, alias)
+        except ElasticsearchException as e:
+            return traceback.format_exc(), 503
+
+    @app.route('/alias_delete', methods=['POST'])
+    @cross_origin()
+    def alias_delete():
+        if 'password' not in request.values:
+            return 'Missing parameter password', 422
+        elif not security.check_password(request.values['password']):
+            return 'Unauthorized', 401
+
+        if 'index' not in request.values:
+            return 'Missing parameter index', 422
+        else:
+            index = request.values['index']
+
+        if 'alias' not in request.values:
+            return 'Missing parameter alias', 422
+        else:
+            alias = request.values['alias']
+
+        try:
+            return es.get_es().indices.delete_alias(index, alias)
         except ElasticsearchException as e:
             return traceback.format_exc(), 503
 

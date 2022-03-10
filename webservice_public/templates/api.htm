@@ -77,6 +77,7 @@ pre::-webkit-scrollbar-track {
 
 <ul>
  <li><a href="#ping">/api/v1/ping</a></li>
+ <li><a href="#get_indices">/api/v1/get_indices</a></li>
  <li><a href="#get_size">/api/v1/get_size</a></li>
  <li><a href="#get_random_entities">/api/v1/get_random_entities</a></li>
  <li><a href="#get_entities">/api/v1/get_entities</a></li>
@@ -121,6 +122,53 @@ if httpx.get('https://embeddings.cc/api/v1/ping').status_code == 200:
  <tr class="test-result">
   <td>Test result</td>
   <td class="code"><pre><code id="ping_result" class="language-json"></code></pre></td>
+ </tr>
+</table>
+
+
+
+<h2 id="get_indices">/api/v1/get_indices</h2>
+
+<table>
+ <tr>
+  <td class="title">Description</td>
+  <td>Gets available indices (databases).</td>
+ </tr>
+ <tr>
+  <td class="title">URL</td>
+  <td>https://embeddings.cc/api/v1/get_indices</td>
+ </tr>
+ <tr>
+  <td>HTTP method</td>
+  <td>POST</td>
+ </tr>
+ <tr>
+  <td>Returns</td>
+  <td>List of available indices, format: JSON</td>
+ </tr>
+ <tr>
+  <td>Python code example</td>
+  <td class="code">
+<pre><code class="language-python">import httpx
+    response = httpx.post('https://embeddings.cc/api/v1/get_indices')
+    if response.status_code == 200:
+        print(response.text)
+    else:
+        print('Error:', response.text)
+</code></pre>
+</td>
+ </tr>
+ <tr>
+  <td>Test</td>
+  <td>
+   <form onsubmit="apiCall('POST', '/api/v1/get_indices', {}, null, 'get_indices_result'); return false">
+    <input type="submit" value="Test API method">
+   </form>
+  </td>
+ </tr>
+ <tr class="test-result">
+  <td>Test result</td>
+  <td class="code"><pre><code id="get_indices_result" class="language-json"></code></pre></td>
  </tr>
 </table>
 

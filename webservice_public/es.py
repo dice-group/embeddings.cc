@@ -119,3 +119,12 @@ def get_indices():
     indices = list(get_es().indices.get_alias().keys())
     indices.remove('logger')
     return [x for x in indices if 'security' not in x]
+
+
+def get_aliases():
+    aliases = []
+    for index in get_es().indices.get_alias().items():
+        index_aliases = list(index[1]['aliases'].keys())
+        if index_aliases:
+            aliases += index_aliases
+    return [x for x in aliases if 'security' not in x]

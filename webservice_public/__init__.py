@@ -35,6 +35,12 @@ def create_app(test_config=None):
         else:
             return 'Status: OK', 200
 
+    @app.route('/api/v1/get_indices', methods=['POST'])
+    @cross_origin()
+    def get_indices():
+        log()
+        return jsonify(es.get_aliases())
+
     @app.route('/api/v1/get_size', methods=['POST'])
     @cross_origin()
     def get_size():

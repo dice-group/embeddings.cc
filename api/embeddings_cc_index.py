@@ -81,3 +81,17 @@ class EmbeddingsCcIndex():
             raise IndexError('Too many records')
         data = json.JSONEncoder().encode({'password': password, 'index': index, 'docs': docs})
         return httpx.post(self.webservice_url + '/add', data=data, headers=self.headers_json, timeout=timeout)
+
+    def alias_put(self, password, index, alias):
+        """
+        Adds an alias for an index.
+        """
+        return httpx.post(self.webservice_url + '/alias_put',
+                          params={'password': password, 'index': index, 'alias': alias})
+
+    def alias_delete(self, password, index, alias):
+        """
+        Deletes an alias of an index.
+        """
+        return httpx.post(self.webservice_url + '/alias_delete',
+                          params={'password': password, 'index': index, 'alias': alias})
