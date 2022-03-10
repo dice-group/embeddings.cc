@@ -24,6 +24,8 @@ def create_app(test_config=None):
 
     es.init_app(app)
 
+    # Webservices ------------------------------------------------------------------------------------------------------
+
     @app.route('/api/v1/ping', methods=['GET', 'POST'])
     @cross_origin()
     def ping():
@@ -37,8 +39,8 @@ def create_app(test_config=None):
     @cross_origin()
     def get_size():
         log()
-        count_string = es.get_es().cat.count(index=current_app.config['ES_INDEX'])
-        return count_string[count_string.rindex(' ')+1:]
+        count_string = es.get_es().cat.count(index=get_index())
+        return count_string[count_string.rindex(' ') + 1:]
 
     @app.route('/api/v1/get_random_entities', methods=['POST'])
     @cross_origin()
@@ -52,7 +54,7 @@ def create_app(test_config=None):
         if size < 1 or size > 100:
             return 'Incorrect value for parameter: size', 422
         log()
-        return jsonify(es.get_random_entities(current_app.config['ES_INDEX'], size=size))
+        return jsonify(es.get_random_entities(get_index(), size=size))
 
     @app.route('/api/v1/get_entities', methods=['POST'])
     @cross_origin()
@@ -74,7 +76,7 @@ def create_app(test_config=None):
         if offset < 0:
             return 'Incorrect value for parameter: offset', 422
         log()
-        return jsonify(es.get_entities(current_app.config['ES_INDEX'], size=size, offset=offset))
+        return jsonify(es.get_entities(get_index(), size=size, offset=offset))
 
     @app.route('/api/v1/get_embeddings', methods=['POST'])
     @cross_origin()
@@ -86,7 +88,7 @@ def create_app(test_config=None):
         if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
         log()
-        return jsonify(es.get_embeddings(current_app.config['ES_INDEX'], entities=entities))
+        return jsonify(es.get_embeddings(get_index(), entities=entities))
 
     @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
     @cross_origin()
@@ -98,11 +100,11 @@ def create_app(test_config=None):
         if len(embeddings) > 100:
             return 'Incorrect value for parameter: embeddings', 422
         for i, embedding in enumerate(embeddings):
-            if current_app.config['ES_DIMENSIONS'] != len(embedding):
+            if es.get_dimensions(get_index()) != len(embedding):
                 return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
-                       str(current_app.config['ES_DIMENSIONS']) + ') for embeddings index: ' + str(i), 422
+                       str(es.get_dimensions(get_index())) + ') for embeddings index: ' + str(i), 422
         log()
-        return jsonify(es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings))
+        return jsonify(es.get_similar_embeddings(get_index(), embeddings))
 
     @app.route('/api/v1/get_similar_entities', methods=['POST'])
     @cross_origin()
@@ -115,14 +117,16 @@ def create_app(test_config=None):
             return 'Incorrect value for parameter: entities', 422
 
         embeddings = []
-        for tup in es.get_embeddings(current_app.config['ES_INDEX'], entities=entities):
+        for tup in es.get_embeddings(get_index(), entities=entities):
             embeddings.append(tup[1])
 
         results = []
-        for trip in es.get_similar_embeddings(current_app.config['ES_INDEX'], embeddings):
+        for trip in es.get_similar_embeddings(get_index(), embeddings):
             results.append((trip[0], trip[1], trip[2]))
         log()
         return jsonify(results)
+
+    # Website ----------------------------------------------------------------------------------------------------------
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -214,8 +218,12 @@ def create_app(test_config=None):
         return send_from_directory(os.path.join(app.root_path, 'static'),
                                    'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+    # Helpers ----------------------------------------------------------------------------------------------------------
+
     def get_index():
-        if 'index' in request.values and request.values['index']:
+        if request.json and 'index' in request.json and request.json['index']:
+            return request.json['index']
+        elif request.values and 'index' in request.values and request.values['index']:
             return request.values['index']
         else:
             return current_app.config['ES_INDEX']

@@ -13,7 +13,7 @@ es_dimensions = 10
 
 # Execution
 do_ping           = True
-do_delete_index   = False
+do_delete_index   = True
 do_create_index   = False
 do_print_indexes  = True
 do_add_data_tuple = False

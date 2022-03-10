@@ -50,6 +50,13 @@ def get_entities(index, size=100, offset=0):
     return entities
 
 
+def get_dimensions(index):
+    response = get_es().search(index=index, body={
+        "from": 0, "size": 1, "query": {"match_all": {}}
+    })
+    return len(response['hits']['hits'][0]['_source']['embeddings'])
+
+
 def get_embeddings(index, entities):
     request = []
     for entity in entities:

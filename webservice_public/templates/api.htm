@@ -142,6 +142,12 @@ if httpx.get('https://embeddings.cc/api/v1/ping').status_code == 200:
   <td>POST</td>
  </tr>
  <tr>
+  <td>Parameter</td>
+  <td>
+   <em>index</em> { optional, format: JSON }
+  </td>
+ </tr>
+ <tr>
   <td>Returns</td>
   <td>Number of available entities, format: text </td>
  </tr>
@@ -189,8 +195,11 @@ else:
   <td>POST</td>
  </tr>
  <tr>
-  <td>Parameter</td>
-  <td><em>size</em> { default: 10, max: 100, format: JSON }</td>
+  <td>Parameters</td>
+  <td>
+   <em>size</em> { default: 10, max: 100, format: JSON } <br />
+   <em>index</em> { optional, format: JSON }
+  </td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -248,7 +257,8 @@ else:
   <td>Parameters</td>
   <td>
    <em>size</em> { default: 100, max: 10000, format: JSON } <br />
-   <em>offset</em> { default: 0, format: JSON }
+   <em>offset</em> { default: 0, format: JSON } <br />
+   <em>index</em> { optional, format: JSON }
   </td>
  </tr>
  <tr>
@@ -305,8 +315,11 @@ else:
   <td>POST</td>
  </tr>
  <tr>
-  <td>Parameter</td>
-  <td><em>entities</em> { value: list of entity identifiers, max: 100, format: JSON }</td>
+  <td>Parameters</td>
+  <td>
+   <em>entities</em> { value: list of entity identifiers, max: 100, format: JSON } <br />
+   <em>index</em> { optional, format: JSON }
+  </td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -366,8 +379,10 @@ else:
   <td>POST</td>
  </tr>
  <tr>
-  <td>Parameter</td>
-  <td><em>embeddings</em> { value: list of embeddings, max: 100, format: JSON }</td>
+  <td>Parameters</td>
+  <td>
+   <em>embeddings</em> { value: list of embeddings, max: 100, format: JSON } <br />
+   <em>index</em> { optional, format: JSON } </td>
  </tr>
  <tr>
   <td>Returns</td>
@@ -427,8 +442,11 @@ else:
   <td>POST</td>
  </tr>
  <tr>
-  <td>Parameter</td>
-  <td><em>embeddings</em> { value: list of entity identifiers, max: 100, format: JSON }</td>
+  <td>Parameters</td>
+  <td>
+   <em>embeddings</em> { value: list of entity identifiers, max: 100, format: JSON } <br />
+   <em>index</em> { optional, format: JSON }
+  </td>
  </tr>
  <tr>
   <td>Returns</td>
