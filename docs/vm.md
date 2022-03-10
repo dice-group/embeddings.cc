@@ -34,6 +34,13 @@
 - Set passwords
     - `sudo /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`
     - Inserted same password
+- Afterwards: Storage directory
+    - `mkdir /data/elasticsearch` 
+    - `sudo nano /etc/elasticsearch/elasticsearch.yml`
+      - old: `path.data: /var/lib/elasticsearch`
+      - new: `path.data: /data/elasticsearch`
+    - `sudo mv /var/lib/elasticsearch/ /data/`
+    - `sudo systemctl restart elasticsearch.service`
 
 ## Packages installation
 
