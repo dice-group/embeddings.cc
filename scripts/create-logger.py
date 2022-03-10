@@ -102,3 +102,4 @@ if do_search:
     print('search:', es.search(index=es_index, body={"query": {"match_all": {}}})['hits']['hits'])
     print('search 2:', es.search(index=es_index, body={"query": {"term": {"parameters": 100}}})['hits']['hits'])
     print('search 3:', es.search(index=es_index, body={"query": {"term": {"parameters.size": 100}}})['hits']['hits'])
+    #print('search offset:', es.search(index=es_index, body={"from": 0, "size": 5, "query": {"match_all": {}}})['hits']['hits'])
