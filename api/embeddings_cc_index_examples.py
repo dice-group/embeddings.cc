@@ -11,18 +11,27 @@ from embeddings_cc_index import EmbeddingsCcIndex
 es_index = 'index_test'
 es_alias = 'index_test_alias'
 es_dimensions = 10
+es_shards = 5
+#
+#es_index = 'caligraph_dbpedia_procrustes'
+#es_alias = 'caligraph-dbpedia-procrustes'
+#es_dimensions = 200
+#
+#es_index = 'caligraph_dbpedia_procrustes_40shards'
+#es_dimensions = 200
+#es_shards = 40
 
 # Execution
-do_ping = True
-do_delete_index = False
-do_create_index = False
-do_alias_delete = False
-do_alias_put = False
-do_print_indexes = True
+do_ping           = True
+do_delete_index   = False
+do_create_index   = False
+do_alias_delete   = False
+do_alias_put      = False
+do_print_indexes  = True
 do_add_data_tuple = False
-do_add_data_list = False
-do_count = False
-do_search = False
+do_add_data_list  = False
+do_count          = False
+do_search         = False
 
 # Get password form CLI
 if len(sys.argv) > 1:
@@ -67,7 +76,7 @@ if do_delete_index:
 
 # Creates an Elasticsearch index and returns Elasticsearch API response.
 if do_create_index:
-    response = embeddings_cc_index.create_index(password, es_index, es_dimensions, shards=5)
+    response = embeddings_cc_index.create_index(password, es_index, es_dimensions, shards=es_shards)
     print('create_index:', response.status_code, response.text)
 
 # Deletes an alias of an index.
