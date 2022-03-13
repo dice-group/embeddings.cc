@@ -1,41 +1,5 @@
 # Development
 
-## Local configuration
-
-- Set up a local system similar to the [VM](vm.md).
-- To start the components, use these commands:
-
-```bash
-# Start Elasticsearch
-sudo systemctl start elasticsearch.service
-
-# Start webservice (public)
-conda activate unikge  # or another venv
-export FLASK_APP=webservice_public
-export FLASK_RUN_PORT=1337  # or another port
-export FLASK_DEBUG=True
-flask run
-
-# Start webservice (index)
-export FLASK_APP=webservice_index
-export FLASK_RUN_PORT=8008  # or another port
-```
-
-## Deployment
-
-- `kinit wilke`
-- Copy code to /tmp:  
-  `./scripts/vm-push.sh`
-- `ssh wilke@embeddings.cs.upb.de`
-- `. /opt/bashrc.sh`
-- Move directory to /opt. **Do not overwrite** running code for one of the both webservices!  
-  `sudo mv /tmp/embeddings.cc/ /opt/embeddings_cc_x`
-- `mkdir /opt/embeddings_cc_x/instance`
-- `ln -s /opt/config.py /opt/embeddings_cc_x/instance/config.py`
-- Stop running instance at start new one at:  
-  `screen -r webservice-public`  
-  `screen -r webservice-index`
-
 ## Python
 
 ### Elasticsearch Python (7.16.0)

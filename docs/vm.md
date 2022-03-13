@@ -41,6 +41,24 @@
       - new: `path.data: /data/elasticsearch`
     - `sudo mv /var/lib/elasticsearch/ /data/`
     - `sudo systemctl restart elasticsearch.service`
+- Afterwards: Check ulimit
+  - `ulimit` -> `unlimited` -> ok
+- Afterwards: Set swappiness
+  - https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration-memory.html 
+  - `cat /proc/sys/vm/swappiness` -> `60`
+  - `sudo nano /proc/sys/vm/swappiness` -> `1`
+  - `sudo sysctl -p`
+- Afterwards: Heap size
+  - https://www.elastic.co/guide/en/elasticsearch/reference/7.16/advanced-configuration.html#set-jvm-heap-size 
+  - `sudo nano /etc/elasticsearch/jvm.options.d/jvm.options` 
+  - `-Xms8g` 
+  - `-Xmx8g`
+  - `sudo nano /etc/elasticsearch/elasticsearch.yml`
+  - Commented out:  
+    `bootstrap.memory_lock: true`
+  - `sudo systemctl restart elasticsearch.service`
+  - `sudo cat /var/log/elasticsearch/elasticsearch.log | grep "heap size"`
+  - `[2022-03-11T18:48:34,985][INFO ][o.e.e.NodeEnvironment    ] [embeddings] heap size [8gb], compressed ordinary object pointers [true]`
 
 ## Packages installation
 

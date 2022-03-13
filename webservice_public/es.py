@@ -72,7 +72,9 @@ def get_embeddings(index, entities):
             results.append((hit['_source']['entity'], hit['_source']['embeddings']))
     return results
 
-
+# For direct request, replace one line:
+# "id": "cossim",
+# "source": "cosineSimilarity(params.query_vector, 'embeddings') + 1.0",
 def get_similar_embeddings(index, embeddings):
     request = []
     for embedding in embeddings:
@@ -81,7 +83,7 @@ def get_similar_embeddings(index, embeddings):
             "script_score": {
                 "query": {"match_all": {}},
                 "script": {
-                    "source": "cosineSimilarity(params.query_vector, 'embeddings') + 1.0",
+                    "id": "cossim",
                     "params": {
                         "query_vector": embedding
                     }
