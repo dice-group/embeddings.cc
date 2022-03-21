@@ -27,10 +27,6 @@ span.entity {
 <body>
 <div id="container">
 
-<div class="autoComplete_wrapper">
-    <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
-</div>
-
 <div id="nav">
 <span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
 <a href="/">Introduction</a>
@@ -73,7 +69,8 @@ Use the following form to find the most similar entities out of {{ index_size }}
 </p>
 
 <form action="/#similar" id="form_similar" method="post">
-<input type="text" name="similarity" id="similarity" value="{{ entity }}">
+<input name="similarity" id="similarity" value="{{ entity }}" 
+ type="text" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
 <input type="submit" value="Get similar entities">
 {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
@@ -102,6 +99,7 @@ Use the form below to view an example.
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 <script>
 const autoCompleteJS = new autoComplete({
+    selector: "#similarity",
     placeHolder: "Search for entities...",
     data: {
         src: async (query) => {
@@ -126,6 +124,8 @@ const autoCompleteJS = new autoComplete({
         }
     }
 });
+
+document.querySelector(".autoComplete_wrapper").style.display = "inline";
 </script>
 
 </div>

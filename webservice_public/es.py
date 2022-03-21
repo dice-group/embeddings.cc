@@ -59,7 +59,6 @@ def search_prefix(index, search_term):
     })
     entities = []
     for hit in response['hits']['hits']:
-        entry = []
         entities.append(hit['_source']['entity'])
     return entities
 
