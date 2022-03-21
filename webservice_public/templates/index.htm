@@ -27,6 +27,10 @@ span.entity {
 <body>
 <div id="container">
 
+<div class="autoComplete_wrapper">
+    <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
+</div>
+
 <div id="nav">
 <span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
 <a href="/">Introduction</a>
@@ -94,6 +98,35 @@ Use the form below to view an example.
 <textarea readonly style="height:210px">{{ embeddings }}</textarea>
 {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
+
+<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
+<script>
+const autoCompleteJS = new autoComplete({
+    placeHolder: "Search for entities...",
+    data: {
+        src: async (query) => {
+          try {
+            const source = await fetch(`/api/v1/autocomplete?search_term=${query}`);
+            const data = await source.json();
+            return data;
+          } catch (error) {
+            return error;
+          }
+        },
+    },
+    resultItem: {
+        highlight: true
+    },
+    events: {
+        input: {
+            selection: (event) => {
+                const selection = event.detail.selection.value;
+                autoCompleteJS.input.value = selection;
+            }
+        }
+    }
+});
+</script>
 
 </div>
 </body>

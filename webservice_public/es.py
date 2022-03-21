@@ -50,6 +50,20 @@ def get_entities(index, size=100, offset=0):
     return entities
 
 
+def search_prefix(index, search_term):
+    response = get_es().search(index=index, query={
+        "prefix": {
+            "entity": {
+                "value": search_term
+            }}
+    })
+    entities = []
+    for hit in response['hits']['hits']:
+        entry = []
+        entities.append(hit['_source']['entity'])
+    return entities
+
+
 def get_dimensions(index):
     response = get_es().search(index=index, body={
         "from": 0, "size": 1, "query": {"match_all": {}}
@@ -71,6 +85,7 @@ def get_embeddings(index, entities):
         for hit in resp['hits']['hits']:
             results.append((hit['_source']['entity'], hit['_source']['embeddings']))
     return results
+
 
 # For direct request, replace one line:
 # "id": "cossim",

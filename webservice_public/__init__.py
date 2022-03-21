@@ -26,6 +26,15 @@ def create_app(test_config=None):
 
     # Webservices ------------------------------------------------------------------------------------------------------
 
+    @app.route('/api/v1/autocomplete', methods=['GET'])
+    @cross_origin()
+    def dev():
+        if request.args.get('search_term'):
+            return jsonify(es.search_prefix(get_index(), request.args.get('search_term')))
+        else:
+            return jsonify([])
+
+
     @app.route('/api/v1/ping', methods=['GET', 'POST'])
     @cross_origin()
     def ping():

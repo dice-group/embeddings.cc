@@ -10,13 +10,15 @@ function apiCall(httpMethod, host, path, params) {
     var xhr = new XMLHttpRequest();
     xhr.open(httpMethod, url, true);
     xhr.setRequestHeader("Content-type", "application/json");
+    var begin = new Date();
     xhr.onreadystatechange = function() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             try {
                 document.getElementById('result').innerHTML = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
             } catch (e) {
-                document.getElementById('result').innerHTML = xhr.responseText;  
-            } 
+                document.getElementById('result').innerHTML = xhr.responseText;
+                document.getElementById('runtime').value = (new Date() - begin) / 1000;
+            }
         } else if (this.readyState === XMLHttpRequest.DONE) {
             document.getElementById('result').innerHTML = xhr.responseText;
         }
@@ -64,7 +66,6 @@ function apiCall(httpMethod, host, path, params) {
             <option value="/api/v1/get_embeddings">/api/v1/get_embeddings</option>
             <option value="/api/v1/get_similar_embeddings">/api/v1/get_similar_embeddings</option>
             <option value="/api/v1/get_similar_entities">/api/v1/get_similar_entities</option>
-            <option value="">
         </select>
         <!--
         </datalist>
@@ -72,19 +73,21 @@ function apiCall(httpMethod, host, path, params) {
         <label for="params">Parameters:</label>
         <textarea id="params" style="width:100%;height:120px;padding:10px">
 {
-  "index": "index_test",
+  "___index": "index_test",
   "size": "3",
   "offset": "0",
   "entities": ["http://example.com/0", "http://example.com/1"],
   "embeddings": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]
 }
-    </textarea>
+        </textarea>
         <input type="submit" value="Send request" style="width:100%;padding:10px">
         <label for="request">Request:</label>
         <textarea id="request" style="width:100%;height:120px;padding:10px;background:#f5f5f5" readonly></textarea>
         <label for="result">Result:</label>
         <textarea id="result" style="width:100%;height:120px;padding:10px;background:#f5f5f5" readonly></textarea>
+        <label for="runtime">Runtime:</label>
+        <input id="runtime" type="text" value="" readonly style="width:100%;padding:10px;background:#f5f5f5">
     </form>
-</p>
+</div>
 </body>
 </html>
