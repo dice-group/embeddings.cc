@@ -59,6 +59,10 @@ ul {
     padding-bottom: 50px;
 }
 
+footer {
+    text-align: center;
+}
+
 #nav {
     margin: 0;
     padding: 15px;
