@@ -114,7 +114,7 @@ def get_similar_embeddings(index, embeddings):
 
 
 def log(epoch_second, ip, path, parameters):
-    get_es().index(index='logger', body={
+    get_es().index(index='usagelog', body={
         'date': epoch_second,
         'ip': ip,
         'path': path,
@@ -123,7 +123,7 @@ def log(epoch_second, ip, path, parameters):
 
 
 def get_log_paths():
-    response = get_es().search(index='logger', body={"aggs": {"paths": {"terms": {"field": "path"}}}})
+    response = get_es().search(index='usagelog', body={"aggs": {"paths": {"terms": {"field": "path"}}}})
     results = {}
     for result in response['aggregations']['paths']['buckets']:
         results[result['key']] = result['doc_count']
@@ -133,7 +133,7 @@ def get_log_paths():
 
 def get_indices():
     indices = list(get_es().indices.get_alias().keys())
-    indices.remove('logger')
+    indices.remove('usagelog')
     return [x for x in indices if 'security' not in x]
 
 

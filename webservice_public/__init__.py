@@ -1,5 +1,7 @@
 import os
 import time
+import hashlib
+import ipaddress
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from . import es
@@ -247,7 +249,15 @@ def create_app(test_config=None):
         else:
             return current_app.config['ES_INDEX']
 
+    def get_ip_hashes():
+        ipv4 = request.remote_addr
+        ipv6 = ipaddress.IPv6Address('2002::' + ipv4).exploded
+        hashes = []
+        for part in ipv6.split(':'):
+            hashes.append(hashlib.shake_256(part.encode()).hexdigest(1))
+        return hashes[:-1]
+
     def log():
-        es.log(int(time.time()), request.remote_addr, request.path, request.args)
+        es.log(int(time.time()), get_ip_hashes(), request.path, request.args)
 
     return app
