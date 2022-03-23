@@ -31,6 +31,7 @@ span.entity {
 <span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
 <a href="/">Introduction</a>
 <a href="/api">API</a>
+<a href="/news">News</a>
 </div>
 
 <h1>Universal Knowledge Graph Embeddings</h1>
@@ -66,6 +67,7 @@ Use the button below to get some examples out of {{ index_size }} available enti
 There are several approaches to identify similar entities.
 One method is to calculate and compare embeddings (see next section).
 Use the following form to find the most similar entities out of {{ index_size }} entities.
+Admittedly, the autocomplete form still needs work, pardon for that.
 </p>
 
 <form action="/#similar" id="form_similar" method="post">
@@ -95,6 +97,13 @@ Use the form below to view an example.
 <textarea readonly style="height:210px">{{ embeddings }}</textarea>
 {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
+
+<h2>Collaboration</h2>
+
+<p>
+And now? We offer embeddings as a service with a convenient <a href="/api">API</a>. <br />
+Our experts are continuously working on updates, we try to hide them in the <a href="/news">news</a>.
+</p>
 
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 <script>
@@ -129,6 +138,6 @@ document.querySelector(".autoComplete_wrapper").style.display = "inline";
 </script>
 
 </div>
-<footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" style="height:35px; margin-top:30px"></a></footer>
+<footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE" style="height:35px; margin-top:30px"></a></footer>
 </body>
 </html>
