@@ -117,6 +117,8 @@
 
 ## Public webservice: Start configuration
 
+### uWSGI
+
 ```ini
 [uwsgi]
 ; This is the uWSGI config, located at /opt/uwsgi.ini
@@ -136,6 +138,30 @@ master             = true
 enable-threads     = true
 manage-script-name = true
 thunder-lock       = true
+```
+
+### systemd
+
+- `sudo nano /etc/systemd/system/embeddings.service`
+- `systemctl enable embeddings.service`
+- `sudo systemctl start embeddings.service`
+- `sudo shutdown -r 0`
+
+```
+# /etc/systemd/system/embeddings.service
+
+[Unit]
+Description=embeddings uwsgi
+Requires=network.target
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/embeddings
+User=embeddings
+ExecStart=/usr/bin/uwsgi /opt/uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 ## Misc
