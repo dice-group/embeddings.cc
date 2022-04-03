@@ -1,5 +1,6 @@
 # Development
 
+
 ## Python
 
 ### Elasticsearch Python (7.16.0)
@@ -26,6 +27,7 @@
 - [HTTPX - A next-generation HTTP client for Python](https://www.python-httpx.org/)
 - [json - JSON encoder and decoder](https://docs.python.org/3/library/json.html)
 
+
 ## Elasticsearch
 
 - [ES blog: Text similarity search with vector fields](https://www.elastic.co/blog/text-similarity-search-with-vectors-in-elasticsearch)
@@ -33,3 +35,9 @@
 - [Elasticsearch Guide [7.16] » How to » Size your shards](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/size-your-shards.html)
 - [Elasticsearch Guide [7.16] » REST APIs](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/rest-apis.html)
 - [Elasticsearch Guide [7.16] » REST APIs » Document APIs](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/docs.html)
+
+
+## uWSGI
+
+- [uWSGI (latest)](https://uwsgi-docs.readthedocs.io/en/latest/)
+- [uWSGI (latest): Options](https://uwsgi-docs.readthedocs.io/en/latest/Options.html)

@@ -98,8 +98,13 @@
     -  `export FLASK_RUN_PORT=8008`
     -  `flask run --host=0.0.0.0`
     - [http://embeddings.cs.uni-paderborn.de:8008/ping](http://embeddings.cs.uni-paderborn.de:8008/ping) --> Status: OK :)
+  - New linux user 'embeddings'
+    - `sudo useradd -m embeddings`
+    - `sudo passwd embeddings`
+    - `sudo -u embeddings -s` (also: how to switch to user)
+  - sudo ln -s embeddings_cc_e embeddings
 
-## Webservice start
+### Index webservice: Start
 
 - `screen -S webservice-index`
 - `. /opt/bashrc.sh`
@@ -110,16 +115,28 @@
 -  `export FLASK_RUN_PORT=8008`
 -  `flask run --host=0.0.0.0`
 
-### Public webservice start:
+## Public webservice: Start configuration
 
-- `screen -S webservice-public`
-- `. /opt/bashrc.sh`
-- `cd /opt/embeddings.cc/`
-- `uwsgi --plugin python3 -H /opt/anaconda3 --mount /=webservice_public/wsgi.py --socket /tmp/embeddingscc.sock --chmod-socket=666 --thunder-lock --enable-threads`
+```ini
+[uwsgi]
+; This is the uWSGI config, located at /opt/uwsgi.ini
+; How to start manually:
+;  Log in as user 'embeddings'
+;  Change directory to embeddings code root
+;  Execute 'uwsgi /opt/uwsgi.ini'
 
-### nginx / certbot / Let’s Encrypt
+home    = /opt/anaconda3
+plugins = python3
+mount   = /=webservice_public/wsgi.py
 
-- See [vm-nginx-certbot.md](vm-nginx-certbot.md)
+socket       = /tmp/embeddingscc.sock
+chmod-socket = 666
+
+master             = true
+enable-threads     = true
+manage-script-name = true
+thunder-lock       = true
+```
 
 ## Misc
 

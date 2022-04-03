@@ -7,6 +7,8 @@
 - `. /opt/bashrc.sh`
 - Move directory to /opt. **Do not overwrite** running code for one of the both webservices!  
   `sudo mv /tmp/embeddings.cc/ /opt/embeddings_cc_x`
+- Unlink symlink
+- Update symlink: `sudo ln -s /opt/embeddings_cc_e /opt/embeddings`
 - `mkdir /opt/embeddings_cc_x/instance`
 - `ln -s /opt/config.py /opt/embeddings_cc_x/instance/config.py`
 - Restart inside screen by CTRL+C, `cd ../embeddings_cc_x`, :  
