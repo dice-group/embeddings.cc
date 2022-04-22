@@ -1,8 +1,10 @@
 # Universal Knowledge Graph Embeddings
 
-This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([without TLS](http://embeddings.cs.uni-paderborn.de/)).
+This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([also without TLS](http://embeddings.cs.uni-paderborn.de/)).
 
 ## Documentation
+
+- [How to install](docs/local.md)
 
 ### Hidden features
 

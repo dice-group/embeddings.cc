@@ -4,7 +4,6 @@ import json
 import numbers
 from flask import Flask, request, current_app
 from flask_cors import cross_origin
-from elasticsearch import ElasticsearchException
 from . import security
 from . import es
 
@@ -47,8 +46,8 @@ def create_app(test_config=None):
             index = request.args.get('index')
 
         try:
-            return es.get_es().cat.count(index)
-        except ElasticsearchException as e:
+            return str(es.get_es().cat.count(index=index))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     @app.route('/get_embeddings', methods=['GET'])
@@ -90,8 +89,8 @@ def create_app(test_config=None):
         if not request.args.get('password') or not security.check_password(request.args.get('password')):
             return 'Unauthorized', 401
         try:
-            return es.get_es().indices.get_alias("*")
-        except ElasticsearchException as e:
+            return str(es.get_es().indices.get_alias(index="*"))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     @app.route('/create_index', methods=['POST'])
@@ -134,8 +133,8 @@ def create_app(test_config=None):
         }
 
         try:
-            return es.get_es().indices.create(index, body=index_config)
-        except ElasticsearchException as e:
+            return str(es.get_es().indices.create(index=index, body=index_config))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     @app.route('/delete_index', methods=['POST'])
@@ -157,8 +156,8 @@ def create_app(test_config=None):
             return 'Not allowed to delete index security', 422
 
         try:
-            return es.get_es().indices.delete(index)
-        except ElasticsearchException as e:
+            return str(es.get_es().indices.delete(index=index))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     @app.route('/add', methods=['POST'])
@@ -205,8 +204,8 @@ def create_app(test_config=None):
             })
 
         try:
-            return es.get_es().bulk(index=index, body=documents)
-        except ElasticsearchException as e:
+            return str(es.get_es().bulk(index=index, body=documents))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     @app.route('/alias_put', methods=['POST'])
@@ -228,8 +227,8 @@ def create_app(test_config=None):
             alias = request.values['alias']
 
         try:
-            return es.get_es().indices.put_alias(index, alias)
-        except ElasticsearchException as e:
+            return str(es.get_es().indices.put_alias(index=index, name=alias))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     @app.route('/alias_delete', methods=['POST'])
@@ -251,8 +250,8 @@ def create_app(test_config=None):
             alias = request.values['alias']
 
         try:
-            return es.get_es().indices.delete_alias(index, alias)
-        except ElasticsearchException as e:
+            return str(es.get_es().indices.delete_alias(index=index, name=alias))
+        except Exception as e:
             return traceback.format_exc(), 503
 
     return app
