@@ -2,21 +2,18 @@
 
 This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([also without TLS](http://embeddings.cs.uni-paderborn.de/)).
 
+
 ## Documentation
 
 - [How to install](docs/local.md)
+- [Development](docs/development.md) (External documentation of integrated components)
 
-### Hidden features
-
-- 💀 Please do not tell anyone! This is top secret! 💀
-- [https://embeddings.cc/?dev](https://embeddings.cc/?dev)
-- [https://embeddings.cc/usage](https://embeddings.cc/usage)
-- [https://embeddings.cc/news](https://embeddings.cc/news)
 
 ### Public API (for users)
 
 - The API is documented at [embeddings.cc/api](https://embeddings.cc/api)
 - Additional examples are provided in [Python examples](api/embeddings_cc_public_examples.py) and [JavaScript HTML form](api/embeddings_cc_public.htm)
+
 
 ### Index API (for universal embeddings developers)
 
@@ -36,12 +33,13 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 | /create_index   | POST   | password, index, dimensions, shards |
 | /delete_index   | POST   | password, index                     |
 | /add            | POST   | password, index, docs               |
+| /alias_put      | POST   | password, index, alias              |
+| /alias_delete   | POST   | password, index, alias              |
 
 ### System administration
 
 - [Virtual machine](docs/vm.md) (Installation and deployment)
 - [VM nginx](docs/vm-nginx-certbot.md) (Webserver configuration)
-- [Development](docs/development.md) (External documentation of integrated components)
 - [Deployment](docs/deployment.md) (How to publish a new version)
 - Note: This is an extension of [kg-embedding-service](https://github.com/dice-group/kg-embedding-service)
 

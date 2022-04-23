@@ -2,6 +2,7 @@ import os
 import traceback
 import json
 import numbers
+import re
 from flask import Flask, request, current_app
 from flask_cors import cross_origin
 from . import security
@@ -124,6 +125,9 @@ def create_app(test_config=None):
                     'entity': {
                         'type': 'keyword'
                     },
+                    "entity_completion": {
+                        "type": "completion"
+                    },
                     'embeddings': {
                         'type': 'dense_vector',
                         'dims': dimensions
@@ -200,7 +204,8 @@ def create_app(test_config=None):
             })
             documents.append({
                 'entity': doc[index_entity],
-                'embeddings': doc[index_embeddings]
+                'embeddings': doc[index_embeddings],
+                'entity_completion': re.split('[^A-Za-z0-9]+',  doc[index_entity].rsplit('/', 1)[1])
             })
 
         try:

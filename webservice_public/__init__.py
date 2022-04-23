@@ -32,7 +32,7 @@ def create_app(test_config=None):
     @cross_origin()
     def dev():
         if request.args.get('search_term'):
-            return jsonify(es.search_prefix(get_index(), request.args.get('search_term')))
+            return jsonify(es.search_completion(get_index(), request.args.get('search_term')))
         else:
             return jsonify([])
 

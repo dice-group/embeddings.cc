@@ -63,6 +63,23 @@ def search_prefix(index, search_term):
     return entities
 
 
+def search_completion(index, search_term):
+    response = get_es().search(index=index, body={
+        "suggest": {
+            "suggestions": {
+                "prefix": search_term,
+                "completion": {
+                    "field": "entity_completion"
+                }
+            }
+        }
+    })
+    entities = []
+    for hit in response['suggest']["suggestions"][0]["options"]:
+        entities.append(hit['_source']['entity'])
+    return entities
+
+
 def get_dimensions(index):
     response = get_es().search(index=index, body={
         "from": 0, "size": 1, "query": {"match_all": {}}
