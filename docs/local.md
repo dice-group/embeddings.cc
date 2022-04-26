@@ -13,7 +13,7 @@
 - A user and password are required.
     - You can use the command `./bin/elasticsearch-reset-password --username elastic --interactive` and provide a password.
     - The command is documented here: [elasticsearch-reset-password](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/reset-password.html).
-
+- You should be able to access [https://127.0.0.1:9200/](https://127.0.0.1:9200/).
 
 ## Install Python modules
 
@@ -40,10 +40,10 @@
 
 - Run the commands in the script file [run-webservice-index-local.sh](../scripts/run-webservice-index-local.sh) to start the webservice for adding data.
   (You may have to edit the commands to match your local configuration.)
-  Opening [http://127.0.0.1:1338/ping](http://127.0.0.1:1338/ping) should return Status: OK.
+  Opening [http://127.0.0.1:8008/ping](http://127.0.0.1:8008/ping) should return Status: OK.
 - Edit the file [embeddings_cc_index_examples.py](../api/embeddings_cc_index_examples.py)
-    - Set *do_create_index*, *do_alias_put* and *do_add_data_tuple* to *True*.
-    - Execute `python api/embeddings_cc_index_examples.py <PASSWORD> http://127.0.0.1:1338`
+    - Set *do_create_index*, *do_alias_put* and *do_add_data_list* to *True*.
+    - Execute `python api/embeddings_cc_index_examples.py <PASSWORD> http://127.0.0.1:8008`
     - You should get several HTTP return codes 200.
 
 ## System check

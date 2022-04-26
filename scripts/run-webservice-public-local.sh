@@ -5,7 +5,7 @@
 
 echo "[Starting webservice public]"
 eval "$(conda shell.bash hook)" # https://stackoverflow.com/a/56155771
-conda activate embeddings8
+conda activate embeddings
 conda env list
 export FLASK_APP=webservice_public
 export FLASK_RUN_PORT=1337

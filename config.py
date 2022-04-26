@@ -2,7 +2,7 @@
 # Copy this file into the 'instance' directory to enable usage.
 
 # Elasticsearch
-ES_HOST       = 'http://localhost:9200/'
+ES_HOST       = 'https://localhost:9200/'
 ES_USER       = 'elastic'
 ES_PASSWORD   = ''
 ES_INDEX      = ''

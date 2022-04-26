@@ -5,7 +5,7 @@ from flask import current_app, g
 def get_es():
     if 'es' not in g:
         if 'ES_USER' in current_app.config and current_app.config['ES_USER'] and 'ES_PASSWORD' in current_app.config and current_app.config['ES_PASSWORD']:
-            g.es = Elasticsearch(current_app.config['ES_HOST'], http_compress=True,
+            g.es = Elasticsearch(current_app.config['ES_HOST'], http_compress=True, verify_certs=False,
                                  http_auth=(current_app.config['ES_USER'], current_app.config['ES_PASSWORD']))
         else:
             g.es = Elasticsearch(current_app.config['ES_HOST'], http_compress=True)

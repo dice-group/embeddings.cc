@@ -108,8 +108,8 @@ if do_add_data_tuple:
 
 # Note: Adds two embeddings for same entity
 if do_add_data_list:
-    embeddings = [['http://example.com/2', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
-                  ['http://example.com/2', [3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 0.0, 1.1, 2.2]]]
+    embeddings = [['http://example.com/A_similarity_test', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
+                  ['http://example.com/Another_similarity_test', [3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 0.0, 1.1, 2.2]]]
     print(embeddings)
     response = embeddings_cc_index.add(password, es_index, embeddings)
     print('add list:', response.status_code, response.text)
