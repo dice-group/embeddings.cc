@@ -11,7 +11,10 @@
     - Memory: 32 GB (`free -h`)
     - Disk: 1007 GB (`/dev/sdb`, `df -h`)
 
+
 ## Elasticsearch installation
+
+### Elasticsearch 7 (outdated)
 
 - Source: [https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html)
 - Installation
@@ -60,6 +63,22 @@
   - `sudo cat /var/log/elasticsearch/elasticsearch.log | grep "heap size"`
   - `[2022-03-11T18:48:34,985][INFO ][o.e.e.NodeEnvironment    ] [embeddings] heap size [8gb], compressed ordinary object pointers [true]`
 
+### Elasticsearch 8
+
+- Path: `/data/elasticsearch-8.1.3/config/elasticsearch.yml`
+- [Elasticsearch Guide [8.1] » Set up Elasticsearch » Configuring Elasticsearch » Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/important-settings.html)
+    - cluster.name: embcc 
+    - node.name: embcc-1
+    - path.data: /data/es8-data
+    - path.data: /data/es8-data
+    - bootstrap.memory_lock: true
+    - network.host: 0.0.0.0
+    - http.port: 9208
+- `sudo systemctl edit --force --full elasticsearch8.service` (force required to create file)
+    - Command created file: `/etc/systemd/system/elasticsearch8.service`
+- State:
+    - Manual start works with bootstrap.memory_lock: false
+
 ## Packages installation
 
 - Anaconda
@@ -68,6 +87,7 @@
     - `sudo bash Anaconda3-2021.11-Linux-x86_64.sh`
     - Directory: `/opt/anaconda3`
     - Output: `modified /root/.bashrc`
+
 
 ## Webservice installation
 
@@ -114,6 +134,7 @@
 -  `export FLASK_APP=webservice_index`
 -  `export FLASK_RUN_PORT=8008`
 -  `flask run --host=0.0.0.0`
+
 
 ## Public webservice: Start configuration
 
@@ -163,6 +184,7 @@ ExecStart=/usr/bin/uwsgi /opt/uwsgi.ini
 [Install]
 WantedBy=multi-user.target
 ```
+
 
 ## Misc
 
