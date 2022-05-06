@@ -1,0 +1,88 @@
+import sys
+import ast
+from embeddings_cc_index import EmbeddingsCcIndex
+import numpy as np
+import json
+import os
+
+# Get password form CLI
+if len(sys.argv) > 1:
+    password = sys.argv[1]
+else:
+    print('Please provide a password')
+    sys.exit(1)
+
+# Get webservice URL form CLI
+webservice_url = None
+if len(sys.argv) > 2:
+    webservice_url = sys.argv[2]
+
+max_docs = 5000
+if len(sys.argv) > 3:
+    max_docs = sys.argv[3]
+    
+# Create instance
+embeddings_cc_index = EmbeddingsCcIndex(webservice_url=webservice_url)
+
+es_indices = ["dbp_en_fr_15k", "dbp_en_fr_100k", "dbp_en_de_100k"]
+data_folders = ["Shallom_EnFr_15K_V1/", "Shallom_EnFr_100K_V1/", "Experiments/EN_DE_100K_V1/"]
+
+# Ping webservice
+if True:
+    statusCode = embeddings_cc_index.ping(seconds=1)
+    if statusCode == 502:
+        print('502: Webservice unavailable')
+        sys.exit(1)
+    elif statusCode == 503:
+        print('503: Elasticsearch service unavailable')
+        sys.exit(1)
+    else:
+        print(statusCode)
+    
+if True:
+
+    def add_embeddings(api, password, index, embeddings):
+        response = api.add(password, index, embeddings)
+        if response.status_code == 200:
+            print(i, end=' ')
+            sys.stdout.flush()
+            return True
+        else:
+            print(response.status_code, response.text)
+            return False
+
+    base_path = os.path.dirname(os.path.realpath(__file__))
+    for es_index, data_folder in zip(es_indices, data_folders):
+        print("\n")
+        print(f"Uploading universal embeddings for {data_folder}")
+        print("\n")
+        response = embeddings_cc_index.delete_index(password, es_index)
+        print(response.status_code, response.text)
+        file_path = base_path.split('embeddings.cc')[0]+data_folder
+        print('\nLoading embeddings...\n')
+        with open(file_path+'list_merged_entities.txt') as file:
+            entities = file.read().split('\t')
+        with open(file_path+'alignment.json') as file:
+            alignment = json.load(file)
+        embeddings = np.load(file_path+'/Universal_Emb.npy')
+        print('Done!\n')
+        response = embeddings_cc_index.create_index(password, es_index, embeddings.shape[1], shards=5)
+        print(response.status_code, response.text)
+        Embeddings = []
+        print("\nDimensions:", embeddings.shape[1])
+        print()
+        assert len(entities) == embeddings.shape[0], f"{len(entities)}, {embeddings.shape[0]}"
+        for i, ent in enumerate(entities):
+            Embeddings.append([ent, list(embeddings[i])])
+            if ent in alignment:
+                Embeddings.append([alignment[ent], list(embeddings[i])])
+
+            if i % max_docs == 0:
+                if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings):
+                    break
+                Embeddings = []
+        if len(Embeddings) > 0:
+            add_embeddings(embeddings_cc_index, password, es_index, Embeddings)
+        # Print number of documents
+        response = embeddings_cc_index.count(es_index)
+        print(response.status_code, response.text)
