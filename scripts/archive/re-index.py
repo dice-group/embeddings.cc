@@ -1,4 +1,3 @@
-  GNU nano 5.4                                                        /opt/embeddings_cc_b/scripts/re-index.py                                                                   
 # embeddings.cc re-index
 # https://github.com/dice-group/embeddings.cc
 #
