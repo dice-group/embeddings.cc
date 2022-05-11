@@ -10,58 +10,11 @@
     - CPU: 4x Intel(R) Xeon(R) CPU E5-2695 v3 @ 2.30GHz (`cat /proc/cpuinfo`)
     - Memory: 32 GB (`free -h`)
     - Disk: 1007 GB (`/dev/sdb`, `df -h`)
+- Note: Some ES8 commands in [Issue 39](https://github.com/dice-group/embeddings.cc/issues/39)
+- Note: ES7 configuration in [previous version](https://github.com/dice-group/embeddings.cc/blob/82e7279f6506b58d4ad2538c91f924c6f33a27c4/docs/vm.md)
 
 
 ## Elasticsearch installation
-
-### Elasticsearch 7 (outdated)
-
-- Source: [https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html)
-- Installation
-    - `wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.16.3-amd64.deb`
-    - `wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.16.3-amd64.deb.sha512`
-    - `shasum -a 512 -c elasticsearch-7.16.3-amd64.deb.sha512`
-    - `sudo dpkg -i elasticsearch-7.16.3-amd64.deb`
-- Autostart
-    - `sudo /bin/systemctl daemon-reload`
-    - `sudo /bin/systemctl enable elasticsearch.service`
-- Start
-    - `sudo systemctl start elasticsearch.service`
-    - `curl -X GET "127.0.0.1:9200/?pretty"` (Returns output after execution of previous command)
-- Enable security
-    - `sudo nano /etc/elasticsearch/elasticsearch.yml`
-    - `# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/security-minimal-setup.html`
-    - `xpack.security.enabled: true`
-    - `discovery.type: single-node`
-    - `sudo systemctl restart elasticsearch.service`
-- Set passwords
-    - `sudo /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`
-    - Inserted same password
-- Afterwards: Storage directory
-    - `mkdir /data/elasticsearch` 
-    - `sudo nano /etc/elasticsearch/elasticsearch.yml`
-      - old: `path.data: /var/lib/elasticsearch`
-      - new: `path.data: /data/elasticsearch`
-    - `sudo mv /var/lib/elasticsearch/ /data/`
-    - `sudo systemctl restart elasticsearch.service`
-- Afterwards: Check ulimit
-  - `ulimit` -> `unlimited` -> ok
-- Afterwards: Set swappiness
-  - https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration-memory.html 
-  - `cat /proc/sys/vm/swappiness` -> `60`
-  - `sudo nano /proc/sys/vm/swappiness` -> `1`
-  - `sudo sysctl -p`
-- Afterwards: Heap size
-  - https://www.elastic.co/guide/en/elasticsearch/reference/7.16/advanced-configuration.html#set-jvm-heap-size 
-  - `sudo nano /etc/elasticsearch/jvm.options.d/jvm.options` 
-  - `-Xms8g` 
-  - `-Xmx8g`
-  - `sudo nano /etc/elasticsearch/elasticsearch.yml`
-  - Commented out:  
-    `bootstrap.memory_lock: true`
-  - `sudo systemctl restart elasticsearch.service`
-  - `sudo cat /var/log/elasticsearch/elasticsearch.log | grep "heap size"`
-  - `[2022-03-11T18:48:34,985][INFO ][o.e.e.NodeEnvironment    ] [embeddings] heap size [8gb], compressed ordinary object pointers [true]`
 
 ### Elasticsearch 8
 
@@ -129,18 +82,6 @@
     - `sudo -u embeddings -s` (also: how to switch to user)
   - sudo ln -s embeddings_cc_e embeddings
 
-### Index webservice: Start
-
-- `screen -S webservice-index`
-- `. /opt/bashrc.sh`
-- `cd /opt/embeddings.cc/`
-- `. /opt/anaconda3/etc/profile.d/conda.sh`
-- `conda activate embeddings`
--  `export FLASK_APP=webservice_index`
--  `export FLASK_RUN_PORT=8008`
--  `flask run --host=0.0.0.0`
-
-
 ## Public webservice: Start configuration
 
 ### uWSGI
@@ -192,8 +133,6 @@ WantedBy=multi-user.target
 ```
 
 ### Update symlink to use Elasticsearch 8
-
-Note: Some commands in [Issue 39](https://github.com/dice-group/embeddings.cc/issues/39)
 
 ```
 ls -l /opt/embeddings
