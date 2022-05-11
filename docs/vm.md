@@ -75,9 +75,14 @@
     - network.host: 0.0.0.0
     - http.port: 9208
 - `sudo systemctl edit --force --full elasticsearch8.service` (force required to create file)
-    - Command created file: `/etc/systemd/system/elasticsearch8.service`
-- State:
-    - Manual start works with bootstrap.memory_lock: false
+    - <strike>Command created file: `/etc/systemd/system/elasticsearch8.service`</strike>
+    - <strike>State: Manual start works with bootstrap.memory_lock: false</strike>
+- Added start by cron:
+    - `crontab -e`
+    - `@reboot /data/elasticsearch-8.1.3/bin/elasticsearch`
+    - `sudo shutdown -r 0`
+- `/data/elasticsearch-8.1.3/config/elasticsearch.yml`
+    - `bootstrap.memory_lock: true`
 
 ## Packages installation
 
@@ -180,10 +185,25 @@ After=network.target
 WorkingDirectory=/opt/embeddings
 User=embeddings
 ExecStart=/usr/bin/uwsgi /opt/uwsgi.ini
+TimeoutStopSec=30
 
 [Install]
 WantedBy=multi-user.target
 ```
+
+### Update symlink to use Elasticsearch 8
+
+Note: Some commands in [Issue 39](https://github.com/dice-group/embeddings.cc/issues/39)
+
+```
+ls -l /opt/embeddings
+lrwxrwxrwx 1 root root 15 Apr  3 12:47 /opt/embeddings -> embeddings_cc_e/
+sudo systemctl stop embeddings.service  # takes 90 seconds, changed to 30
+sudo unlink /opt/embeddings
+sudo ln -s /data/embeddings.cc-es8/ /opt/embeddings
+sudo systemctl start embeddings.service
+```
+
 
 
 ## Misc

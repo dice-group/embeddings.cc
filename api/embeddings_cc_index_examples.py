@@ -13,13 +13,17 @@ es_alias = 'index_test_alias'
 es_dimensions = 10
 es_shards = 5
 #
-#es_index = 'caligraph_dbpedia_procrustes'
-#es_alias = 'caligraph-dbpedia-procrustes'
-#es_dimensions = 200
+#es_index = 'dbp_en_de_100k'
+#es_alias = 'dbp-en-de-100k'
+#es_dimensions = 300
 #
-#es_index = 'caligraph_dbpedia_procrustes_40shards'
-#es_dimensions = 200
-#es_shards = 40
+#es_index = 'dbp_en_fr_100k'
+#es_alias = 'dbp-en-fr-100k'
+#es_dimensions = 300
+#
+#es_index = 'dbp_en_fr_15k'
+#es_alias = 'dbp-en-fr-15k'
+#es_dimensions = 300
 
 # Execution
 do_ping           = True
