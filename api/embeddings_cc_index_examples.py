@@ -13,13 +13,17 @@ es_alias = 'index_test_alias'
 es_dimensions = 10
 es_shards = 5
 #
-#es_index = 'caligraph_dbpedia_procrustes'
-#es_alias = 'caligraph-dbpedia-procrustes'
-#es_dimensions = 200
+#es_index = 'dbp_en_de_100k'
+#es_alias = 'dbp-en-de-100k'
+#es_dimensions = 300
 #
-#es_index = 'caligraph_dbpedia_procrustes_40shards'
-#es_dimensions = 200
-#es_shards = 40
+#es_index = 'dbp_en_fr_100k'
+#es_alias = 'dbp-en-fr-100k'
+#es_dimensions = 300
+#
+#es_index = 'dbp_en_fr_15k'
+#es_alias = 'dbp-en-fr-15k'
+#es_dimensions = 300
 
 # Execution
 do_ping           = True
@@ -108,8 +112,8 @@ if do_add_data_tuple:
 
 # Note: Adds two embeddings for same entity
 if do_add_data_list:
-    embeddings = [['http://example.com/2', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
-                  ['http://example.com/2', [3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 0.0, 1.1, 2.2]]]
+    embeddings = [['http://example.com/A_similarity_test', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
+                  ['http://example.com/Another_similarity_test', [3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 0.0, 1.1, 2.2]]]
     print(embeddings)
     response = embeddings_cc_index.add(password, es_index, embeddings)
     print('add list:', response.status_code, response.text)

@@ -3,11 +3,11 @@
 
 ## Python
 
-### Elasticsearch Python (7.16.0)
+### Elasticsearch Python (8.1)
 
-- [Elasticsearch Python Client 7.16](https://www.elastic.co/guide/en/elasticsearch/client/python-api/7.16/index.html)
-- [Python Elasticsearch Client v7.16.0](https://elasticsearch-py.readthedocs.io/en/v7.16.0/)
-  - [API Documentation](https://elasticsearch-py.readthedocs.io/en/v7.16.0/api.html)
+- [Elasticsearch Python Client 8.1](https://www.elastic.co/guide/en/elasticsearch/client/python-api/8.1/index.html)
+- [Python Elasticsearch Client 8.1.3](https://elasticsearch-py.readthedocs.io/en/v8.1.3/)
+  - [Python Elasticsearch Client 8.1.3 - API Documentation](https://elasticsearch-py.readthedocs.io/en/v8.1.3/api.html)
 
 ### Elasticsearch Python DSL (7.4.0)
 

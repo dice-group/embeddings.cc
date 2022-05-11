@@ -10,55 +10,32 @@
     - CPU: 4x Intel(R) Xeon(R) CPU E5-2695 v3 @ 2.30GHz (`cat /proc/cpuinfo`)
     - Memory: 32 GB (`free -h`)
     - Disk: 1007 GB (`/dev/sdb`, `df -h`)
+- Note: Some ES8 commands in [Issue 39](https://github.com/dice-group/embeddings.cc/issues/39)
+- Note: ES7 configuration in [previous version](https://github.com/dice-group/embeddings.cc/blob/82e7279f6506b58d4ad2538c91f924c6f33a27c4/docs/vm.md)
+
 
 ## Elasticsearch installation
 
-- Source: [https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html)
-- Installation
-    - `wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.16.3-amd64.deb`
-    - `wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.16.3-amd64.deb.sha512`
-    - `shasum -a 512 -c elasticsearch-7.16.3-amd64.deb.sha512`
-    - `sudo dpkg -i elasticsearch-7.16.3-amd64.deb`
-- Autostart
-    - `sudo /bin/systemctl daemon-reload`
-    - `sudo /bin/systemctl enable elasticsearch.service`
-- Start
-    - `sudo systemctl start elasticsearch.service`
-    - `curl -X GET "127.0.0.1:9200/?pretty"` (Returns output after execution of previous command)
-- Enable security
-    - `sudo nano /etc/elasticsearch/elasticsearch.yml`
-    - `# https://www.elastic.co/guide/en/elasticsearch/reference/7.16/security-minimal-setup.html`
-    - `xpack.security.enabled: true`
-    - `discovery.type: single-node`
-    - `sudo systemctl restart elasticsearch.service`
-- Set passwords
-    - `sudo /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`
-    - Inserted same password
-- Afterwards: Storage directory
-    - `mkdir /data/elasticsearch` 
-    - `sudo nano /etc/elasticsearch/elasticsearch.yml`
-      - old: `path.data: /var/lib/elasticsearch`
-      - new: `path.data: /data/elasticsearch`
-    - `sudo mv /var/lib/elasticsearch/ /data/`
-    - `sudo systemctl restart elasticsearch.service`
-- Afterwards: Check ulimit
-  - `ulimit` -> `unlimited` -> ok
-- Afterwards: Set swappiness
-  - https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration-memory.html 
-  - `cat /proc/sys/vm/swappiness` -> `60`
-  - `sudo nano /proc/sys/vm/swappiness` -> `1`
-  - `sudo sysctl -p`
-- Afterwards: Heap size
-  - https://www.elastic.co/guide/en/elasticsearch/reference/7.16/advanced-configuration.html#set-jvm-heap-size 
-  - `sudo nano /etc/elasticsearch/jvm.options.d/jvm.options` 
-  - `-Xms8g` 
-  - `-Xmx8g`
-  - `sudo nano /etc/elasticsearch/elasticsearch.yml`
-  - Commented out:  
-    `bootstrap.memory_lock: true`
-  - `sudo systemctl restart elasticsearch.service`
-  - `sudo cat /var/log/elasticsearch/elasticsearch.log | grep "heap size"`
-  - `[2022-03-11T18:48:34,985][INFO ][o.e.e.NodeEnvironment    ] [embeddings] heap size [8gb], compressed ordinary object pointers [true]`
+### Elasticsearch 8
+
+- Path: `/data/elasticsearch-8.1.3/config/elasticsearch.yml`
+- [Elasticsearch Guide [8.1] » Set up Elasticsearch » Configuring Elasticsearch » Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/important-settings.html)
+    - cluster.name: embcc 
+    - node.name: embcc-1
+    - path.data: /data/es8-data
+    - path.data: /data/es8-data
+    - bootstrap.memory_lock: true
+    - network.host: 0.0.0.0
+    - http.port: 9208
+- `sudo systemctl edit --force --full elasticsearch8.service` (force required to create file)
+    - <strike>Command created file: `/etc/systemd/system/elasticsearch8.service`</strike>
+    - <strike>State: Manual start works with bootstrap.memory_lock: false</strike>
+- Added start by cron:
+    - `crontab -e`
+    - `@reboot /data/elasticsearch-8.1.3/bin/elasticsearch`
+    - `sudo shutdown -r 0`
+- `/data/elasticsearch-8.1.3/config/elasticsearch.yml`
+    - `bootstrap.memory_lock: true`
 
 ## Packages installation
 
@@ -68,6 +45,7 @@
     - `sudo bash Anaconda3-2021.11-Linux-x86_64.sh`
     - Directory: `/opt/anaconda3`
     - Output: `modified /root/.bashrc`
+
 
 ## Webservice installation
 
@@ -103,17 +81,6 @@
     - `sudo passwd embeddings`
     - `sudo -u embeddings -s` (also: how to switch to user)
   - sudo ln -s embeddings_cc_e embeddings
-
-### Index webservice: Start
-
-- `screen -S webservice-index`
-- `. /opt/bashrc.sh`
-- `cd /opt/embeddings.cc/`
-- `. /opt/anaconda3/etc/profile.d/conda.sh`
-- `conda activate embeddings`
--  `export FLASK_APP=webservice_index`
--  `export FLASK_RUN_PORT=8008`
--  `flask run --host=0.0.0.0`
 
 ## Public webservice: Start configuration
 
@@ -159,10 +126,24 @@ After=network.target
 WorkingDirectory=/opt/embeddings
 User=embeddings
 ExecStart=/usr/bin/uwsgi /opt/uwsgi.ini
+TimeoutStopSec=30
 
 [Install]
 WantedBy=multi-user.target
 ```
+
+### Update symlink to use Elasticsearch 8
+
+```
+ls -l /opt/embeddings
+lrwxrwxrwx 1 root root 15 Apr  3 12:47 /opt/embeddings -> embeddings_cc_e/
+sudo systemctl stop embeddings.service  # takes 90 seconds, changed to 30
+sudo unlink /opt/embeddings
+sudo ln -s /data/embeddings.cc-es8/ /opt/embeddings
+sudo systemctl start embeddings.service
+```
+
+
 
 ## Misc
 
