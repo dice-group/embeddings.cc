@@ -33,12 +33,14 @@
     - To get the values for *SALT* and *PSW_SALT_HASH*, execute the script [generate-salt-password.py](../scripts/generate-salt-password.py).
       The plain password you provide here is required later to create an Elasticsearch index. The script can be executed using the command `python scripts/generate-salt-password.py <PASSWORD>`
 - Run the commands in the script file [run-webservice-public-local.sh](../scripts/run-webservice-public-local.sh).
+  Run this script from the root directory, e.g. ./scripts/run-webservice-public-local.sh. 
   (You may have to edit the commands to match your local configuration.)
 - If you open [127.0.0.1:1337](http://127.0.0.1:1337/) now, there should be an error message stating that an index was not found.
 
 ## Create an Elasticsearch index
 
 - Run the commands in the script file [run-webservice-index-local.sh](../scripts/run-webservice-index-local.sh) to start the webservice for adding data.
+  Run this script from the root directory, e.g. ./scripts/run-webservice-index-local.sh. 
   (You may have to edit the commands to match your local configuration.)
   Opening [http://127.0.0.1:8008/ping](http://127.0.0.1:8008/ping) should return Status: OK.
 - Edit the file [embeddings_cc_index_examples.py](../api/embeddings_cc_index_examples.py)
