@@ -28,12 +28,12 @@ es_shards = 5
 # Execution
 do_ping           = True
 do_delete_index   = False
-do_create_index   = False
+do_create_index   = True
 do_alias_delete   = False
-do_alias_put      = False
+do_alias_put      = True
 do_print_indexes  = True
 do_add_data_tuple = False
-do_add_data_list  = False
+do_add_data_list  = True
 do_count          = False
 do_search         = False
 
