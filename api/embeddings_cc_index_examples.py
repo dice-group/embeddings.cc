@@ -28,12 +28,12 @@ es_shards = 5
 # Execution
 do_ping           = True
 do_delete_index   = False
-do_create_index   = True
+do_create_index   = False
 do_alias_delete   = False
-do_alias_put      = True
+do_alias_put      = False
 do_print_indexes  = True
 do_add_data_tuple = False
-do_add_data_list  = True
+do_add_data_list  = False
 do_count          = False
 do_search         = False
 
@@ -112,12 +112,8 @@ if do_add_data_tuple:
 
 # Note: Adds two embeddings for same entity
 if do_add_data_list:
-    with open('/Users/ljymacbook/Downloads/index_test', 'r') as f:
-    # lines = f.read()
-
-     embeddings = f.readlines()
-
-
+    embeddings = [['http://example.com/A_similarity_test', [2, 3, 4, 5, 6, 7, 8, 9, 0, 1]],
+                  ['http://example.com/Another_similarity_test', [3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 0.0, 1.1, 2.2]]]
     print(embeddings)
     response = embeddings_cc_index.add(password, es_index, embeddings)
     print('add list:', response.status_code, response.text)
