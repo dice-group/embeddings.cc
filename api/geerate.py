@@ -26,7 +26,7 @@ i=0
 finalout=[]
 
 with open('/Users/ljymacbook/Downloads/index_test', 'w') as fa:
-    while i<10:
+    while i<10000:
      numlist=random_int_list(1,100,10)
     # if (i-10==0):
      out="http://example.com/test"+str(i)
