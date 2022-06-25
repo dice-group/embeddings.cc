@@ -1,4 +1,6 @@
 
+from operator import index
+from urllib.request import Request
 import numpy as np
  
 import random
@@ -37,7 +39,8 @@ with open('/Users/ljymacbook/Downloads/index_test', 'w') as fa:
      finalout[i].append(out)     
      finalout[i].append(numlist)
      i=i+1
-   # print(finalout)  
+   
+     
      
     # else:
      # out="['http://example.com/test"+str(i)+"',"+str(numlist)+"],"
@@ -48,8 +51,23 @@ with open('/Users/ljymacbook/Downloads/index_test', 'w') as fa:
     #matrix = [[finalout[i-1]] for n in finalout2[i-1]]
     fa.writelines(str(finalout))
 
+    request = []
+    while i < 2:
+        req_head = "index" 
+        req_body = {'query': {
+               "knn": {
+               'field': "embeddings",
+               'query_vector':2,
+               'k': 10,
+               'num_candidates': 100
+        }
+        }
+    }
+    request.extend(req_body)
+            
 
 
+    print(request)
 
 
 with open('/Users/ljymacbook/Downloads/index_test', 'r') as f:
@@ -60,7 +78,7 @@ with open('/Users/ljymacbook/Downloads/index_test', 'r') as f:
     
     
    
-print(lines)   
+#print(lines)   
 
 
 

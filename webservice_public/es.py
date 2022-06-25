@@ -105,39 +105,26 @@ def get_embeddings(index, entities):
 
 def get_similar_embeddings(index, embeddings):
     request = []
-    #for embedding in embeddings:
-       ## req_head = {'index': index }
-       # req_body = {"knn_search": {
-         #  "knn": {
-          # "field": "embeddings",
-          ## "query_vector":embedding,
-           #"k": 10,
-          # "num_candidates": 10
-        #}
-        
-        #}
-   # }
+
+    
     for embedding in embeddings:
         req_head = {'index': index }
-        req_body = {
-                "knn": {
-               
-               "field": 'embeddings',
-              "query_vector":embedding,
+        req_body = {"query":{
+               "knn": {
+               "field":"embeddings",
+               "query_vector":embedding,
                "k": 10,
-               "num_candidates": 10
-        },
-         "_source": ["id","entity"]
-            }
-            
-            
-        request.extend([req_head, req_body])
-        response = get_es().knn_search(body = request)
+               "num_candidates": 100
+        }
         
+    }
+        }
+        request.extend([req_head, req_body])
+    response = get_es().knn_search(body=request)
     results = []
     for i, resp in enumerate(response['responses']):
         for hit in resp['hits']['hits']:
-         results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
+            results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
     return results
     
    # request.extend([req_head, req_body])

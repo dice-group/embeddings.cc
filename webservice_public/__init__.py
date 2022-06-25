@@ -107,6 +107,9 @@ def create_app(test_config=None):
         log()
         return jsonify(es.get_embeddings(get_index(), entities=entities))
 
+
+
+
     @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
     @cross_origin()
     def get_similar_embeddings():
@@ -114,6 +117,7 @@ def create_app(test_config=None):
             return 'Missing parameter: embeddings', 422
         else:
             embeddings = request.json['embeddings']
+            #the list of embedding in JSON
         if len(embeddings) > 100:
             return 'Incorrect value for parameter: embeddings', 422
         for i, embedding in enumerate(embeddings):
@@ -121,7 +125,11 @@ def create_app(test_config=None):
                 return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
                        str(es.get_dimensions(get_index())) + ') for embeddings index: ' + str(i), 422
         log()
-        return jsonify(es.get_similar_embeddings(get_index(), embeddings))
+        
+        return es.get_similar_embeddings(get_index(), embeddings)
+
+
+
 
     @app.route('/api/v1/get_similar_entities', methods=['POST'])
     @cross_origin()
@@ -193,8 +201,8 @@ def create_app(test_config=None):
                     embeddings = embeddings_results[0][1]
 
             # Second form: Set similar embeddings
-            if 'similarity' in request.values and request.values['similarity']:
-                entity = request.values['similarity']
+            if 'knn' in request.values and request.values['knn']:
+                entity = request.values['knn']
                 embeddings_results = es.get_embeddings(get_index(), entities=[entity])
                 if len(embeddings_results) > 0:
                     similar_entities = []
