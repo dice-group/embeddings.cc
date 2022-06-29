@@ -1,3 +1,9 @@
+
+from email.quoprimime import body_check
+from http.client import responses
+from platform import java_ver
+
+from urllib import response
 from elasticsearch import Elasticsearch
 from flask import current_app, g
 
@@ -104,37 +110,37 @@ def get_embeddings(index, entities):
 
 
 def get_similar_embeddings(index, embeddings):
-    request = []
 
-    
+
+#embeddings comes from API
+    responses=[]
+    i=0
     for embedding in embeddings:
-        req_head = {'index': index }
-        req_body = {"query":{
-               "knn": {
+    
+         response = get_es().knn_search(index=index,knn={
                "field":"embeddings",
                "query_vector":embedding,
-               "k": 10,
-               "num_candidates": 100
-        }
-        
-    }
-        }
-        request.extend([req_head, req_body])
-    response = get_es().knn_search(body=request)
+                "k": 10,
+                "num_candidates": 1000
+               }
+           )
+         responses.insert(i,response)
+         i=i+1
+    print(i)
+    j=0  
+    #print(responses)  
+
     results = []
-    for i, resp in enumerate(response['responses']):
-        for hit in resp['hits']['hits']:
-            results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
+    #read from list
+    while j<i:  
+      responsenow=responses[j]
+      print(responsenow)
+      for hit in responsenow['hits']['hits']:
+            results.append((j, hit['_score'], hit['_source']['entity'], hit['_source']['embeddings']))
+      j=j+1
     return results
     
-   # request.extend([req_head, req_body])
-   # response = get_es().knn_search(body=request)
-    #results = []
-    #for i, resp in enumerate(response['responses']):
-      #  for hit in resp['hits']['hits']:
-       #     results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
-   # return results
-
+         
 
 def log(epoch_second, ip, path, parameters):
     get_es().index(index='usagelog', body={
@@ -167,3 +173,5 @@ def get_aliases():
         if index_aliases:
             aliases += index_aliases
     return [x for x in aliases if 'security' not in x]
+
+

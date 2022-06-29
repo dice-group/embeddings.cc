@@ -125,8 +125,8 @@ def create_app(test_config=None):
                 return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
                        str(es.get_dimensions(get_index())) + ') for embeddings index: ' + str(i), 422
         log()
-        
-        return es.get_similar_embeddings(get_index(), embeddings)
+
+        return jsonify(es.get_similar_embeddings(get_index(), embeddings))
 
 
 
@@ -140,13 +140,15 @@ def create_app(test_config=None):
             entities = request.json['entities']
         if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
-
+        print('a')
         embeddings = []
         for tup in es.get_embeddings(get_index(), entities=entities):
             embeddings.append(tup[1])
-
+        print('b')
         results = []
+        print('c')
         for trip in es.get_similar_embeddings(get_index(), embeddings):
+            print('d')
             results.append((trip[0], trip[1], trip[2]))
         log()
         return jsonify(results)
@@ -201,8 +203,8 @@ def create_app(test_config=None):
                     embeddings = embeddings_results[0][1]
 
             # Second form: Set similar embeddings
-            if 'knn' in request.values and request.values['knn']:
-                entity = request.values['knn']
+            if 'similarity' in request.values and request.values['similarity']:
+                entity = request.values['similarity']
                 embeddings_results = es.get_embeddings(get_index(), entities=[entity])
                 if len(embeddings_results) > 0:
                     similar_entities = []
