@@ -6,8 +6,10 @@
 ### Elasticsearch Python (8.1)
 
 - [Elasticsearch Python Client 8.1](https://www.elastic.co/guide/en/elasticsearch/client/python-api/8.1/index.html)
-- [Python Elasticsearch Client 8.1.3](https://elasticsearch-py.readthedocs.io/en/v8.1.3/)
-  - [Python Elasticsearch Client 8.1.3 - API Documentation](https://elasticsearch-py.readthedocs.io/en/v8.1.3/api.html)
+- [Python Elasticsearch Client 8.1.2](https://elasticsearch-py.readthedocs.io/en/v8.1.2/)
+  - [Python Elasticsearch Client 8.1.2 - API Documentation](https://elasticsearch-py.readthedocs.io/en/v8.1.2/api.html)
+    - [knn_search()](https://elasticsearch-py.readthedocs.io/en/v8.1.2/api.html#elasticsearch.Elasticsearch.knn_search)  
+    related: [Elasticsearch Guide [8.1]: kNN search API](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/knn-search-api.html)
 
 ### Elasticsearch Python DSL (7.4.0)
 
