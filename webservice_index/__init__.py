@@ -128,13 +128,13 @@ def create_app(test_config=None):
                     "entity_completion": {
                         "type": "completion"
                     },
-                    ##############insert KNN 
                     'embeddings': {
                         'type': 'dense_vector',
+                        'dims': dimensions,
+                        
+                        # KNN additions
                         'index': 'true',
-                        'similarity': 'l2_norm',
-                        'dims': dimensions
-
+                        'similarity': 'l2_norm'
                     }
                 }
             }

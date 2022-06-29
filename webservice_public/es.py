@@ -110,13 +110,37 @@ def get_embeddings(index, entities):
 
 
 def get_similar_embeddings(index, embeddings):
+    request = []
+    for embedding in embeddings:
+        req_head = {'index': index}
+        req_body = {"query": {
+            "script_score": {
+                "query": {"match_all": {}},
+                "script": {
+                    # Option: Use direct request, no external script
+                    "source": "cosineSimilarity(params.query_vector, 'embeddings') + 1.0",
+                    # Option: Use external script
+                    # "id": "cossim",
+                    "params": {
+                        "query_vector": embedding
+                    }
+                }
+            }
+        }}
+        request.extend([req_head, req_body])
+    response = get_es().msearch(body=request)
+    results = []
+    for i, resp in enumerate(response['responses']):
+        for hit in resp['hits']['hits']:
+            results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
+    return results
 
 
-#embeddings comes from API
+def get_similar_embeddings_knn(index, embeddings):
     responses=[]
     i=0
     for embedding in embeddings:
-    
+         # TODO: Combine several ES requests in loop
          response = get_es().knn_search(index=index,knn={
                "field":"embeddings",
                "query_vector":embedding,
@@ -126,15 +150,10 @@ def get_similar_embeddings(index, embeddings):
            )
          responses.insert(i,response)
          i=i+1
-    print(i)
-    j=0  
-    #print(responses)  
-
+    j=0
     results = []
-    #read from list
     while j<i:  
       responsenow=responses[j]
-      print(responsenow)
       for hit in responsenow['hits']['hits']:
             results.append((j, hit['_score'], hit['_source']['entity'], hit['_source']['embeddings']))
       j=j+1
