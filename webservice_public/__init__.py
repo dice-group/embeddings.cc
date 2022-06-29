@@ -107,6 +107,9 @@ def create_app(test_config=None):
         log()
         return jsonify(es.get_embeddings(get_index(), entities=entities))
 
+
+
+
     @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
     @cross_origin()
     def get_similar_embeddings():
@@ -114,6 +117,7 @@ def create_app(test_config=None):
             return 'Missing parameter: embeddings', 422
         else:
             embeddings = request.json['embeddings']
+            #the list of embedding in JSON
         if len(embeddings) > 100:
             return 'Incorrect value for parameter: embeddings', 422
         for i, embedding in enumerate(embeddings):
@@ -121,7 +125,11 @@ def create_app(test_config=None):
                 return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
                        str(es.get_dimensions(get_index())) + ') for embeddings index: ' + str(i), 422
         log()
+
         return jsonify(es.get_similar_embeddings(get_index(), embeddings))
+
+
+
 
     @app.route('/api/v1/get_similar_entities', methods=['POST'])
     @cross_origin()
@@ -132,13 +140,15 @@ def create_app(test_config=None):
             entities = request.json['entities']
         if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
-
+        print('a')
         embeddings = []
         for tup in es.get_embeddings(get_index(), entities=entities):
             embeddings.append(tup[1])
-
+        print('b')
         results = []
+        print('c')
         for trip in es.get_similar_embeddings(get_index(), embeddings):
+            print('d')
             results.append((trip[0], trip[1], trip[2]))
         log()
         return jsonify(results)
