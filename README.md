@@ -5,9 +5,6 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ## Documentation
 
-- [How to install](docs/local.md)
-- [Development](docs/development.md) (External documentation of integrated components)
-
 
 ### Public API (for users)
 
@@ -15,13 +12,14 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 - Additional examples are provided in [Python examples](api/embeddings_cc_public_examples.py) and [JavaScript HTML form](api/embeddings_cc_public.htm)
 
 
-### Index API (for universal embeddings developers)
+### Index API (for data developers)
 
 - Use the Index API to create Elasticsearch indexes and to **add data**.
 - It is only available in UPB network (use **VPN**).
-- It can easily accessed via the [API python file](api/embeddings_cc_index.py).
-- Usage examples are provided in the [examples python file](api/embeddings_cc_index_examples.py) and
-  in the [CSV example python file](api/embeddings_cc_index_csv.py).
+- It can easily accessed using the methods in [API python file](api/embeddings_cc_index.py).  
+  Usage examples are provided in the files for [simple examples](api/embeddings_cc_index_examples.py),
+  in the [adding CSV](api/embeddings_cc_index_csv.py) and
+  in the [adding UniKGE data](api/embeddings_cc_index_unikge.py).
 - **Important**: Create an alias for each index to be available in public. Only aliases can be accessed by webservices.
 
 | Webservice      | Method | Parameters                          |
@@ -36,7 +34,14 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 | /alias_put      | POST   | password, index, alias              |
 | /alias_delete   | POST   | password, index, alias              |
 
-### System administration
+
+### Development (for python developers)
+
+- [How to install](docs/local.md)
+- [Development](docs/development.md) (External documentation of integrated components)
+
+
+### Virtual machine (for system administrators)
 
 - [Virtual machine](docs/vm.md) (Installation and deployment)
 - [VM nginx](docs/vm-nginx-certbot.md) (Webserver configuration)
