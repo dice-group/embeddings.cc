@@ -1,5 +1,10 @@
 # Deployment
 
+- `kinit wilke` (or another upb user)
+- `ssh wilke@embeddings.cs.upb.de`
+
+## Outdated
+
 - `kinit wilke`
 - Copy code to /tmp:  
   `./scripts/vm-push.sh`
@@ -23,36 +28,18 @@ Before, activate environment:
 ```bash
 . /opt/anaconda3/etc/profile.d/conda.sh
 conda activate embeddings
-```
 
-## Local configuration
+# VM config overview
 
-- Set up a local system similar to the [VM](vm.md).
-- To start the components, use these commands:
-
-
-### Start Elasticsearch
-
-```bash
-sudo systemctl start elasticsearch.service
-```
-
-### Start webservice (public)
-
-```bash
-conda activate embeddings
-export FLASK_APP=webservice_public
-export FLASK_RUN_PORT=1337
-export FLASK_DEBUG=True
-flask run
-```
-
-### Start webservice (index)
-
-```bash
-conda activate unikge
-export FLASK_APP=webservice_index
-export FLASK_RUN_PORT=8008
-export FLASK_DEBUG=True
-flask run
-```
+- /data/elasticsearch/ - outdated version 7.16.3 (see [config](https://github.com/dice-group/embeddings.cc/blob/b0802888943a7ec93396d129a68f4fd605a66b55/docs/vm.md#elasticsearch-installation))
+- /data/elasticsearch-8.1.3/ - current ES
+- /data/elasticsearch-8.1.3/config/elasticsearch.yml - current ES config file
+- /data/es8-data/ - set in elasticsearch.yml
+- /data/es8-logs/ - set in elasticsearch.yml
+- /data/embeddings.cc-es8/ - current deployment
+- /opt/anaconda3/
+- /opt/cert/
+- /opt/embeddings -> /data/embeddings.cc-es8/ **symlink to main version**
+- /opt/embeddings_cc_e/ - outdated version 7.16.3
+- /opt/config.py
+- /opt/uwsgi.ini
