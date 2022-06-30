@@ -130,7 +130,11 @@ def create_app(test_config=None):
                     },
                     'embeddings': {
                         'type': 'dense_vector',
-                        'dims': dimensions
+                        'dims': dimensions,
+                        
+                        # KNN additions
+                        'index': 'true',
+                        'similarity': 'l2_norm'
                     }
                 }
             }
