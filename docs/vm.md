@@ -10,11 +10,12 @@
     - CPU: 4x Intel(R) Xeon(R) CPU E5-2695 v3 @ 2.30GHz (`cat /proc/cpuinfo`)
     - Memory: 32 GB (`free -h`)
     - Disk: 1007 GB (`/dev/sdb`, `df -h`)
-- Note: Some ES8 commands in [Issue 39](https://github.com/dice-group/embeddings.cc/issues/39)
-- Note: ES7 configuration in [previous version](https://github.com/dice-group/embeddings.cc/blob/82e7279f6506b58d4ad2538c91f924c6f33a27c4/docs/vm.md)
 
 
 ## Elasticsearch installation
+
+- Elasticsearch 7.16.3 documentation in [vm.md - Apr 3, 2022](https://github.com/dice-group/embeddings.cc/blob/b0802888943a7ec93396d129a68f4fd605a66b55/docs/vm.md#elasticsearch-installation)
+
 
 ### Elasticsearch 8.3.1
 

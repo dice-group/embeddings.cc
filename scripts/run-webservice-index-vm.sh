@@ -6,5 +6,5 @@ conda activate embeddings
 conda env list
 export FLASK_APP=webservice_index
 export FLASK_RUN_PORT=8008
-export FLASK_DEBUG=True
-flask run
+#export FLASK_DEBUG=True
+flask run --host=0.0.0.0

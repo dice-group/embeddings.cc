@@ -28,26 +28,24 @@ The current deployment uses the existing VM configuration and basically is
 - Eventually delete old deloyment directories
 
 
+## Starting the index webservice
+
+- `screen -S webservice-index`
+- `. /opt/bashrc.sh`
+- `cd /opt/embeddings`
+- `./scripts/run-webservice-index-vm.sh`
+- Test: [http://embeddings.cs.uni-paderborn.de:8008/ping](http://embeddings.cs.uni-paderborn.de:8008/ping)
+
+
 # VM config overview
 
 - Elasticsearch API
     - [ES :9200 version](https://embeddings.cs.upb.de:9200/)
     - [ES :9200 indexes](https://embeddings.cs.upb.de:9200/_cat/indices)
-- Elasticsearch 8.1.3
-    - Documentation: [vm.md](https://github.com/dice-group/embeddings.cc/blob/master/docs/vm.md#elasticsearch-installation)
-    - Configuration: /data/elasticsearch-8.1.3/config/elasticsearch.yml
-        - path.data: /data/es8-data
-        - path.logs: /data/es8-logs
-    - Manual start command: `/data/elasticsearch-8.1.3/bin/elasticsearch -d -p /data/elasticsearch-8.1.3/pid/pid.txt`  
-      (also see Guide for [starting](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/starting-elasticsearch.html), [stopping](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/stopping-elasticsearch.html))
-- Elasticsearch 7.16.3 (until Apr 27, 2022)
-    - Documentation: [vm.md - Apr 3, 2022](https://github.com/dice-group/embeddings.cc/blob/b0802888943a7ec93396d129a68f4fd605a66b55/docs/vm.md#elasticsearch-installation)
-    - Configuration: /etc/elasticsearch/elasticsearch.yml
-        - path.data: /data/elasticsearch
-        - path.logs: /var/log/elasticsearch
-- Check logs
-    - `tail /data/es8-logs/embcc.log`
-
+    - [ES :9200 mappings example](https://embeddings.cs.upb.de:9200/dbpedia_en_fr_15k_procrustes/_mapping)
+- Elasticsearch 8.3.1
+    - Manual start command: see Guide for [starting](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/starting-elasticsearch.html), [stopping](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/stopping-elasticsearch.html))
+    - Check ES logs command: `tail /data/es8-logs/embcc.log`
 
 # Archive
 

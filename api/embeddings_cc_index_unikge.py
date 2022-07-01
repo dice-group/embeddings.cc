@@ -6,6 +6,12 @@
 #
 # Runtime local: 21m59,087s (incl. 3x3min sleep time)
 # Authors (for questions): N'Dah Jean Kouagou, Adrian Wilke
+#
+# Note: To be available via the API, create the following aliases afterwards:
+# Index                            Alias
+# dbpedia_en_fr_15k_procrustes     dbpedia-en-fr-15k
+# dbpedia_en_fr_100k_procrustes_v2 dbpedia-en-fr-100k
+# dbpedia_en_de_100k_procrustes    dbpedia-en-de-100k
 
 import sys
 import numpy as np

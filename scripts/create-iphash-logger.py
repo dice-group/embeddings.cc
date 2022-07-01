@@ -6,8 +6,8 @@
 # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/ip.html
 # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/flattened.html
 #
-# Usage:       python3 scripts/create-logger.py <PASSWORD>
-# Local usage: python3 scripts/create-logger.py <PASSWORD> http://127.0.0.1:8008
+# Usage:       python3 scripts/create-iphash-logger.py <PASSWORD>
+# Local usage: python3 scripts/create-iphash-logger.py <PASSWORD> http://127.0.0.1:8008
 import sys
 from elasticsearch import Elasticsearch
 
