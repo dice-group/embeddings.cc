@@ -46,6 +46,9 @@ The current deployment uses the existing VM configuration and basically is
 - Elasticsearch 8.3.1
     - Manual start command: see Guide for [starting](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/starting-elasticsearch.html), [stopping](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/stopping-elasticsearch.html))
     - Check ES logs command: `tail /data/es8-logs/embcc.log`
+- Debug webservice-public
+    - Use run-webservice-public-local.sh to start another instance
+    - Access at [http://embeddings.cs.upb.de:1337](http://embeddings.cs.upb.de:1337)
 
 # Archive
 
