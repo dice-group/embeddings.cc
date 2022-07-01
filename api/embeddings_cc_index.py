@@ -12,7 +12,7 @@ import json
 
 
 class EmbeddingsCcIndex():
-    WEBSERVICE_URL = 'http://embeddings.cs.uni-paderborn.de:1338'
+    WEBSERVICE_URL = 'http://embeddings.cs.uni-paderborn.de:8008'
 
     def __init__(self, webservice_url=None):
         if webservice_url is None:

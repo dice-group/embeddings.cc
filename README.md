@@ -37,7 +37,7 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ### Development (for python developers)
 
-- [How to install](docs/local.md)
+- [How to install on your system](docs/local.md)
 - [Development](docs/development.md) (External documentation of integrated components)
 
 

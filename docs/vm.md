@@ -16,26 +16,40 @@
 
 ## Elasticsearch installation
 
-### Elasticsearch 8
+### Elasticsearch 8.3.1
 
-- Path: `/data/elasticsearch-8.1.3/config/elasticsearch.yml`
-- [Elasticsearch Guide [8.1] » Set up Elasticsearch » Configuring Elasticsearch » Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/important-settings.html)
+- [ES 8.3 installation](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/targz.html#install-linux)
+    - `cd /data`
+    - `wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.1-linux-x86_64.tar.gz`
+    - `wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.1-linux-x86_64.tar.gz.sha512`
+    - `shasum -a 512 -c elasticsearch-8.3.1-linux-x86_64.tar.gz.sha512`
+    - `tar -xzf elasticsearch-8.3.1-linux-x86_64.tar.gz`
+    - `rm elasticsearch-8.3.1-linux-x86_64.tar.gz*`
+https://www.elastic.co/guide/en/elasticsearch/reference/8.3/settings.html
+- [ES 8.3 settings](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/important-settings.html)
+    - `cp /data/elasticsearch-8.3.1/config/elasticsearch.yml /data/elasticsearch-8.3.1/config/elasticsearch.original.yml`
+    - `nano /data/elasticsearch-8.3.1/config/elasticsearch.yml`
     - cluster.name: embcc 
     - node.name: embcc-1
     - path.data: /data/es8-data
-    - path.data: /data/es8-data
-    - bootstrap.memory_lock: true
+    - path.logs: /data/es8-logs
+    - bootstrap.memory_lock: false
     - network.host: 0.0.0.0
-    - http.port: 9208
-- `sudo systemctl edit --force --full elasticsearch8.service` (force required to create file)
-    - <strike>Command created file: `/etc/systemd/system/elasticsearch8.service`</strike>
-    - <strike>State: Manual start works with bootstrap.memory_lock: false</strike>
-- Added start by cron:
+    - http.port: 9200
+- [ES 8.3 virtual memory](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/vm-max-map-count.html)
+    - `sudo sysctl -w vm.max_map_count=262144` (temp)
+    - `sudo sysctl vm.max_map_count` (check)
+    - `sudo nano /etc/sysctl.conf` (permanently)  
+      `vm.max_map_count=262144`
+- [ES 8.3 start](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/starting-elasticsearch.html)
+    - `/data/elasticsearch-8.3.1/bin/elasticsearch -d -p /data/elasticsearch-8.3.1/pid.txt`
+- [ES 8.3 password](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/reset-password.html)
+    - `/data/elasticsearch-8.3.1/bin/elasticsearch-reset-password --username elastic --interactive`
+- Autostart
     - `crontab -e`
-    - `@reboot /data/elasticsearch-8.1.3/bin/elasticsearch`
+    - `@reboot /data/elasticsearch-8.3.1/bin/elasticsearch -d -p /data/elasticsearch-8.3.1/pid.txt`
     - `sudo shutdown -r 0`
-- `/data/elasticsearch-8.1.3/config/elasticsearch.yml`
-    - `bootstrap.memory_lock: true`
+
 
 ## Packages installation
 
@@ -49,6 +63,7 @@
 
 ## Webservice installation
 
+- Initial version, updates in [deployment.md](deployment.md)
 - Copy code
     - `kinit wilke`
     - `./scripts/vm-push.sh`
@@ -131,19 +146,6 @@ TimeoutStopSec=30
 [Install]
 WantedBy=multi-user.target
 ```
-
-### Update symlink to use Elasticsearch 8
-
-```
-ls -l /opt/embeddings
-lrwxrwxrwx 1 root root 15 Apr  3 12:47 /opt/embeddings -> embeddings_cc_e/
-sudo systemctl stop embeddings.service  # takes 90 seconds, changed to 30
-sudo unlink /opt/embeddings
-sudo ln -s /data/embeddings.cc-es8/ /opt/embeddings
-sudo systemctl start embeddings.service
-```
-
-
 
 ## Misc
 
