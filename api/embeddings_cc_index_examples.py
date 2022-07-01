@@ -8,34 +8,23 @@ import sys
 from embeddings_cc_index import EmbeddingsCcIndex
 
 # Configuration
-es_index = 'index_test'
-es_alias = 'index_test_alias'
+es_index      = 'index_test'
+es_alias      = 'index_test_alias'
 es_dimensions = 10
-es_shards = 5
-#
-#es_index = 'dbp_en_de_100k'
-#es_alias = 'dbp-en-de-100k'
-#es_dimensions = 300
-#
-#es_index = 'dbp_en_fr_100k'
-#es_alias = 'dbp-en-fr-100k'
-#es_dimensions = 300
-#
-#es_index = 'dbp_en_fr_15k'
-#es_alias = 'dbp-en-fr-15k'
-#es_dimensions = 300
+es_shards     = 5
 
 # Execution
-do_ping           = True
-do_delete_index   = False
-do_create_index   = False
-do_alias_delete   = False
-do_alias_put      = False
-do_print_indexes  = True
-do_add_data_tuple = False
-do_add_data_list  = False
-do_count          = False
-do_search         = False
+do_ping                  = True
+do_delete_index          = False
+do_create_index          = False
+do_create_index_usagelog = False
+do_alias_delete          = False
+do_alias_put             = False
+do_print_indexes         = True
+do_add_data_tuple        = False
+do_add_data_list         = False
+do_count                 = False
+do_search                = False
 
 # Get password form CLI
 if len(sys.argv) > 1:
@@ -50,8 +39,10 @@ if len(sys.argv) > 2:
     webservice_url = sys.argv[2]
 
 # Print configuration
-print("es_index:", es_index)
-print("es_dimensions:", es_dimensions)
+print("es_index:",       es_index)
+print("es_alias:",       es_alias)
+print("es_dimensions:",  es_dimensions)
+print("es_shards:",      es_shards)
 print("webservice_url:", webservice_url)
 
 # Create instance
@@ -82,6 +73,11 @@ if do_delete_index:
 if do_create_index:
     response = embeddings_cc_index.create_index(password, es_index, es_dimensions, shards=es_shards)
     print('create_index:', response.status_code, response.text)
+
+# Creates the Elasticsearch index 'usagelog' and returns Elasticsearch API response.
+if do_create_index_usagelog:
+    response = embeddings_cc_index.create_index_usagelog(password)
+    print('create_index_usagelog:', response.status_code, response.text)
 
 # Deletes an alias of an index.
 if do_alias_delete:

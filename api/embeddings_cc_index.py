@@ -63,6 +63,13 @@ class EmbeddingsCcIndex():
                           params={'password': password, 'index': index, 'dimensions': dimensions,
                                   'shards': shards})
 
+    def create_index_usagelog(self, password):
+        """
+        Creates the Elasticsearch index 'usagelog' and returns Elasticsearch API response.
+        """
+        return httpx.post(self.webservice_url + '/create_index_usagelog',
+                          params={'password': password})
+
     def delete_index(self, password, index):
         """
         Deletes an Elasticsearch index and returns Elasticsearch API response.

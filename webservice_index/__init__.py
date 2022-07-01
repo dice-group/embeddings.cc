@@ -145,6 +145,41 @@ def create_app(test_config=None):
         except Exception as e:
             return traceback.format_exc(), 503
 
+    @app.route('/create_index_usagelog', methods=['POST'])
+    @cross_origin()
+    def create_index_usagelog():
+        if not request.args.get('password') or not security.check_password(request.args.get('password')):
+            return 'Unauthorized', 401
+
+        index_config = {
+            'settings': {
+                'number_of_shards': 2,
+                'number_of_replicas': 1
+            },
+            'mappings': {
+                'properties': {
+                    "date": {
+                        "type": "date",
+                        "format": "epoch_second"
+                    },
+                    "ip": {
+                        "type": "keyword"
+                    },
+                    'path': {
+                        'type': 'keyword'
+                    },
+                    'parameters': {
+                        'type': 'flattened'
+                    }
+                }
+            }
+        }
+
+        try:
+            return str(es.get_es().indices.create(index='usagelog', body=index_config))
+        except Exception as e:
+            return traceback.format_exc(), 503
+
     @app.route('/delete_index', methods=['POST'])
     @cross_origin()
     def delete_index():

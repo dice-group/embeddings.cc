@@ -2,16 +2,17 @@
 
 ## Set up Elasticsearch
 
-- Note: embeddings.cc requires the configuration values listed in [config.py](../config.py).
-  You have to collect the values for Elasticsearch *host*, *user* and *password*.
-  When you finally open a host address like [http://localhost:9200/](http://localhost:9200/) and have to provide a user and password, you have prepared everything in this step.
+- Note: In the next steps. you have to collect the values for Elasticsearch *host*, *user* and *password*.
+This project requires the configuration values to be availabe in [config.py](../config.py).
+  When you finally open a host address like [https://localhost:9200/](https://localhost:9200/) and have to provide a user and password, you have prepared everything in this step.
 - Install and/or start Elasticsearch on your machine
-    - We use Elasticsearch version 8.1.3.
+    - We currently use Elasticsearch version 8.3.1.
       Later versions will probably also work.
     - Download Elasticsearch from [elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch).
-    - See detailed instructions in the [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/index.html), part *Set up Elasticsearch*.
-- A user and password are required.
-    - You can use the command `./bin/elasticsearch-reset-password --username elastic --interactive` and provide a password.
+      For linux, check the [guide to download and install archive for Linux](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/targz.html#install-linux).
+    - See detailed instructions in the [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/8.3/index.html), part *Set up Elasticsearch*.
+- Provide a password for the user *elastic*.
+    - You can use the command `./bin/elasticsearch-reset-password --username elastic --interactive`.
     - The command is documented here: [elasticsearch-reset-password](https://www.elastic.co/guide/en/elasticsearch/reference/8.1/reset-password.html).
 - You should be able to access [https://127.0.0.1:9200/](https://127.0.0.1:9200/).
 
@@ -36,6 +37,7 @@
   Run this script from the root directory, e.g. ./scripts/run-webservice-public-local.sh. 
   (You may have to edit the commands to match your local configuration.)
 - If you open [127.0.0.1:1337](http://127.0.0.1:1337/) now, there should be an error message stating that an index was not found.
+  That is fine as we did not add any data.
 
 ## Create an Elasticsearch index
 
@@ -44,7 +46,7 @@
   (You may have to edit the commands to match your local configuration.)
   Opening [http://127.0.0.1:8008/ping](http://127.0.0.1:8008/ping) should return Status: OK.
 - Edit the file [embeddings_cc_index_examples.py](../api/embeddings_cc_index_examples.py)
-    - Set *do_create_index*, *do_alias_put* and *do_add_data_list* to *True*.
+    - Set *do_create_index*, *do_create_index_usagelog*, *do_alias_put* and *do_add_data_list* to *True*.
     - Execute `python api/embeddings_cc_index_examples.py <PASSWORD> http://127.0.0.1:8008`
     - You should get several HTTP return codes 200.
 

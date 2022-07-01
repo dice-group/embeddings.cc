@@ -22,17 +22,18 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
   in the [adding UniKGE data](api/embeddings_cc_index_unikge.py).
 - **Important**: Create an alias for each index to be available in public. Only aliases can be accessed by webservices.
 
-| Webservice      | Method | Parameters                          |
-|-----------------|--------|-------------------------------------|
-| /ping           | GET    | -                                   |
-| /count          | GET    | index                               |
-| /get_embeddings | GET    | index, entity                       |
-| /get_indexes    | POST   | password                            |
-| /create_index   | POST   | password, index, dimensions, shards |
-| /delete_index   | POST   | password, index                     |
-| /add            | POST   | password, index, docs               |
-| /alias_put      | POST   | password, index, alias              |
-| /alias_delete   | POST   | password, index, alias              |
+| Webservice             | Method | Parameters                          |
+|------------------------|--------|-------------------------------------|
+| /ping                  | GET    | -                                   |
+| /count                 | GET    | index                               |
+| /get_embeddings        | GET    | index, entity                       |
+| /get_indexes           | POST   | password                            |
+| /create_index          | POST   | password, index, dimensions, shards |
+| /create_index_usagelog | POST   | password                            |
+| /delete_index          | POST   | password, index                     |
+| /add                   | POST   | password, index, docs               |
+| /alias_put             | POST   | password, index, alias              |
+| /alias_delete          | POST   | password, index, alias              |
 
 
 ### Development (for python developers)
