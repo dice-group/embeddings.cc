@@ -12,6 +12,7 @@
 # dbpedia_en_fr_15k_procrustes     dbpedia-en-fr-15k
 # dbpedia_en_fr_100k_procrustes_v2 dbpedia-en-fr-100k
 # dbpedia_en_de_100k_procrustes    dbpedia-en-de-100k
+# dbpedia_caligraph_procrustes     dbpedia-caligraph
 
 import sys
 import numpy as np
@@ -24,18 +25,20 @@ from embeddings_cc_index import EmbeddingsCcIndex
 es_indices = [
     "dbpedia_en_fr_15k_procrustes",
     "dbpedia_en_fr_100k_procrustes_v2",
-    "dbpedia_en_de_100k_procrustes"
+    "dbpedia_en_de_100k_procrustes",
+    "dbpedia_caligraph_procrustes"
 ]
 # Each folder has to contain: alignment.json, list_merged_entities.txt, Universal_Emb.npy
 # Do not forget final '/'
 data_folders = [
     "/home/wilke/Data/UniKGE/dbpedia_en_fr_15k_procrustes/EnFr15KV1/",
     "/home/wilke/Data/UniKGE/dbpedia_en_fr_100k_procrustes/EnFr100KV2/",
-    "/home/wilke/Data/UniKGE/dbpedia_en_de_100k_procrustes/EnDe100K/"
+    "/home/wilke/Data/UniKGE/dbpedia_en_de_100k_procrustes/EnDe100K/",
+    "/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/"
 ]
 
 # Pause seconds to let ES cool down
-sleep_secs = 3 * 60
+sleep_secs = 5 * 60   # 3 min for dbpedia en/fr/de, 5 min for caligraph
 
 # Get password form CLI
 if len(sys.argv) > 1:
@@ -91,7 +94,7 @@ for es_index, data_folder in zip(es_indices, data_folders):
         entities = file.read().split('\t')
     with open(data_folder + 'alignment.json') as file:
         alignment = json.load(file)
-    embeddings = np.load(data_folder + 'Universal_Emb.npy')
+    embeddings = np.load(data_folder + 'Universal_Emb.npy', mmap_mode='r+')
     print('Done!\n')
 
     # Create index

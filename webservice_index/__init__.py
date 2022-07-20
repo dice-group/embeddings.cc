@@ -3,6 +3,7 @@ import traceback
 import json
 import numbers
 import re
+import ast
 from flask import Flask, request, current_app
 from flask_cors import cross_origin
 from . import security
@@ -83,6 +84,24 @@ def create_app(test_config=None):
         return json.JSONEncoder().encode(results)
 
     # ----------| POST requests with password |-------------------------------------------------------------------------
+
+    @app.route('/get_max_cpu_usage', methods=['POST'])
+    @cross_origin()
+    def get_max_cpu_usage():
+        if not request.args.get('password') or not security.check_password(request.args.get('password')):
+            return 'Unauthorized', 401
+        results = "{}"
+        try:
+            results = es.get_es().nodes.stats(node_id="*", metric="process")
+        except Exception as e:
+            return traceback.format_exc(), 503
+        results_dict = ast.literal_eval(str(results))
+        cpu_max = 0
+        for node_id in results_dict['nodes']:
+            cpu_percent = results_dict['nodes'][node_id]['process']['cpu']['percent']
+            if cpu_percent > cpu_max:
+                cpu_max = cpu_percent
+        return str(cpu_max)
 
     @app.route('/get_indexes', methods=['POST'])
     @cross_origin()

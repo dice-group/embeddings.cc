@@ -49,6 +49,12 @@ class EmbeddingsCcIndex():
 
     # ----------| POST requests with password |-------------------------------------------------------------------------
 
+    def get_max_cpu_usage(self, password):
+        """
+        Gets the maximum CPU useage of ES nodes
+        """
+        return httpx.post(self.webservice_url + '/get_max_cpu_usage', params={'password': password})
+
     def get_indexes(self, password):
         """
         Returns webservice response containing existing Elasticsearch indexes.

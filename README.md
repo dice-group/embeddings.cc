@@ -27,6 +27,7 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 | /ping                  | GET    | -                                   |
 | /count                 | GET    | index                               |
 | /get_embeddings        | GET    | index, entity                       |
+| /get_cpu_usage         | POST   | password                            |
 | /get_indexes           | POST   | password                            |
 | /create_index          | POST   | password, index, dimensions, shards |
 | /create_index_usagelog | POST   | password                            |

@@ -15,6 +15,7 @@ es_shards     = 5
 
 # Execution
 do_ping                  = True
+do_print_cpu_usage       = False
 do_delete_index          = False
 do_create_index          = False
 do_create_index_usagelog = False
@@ -113,6 +114,11 @@ if do_add_data_list:
     print(embeddings)
     response = embeddings_cc_index.add(password, es_index, embeddings)
     print('add list:', response.status_code, response.text)
+
+# Gets the maximum CPU useage of ES nodes
+if do_print_cpu_usage:
+    response = embeddings_cc_index.get_max_cpu_usage(password)
+    print('cpu usage:', response.status_code, response.text)
 
 # ----------| GET requests without password |---------------------------------------------------------------------------
 
