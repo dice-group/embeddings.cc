@@ -37,9 +37,6 @@ data_folders = [
     "/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/"
 ]
 
-# Pause seconds to let ES cool down
-sleep_secs = 5 * 60   # 3 min for dbpedia en/fr/de, 5 min for caligraph
-
 # Get password form CLI
 if len(sys.argv) > 1:
     password = sys.argv[1]
@@ -79,6 +76,18 @@ def add_embeddings(api, password, index, embeddings):
         return False
 
 
+# Wait some time if CPU usage is high
+def optional_sleep(embeddings_cc_index, password):
+    if int(embeddings_cc_index.get_max_cpu_usage(password).text) > 66:
+        print('sleep', end=' ')
+        sys.stdout.flush()
+        time.sleep(60)
+    if int(embeddings_cc_index.get_max_cpu_usage(password).text) > 33:
+        print('sleep', end=' ')
+        sys.stdout.flush()
+        time.sleep(30)
+
+
 # Parse files
 for es_index, data_folder in zip(es_indices, data_folders):
 
@@ -115,11 +124,14 @@ for es_index, data_folder in zip(es_indices, data_folders):
             if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings):
                 break
             Embeddings = []
+            
+            optional_sleep(embeddings_cc_index, password)
 
+    optional_sleep(embeddings_cc_index, password)
+    
     if len(Embeddings) > 0:
         add_embeddings(embeddings_cc_index, password, es_index, Embeddings)
 
-    time.sleep(sleep_secs)
 
 # Print number of documents
 # In tests, this resulted in 'httpcore.ReadTimeout: timed out'
