@@ -7,11 +7,11 @@
 # Authors (for questions): N'Dah Jean Kouagou, Adrian Wilke
 #
 # Note: To be available via the API, create the following aliases afterwards:
-# Index                            Alias
+# Index                            Alias              Comments
 # dbpedia_en_fr_15k_procrustes     dbpedia-en-fr-15k
 # dbpedia_en_fr_100k_procrustes_v2 dbpedia-en-fr-100k
 # dbpedia_en_de_100k_procrustes    dbpedia-en-de-100k
-# dbpedia_caligraph_procrustes     dbpedia-caligraph
+# dbpedia_caligraph                dbpedia-caligraph  Only DBpedia URIs
 
 import sys
 import numpy as np
@@ -40,7 +40,7 @@ if False:
 if False:
     es_indices.append("dbpedia_caligraph_procrustes")
     data_folders.append("/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/")
-if True:
+if False:
     es_indices.append("dbpedia_caligraph")
     data_folders.append("/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/")
     add_mappings_key = False  # Only add DBpedia URIs from caligraph
