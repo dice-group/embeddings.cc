@@ -4,7 +4,6 @@
 # Usage:       time python3 api/embeddings_cc_index_unikge.py <PASSWORD>
 # Local usage: time python3 api/embeddings_cc_index_unikge.py <PASSWORD> http://127.0.0.1:8008
 #
-# Runtime local: 21m59,087s (incl. 3x3min sleep time)
 # Authors (for questions): N'Dah Jean Kouagou, Adrian Wilke
 #
 # Note: To be available via the API, create the following aliases afterwards:
@@ -21,21 +20,31 @@ import time
 from embeddings_cc_index import EmbeddingsCcIndex
 
 # Configuration
+add_mappings_key   = True
+add_mappings_value = True
+
 # UniKGE/Procrustes data: https://hobbitdata.informatik.uni-leipzig.de/UniKGE/
-es_indices = [
-    "dbpedia_en_fr_15k_procrustes",
-    "dbpedia_en_fr_100k_procrustes_v2",
-    "dbpedia_en_de_100k_procrustes",
-    "dbpedia_caligraph_procrustes"
-]
 # Each folder has to contain: alignment.json, list_merged_entities.txt, Universal_Emb.npy
 # Do not forget final '/'
-data_folders = [
-    "/home/wilke/Data/UniKGE/dbpedia_en_fr_15k_procrustes/EnFr15KV1/",
-    "/home/wilke/Data/UniKGE/dbpedia_en_fr_100k_procrustes/EnFr100KV2/",
-    "/home/wilke/Data/UniKGE/dbpedia_en_de_100k_procrustes/EnDe100K/",
-    "/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/"
-]
+es_indices = []
+data_folders = []
+if False:
+    es_indices.append("dbpedia_en_fr_15k_procrustes")
+    data_folders.append("/home/wilke/Data/UniKGE/dbpedia_en_fr_15k_procrustes/EnFr15KV1/")
+if False:
+    es_indices.append("dbpedia_en_fr_100k_procrustes_v2")
+    data_folders.append("/home/wilke/Data/UniKGE/dbpedia_en_fr_100k_procrustes/EnFr100KV2/")
+if False:
+    es_indices.append("dbpedia_en_de_100k_procrustes")
+    data_folders.append("/home/wilke/Data/UniKGE/dbpedia_en_de_100k_procrustes/EnDe100K/")
+if False:
+    es_indices.append("dbpedia_caligraph_procrustes")
+    data_folders.append("/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/")
+if True:
+    es_indices.append("dbpedia_caligraph")
+    data_folders.append("/home/wilke/Data/UniKGE/caligraph_dbpedia_procrustes/")
+    add_mappings_key = False  # Only add DBpedia URIs from caligraph
+
 
 # Get password form CLI
 if len(sys.argv) > 1:
@@ -48,6 +57,7 @@ else:
 webservice_url = None
 if len(sys.argv) > 2:
     webservice_url = sys.argv[2]
+
 
 # Create instance
 embeddings_cc_index = EmbeddingsCcIndex(webservice_url=webservice_url)
@@ -65,27 +75,25 @@ else:
 
 
 # Add data
-def add_embeddings(api, password, index, embeddings):
+def add_embeddings(api, password, index, embeddings, i):
     response = api.add(password, index, embeddings)
     if response.status_code == 200:
         print(i, end=' ')
         sys.stdout.flush()
         return True
     else:
-        print(response.status_code, response.text)
+        print('Could not add embeddings', response.status_code, response.text)
         return False
 
 
 # Wait some time if CPU usage is high
 def optional_sleep(embeddings_cc_index, password):
-    if int(embeddings_cc_index.get_max_cpu_usage(password).text) > 66:
-        print('sleep', end=' ')
-        sys.stdout.flush()
-        time.sleep(60)
-    if int(embeddings_cc_index.get_max_cpu_usage(password).text) > 33:
-        print('sleep', end=' ')
+    if int(embeddings_cc_index.get_max_cpu_usage(password).text) > 50:
+        print('(s)', end=' ')
         sys.stdout.flush()
         time.sleep(30)
+        # recursive call:
+        optional_sleep(embeddings_cc_index, password)
 
 
 # Parse files
@@ -115,13 +123,14 @@ for es_index, data_folder in zip(es_indices, data_folders):
     print("\nDimensions:", embeddings.shape[1], "\n")
     assert len(entities) == embeddings.shape[0], f"{len(entities)}, {embeddings.shape[0]}"
     for i, ent in enumerate(entities):
-        Embeddings.append([ent, list(embeddings[i])])
+        if add_mappings_key:
+            Embeddings.append([ent, list(embeddings[i])])
 
-        if ent in alignment:
+        if add_mappings_value and (ent in alignment):
             Embeddings.append([alignment[ent], list(embeddings[i])])
 
-        if i % 5000 == 0:
-            if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings):
+        if len(Embeddings) >= 5000:
+            if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings, i):
                 break
             Embeddings = []
             
@@ -130,12 +139,13 @@ for es_index, data_folder in zip(es_indices, data_folders):
     optional_sleep(embeddings_cc_index, password)
     
     if len(Embeddings) > 0:
-        add_embeddings(embeddings_cc_index, password, es_index, Embeddings)
+        add_embeddings(embeddings_cc_index, password, es_index, Embeddings, 0)
 
 
 # Print number of documents
 # In tests, this resulted in 'httpcore.ReadTimeout: timed out'
-if False:
+if True:
+    optional_sleep(embeddings_cc_index, password)
     for es_index, data_folder in zip(es_indices, data_folders):
         response = embeddings_cc_index.count(es_index)
         print(response.status_code, response.text)
