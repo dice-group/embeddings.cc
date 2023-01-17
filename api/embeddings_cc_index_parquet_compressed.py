@@ -25,8 +25,8 @@ if len(sys.argv) > 3:
 embeddings_cc_index = EmbeddingsCcIndex(webservice_url=webservice_url)
 
 # Define the index and provide path to data
-es_indices = ["dbpedia_wikidata_v1"]#["dbp_en_fr_15k", "dbp_en_fr_100k", "dbp_en_de_100k"]
-data_folders = ["Experiments/DBpedia+_ConEx/"] #["Shallom_EnFr_15K_V1/", "Shallom_EnFr_100K_V1/", "Experiments/EN_DE_100K_V1/"]
+es_indices = ["dbpedia_wikidata_full"]#["dbp_en_fr_15k", "dbp_en_fr_100k", "dbp_en_de_100k"]
+data_folders = ["Wiki-DBpedia/"] #["Shallom_EnFr_15K_V1/", "Shallom_EnFr_100K_V1/", "Experiments/EN_DE_100K_V1/"]
 
 # Ping webservice
 if True:
@@ -61,7 +61,7 @@ if True:
         print(response.status_code, response.text)
         file_path = base_path.split('embeddings.cc')[0]+data_folder
         print('\nLoading embeddings...\n')
-        embeddings = polars.read_parquet(file_path+'/ConEx_entity_emb').to_pandas()
+        embeddings = polars.read_parquet(file_path+'/entity_embeddings_parquet', use_pyarrow=True).to_pandas()
         print('Done!\n')
         response = embeddings_cc_index.create_index(password, es_index, embeddings.shape[1]-1, shards=5)
         print(response.status_code, response.text)
