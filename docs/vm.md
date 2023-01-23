@@ -11,6 +11,11 @@
     - Memory: 32 GB (`free -h`)
     - Disk: 1007 GB (`/dev/sdb`, `df -h`)
 
+## Logs
+
+- Elasticsearch: `/data/es8-logs/`
+- Elasticsearch garbage collection: `/data/elasticsearch-8.3.1/logs/gc.log`
+
 
 ## Elasticsearch installation
 
