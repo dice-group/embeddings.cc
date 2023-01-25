@@ -1,5 +1,5 @@
-# This scripts reads embeddings.cc source files.
-# The files can be in bzip2 or text format.
+# This Python class reads embeddings.cc data files.
+# The data files can be in bzip2 or text format.
 #
 # Example usage:
 # from file_reader import FileReader
