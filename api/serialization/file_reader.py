@@ -28,8 +28,8 @@ class FileReader:
 
     def __iter__(self):
         if self.format is self.FORMAT_BZIP2:
-            f_embs = bz2.open(self.embeddings_file, mode='rt')
-            f_uris = bz2.open(self.uri_file, mode='rt')
+            f_embs = bz2.open(self.embeddings_file, mode='rt',encoding="utf-8")
+            f_uris = bz2.open(self.uri_file, mode='rt',encoding="utf-8")
         elif self.format is self.FORMAT_TEXT:
             f_embs = open(self.embeddings_file, 'r')
             f_uris = open(self.uri_file, 'r')
