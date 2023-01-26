@@ -57,14 +57,28 @@ https://www.elastic.co/guide/en/elasticsearch/reference/8.3/settings.html
     - `sudo shutdown -r 0`
 
 
-## Packages installation
+## Packages / software installation
 
-- Anaconda
-    - Source: [https://docs.anaconda.com/anaconda/install/linux/](https://docs.anaconda.com/anaconda/install/linux/)
-    - `wget https://repo.anaconda.com/archive/Anaconda3-2021.11-Linux-x86_64.sh`
-    - `sudo bash Anaconda3-2021.11-Linux-x86_64.sh`
-    - Directory: `/opt/anaconda3`
-    - Output: `modified /root/.bashrc`
+- Anaconda (required for Faiss)
+    - https://docs.conda.io/projects/conda/en/stable/user-guide/install/linux.html
+    - `wget https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh`
+    - `bash Anaconda3-2022.10-Linux-x86_64.sh`
+        - Installation path: `/upb/users/w/wilke/profiles/unix/cs/anaconda3`
+        - Ended with Exception
+        - `rm -rf anaconda3/`
+    - `bash Anaconda3-2022.10-Linux-x86_64.sh`
+        - Installation path: `/opt/anaconda`
+        - Error: [Errno 28] No space left on device: '/opt/anaconda/pkgs/python-3.9.13-haa1d7c7_1'
+        - `rm -rf /opt/anaconda3/`
+    - `bash Anaconda3-2022.10-Linux-x86_64.sh`
+        - Installation path: **`/data/anaconda`**
+        - `conda --version` → **`conda 22.9.0`**
+- Faiss
+    - https://github.com/facebookresearch/faiss/
+    - https://github.com/facebookresearch/faiss/blob/main/INSTALL.md
+    - `conda install -c pytorch faiss-cpu`
+    - https://github.com/facebookresearch/faiss/wiki/Getting-started
+    - **Faiss version**: `import faiss \n print(faiss.__version__)` → **1.7.3**
 
 
 ## Webservice installation
