@@ -37,7 +37,8 @@ class FileWriter:
 
     def add(self, uri, embeddings):
         if not uri.startswith('http://') and not uri.startswith('https://'):
-            raise RuntimeError('URI with unknown protocol:', uri)
+            print('Skipping URI with unknown protocol:', uri)
+            return
         if not type(embeddings) is list:
             raise TypeError('Embeddings not provided as list of floats:', uri, embeddings)
         for number in embeddings:

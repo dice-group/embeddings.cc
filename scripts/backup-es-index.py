@@ -16,6 +16,7 @@ from file_writer import FileWriter
 
 # Configuration
 host = "https://embeddings.cs.upb.de:9200"
+#host = "https://localhost:9200"
 user = "elastic"
 size = 10 * 1000
 keep_context = "60s"

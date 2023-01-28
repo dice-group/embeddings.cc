@@ -20,6 +20,7 @@ logger = logging.getLogger()
 
 
 class DenseIndex(object):
+
     def __init__(self, buffer_size: int = 50000):
         self.buffer_size = buffer_size
         self.index_id_to_db_id = {}
@@ -42,6 +43,7 @@ class DenseIndex(object):
         logger.info(
             "Loaded index of type %s and size %d", type(self.index), self.index.ntotal
         )
+        
     def search(self, encodings,k):
         candidates=np.array(encodings,dtype=np.float32)
         found_uris=[]
@@ -70,12 +72,14 @@ class DenseIndex(object):
 
     def getVectorForId(self,id):
         return list(self.index.reconstruct(id))
+        
     def getVectorForId_by_uri(self,uri):
         return list(self.index.reconstruct(self.db_id_to_index_id[uri]))
 
 
 # DenseFlatIndexer does exact search
 class DenseFlatIndex(DenseIndex):
+
     def __init__(self, vector_sz: int = 1, buffer_size: int = 50000):
         super(DenseFlatIndex, self).__init__(buffer_size=buffer_size)
         self.index = faiss.IndexFlatIP(vector_sz)
@@ -94,8 +98,6 @@ class DenseFlatIndex(DenseIndex):
     def search_knn(self, query_vectors, top_k):
         scores, indexes = self.index.search(query_vectors, top_k)
         return scores, indexes
-
-
 
 
 # DenseHNSWFlatIndexer does approximate search
@@ -172,14 +174,14 @@ class DenseHNSWFlatIndex(DenseIndex):
         self.phi = 1
 
 def load_Exact_index(file_to_index, index_dictionary_file):
-    search_index =DenseFlatIndex()
+    search_index = DenseFlatIndex()
     search_index.index = faiss.read_index(file_to_index)
     search_index.index_id_to_db_id = pickle.load(open(index_dictionary_file,"rb"))
     search_index.db_id_to_index_id = {v: k for k, v in search_index.index_id_to_db_id.items()}
     return search_index
 
 def load_HNSW_index(file_to_index, index_dictionary_file,vector_size):
-    search_index=DenseHNSWFlatIndex(vector_size)
+    search_index = DenseHNSWFlatIndex(vector_size)
     search_index.index = faiss.read_index(file_to_index)
     search_index.index_id_to_db_id = pickle.load(open(index_dictionary_file,"rb"))
     search_index.index.db_id_to_index_id = {v: k for k, v in search_index.index_id_to_db_id.items()}

@@ -76,9 +76,10 @@ https://www.elastic.co/guide/en/elasticsearch/reference/8.3/settings.html
 - Faiss
     - https://github.com/facebookresearch/faiss/
     - https://github.com/facebookresearch/faiss/blob/main/INSTALL.md
-    - `conda install -c pytorch faiss-cpu`
     - https://github.com/facebookresearch/faiss/wiki/Getting-started
-    - **Faiss version**: `import faiss \n print(faiss.__version__)` → **1.7.3**
+    - (outdated:) `conda install -c pytorch faiss-cpu`
+    - `conda activate embeddings`  
+      `conda install -c conda-forge faiss-cpu` (**1.7.2**)
 
 
 ## Webservice installation
