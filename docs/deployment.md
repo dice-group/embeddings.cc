@@ -58,3 +58,4 @@ Before, activate environment:
 ```bash
 . /opt/anaconda3/etc/profile.d/conda.sh
 conda activate embeddings
+```

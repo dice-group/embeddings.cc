@@ -11,10 +11,13 @@
     - Memory: 32 GB (`free -h`)
     - Disk: 1007 GB (`/dev/sdb`, `df -h`)
 
+
 ## Logs
 
 - Elasticsearch: `/data/es8-logs/`
 - Elasticsearch garbage collection: `/data/elasticsearch-8.3.1/logs/gc.log`
+- systemd: `sudo journalctl -u embeddings.service -b`
+- nginx: `cat /var/log/nginx/error.log`
 
 
 ## Elasticsearch installation
@@ -59,7 +62,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/8.3/settings.html
 
 ## Packages / software installation
 
-- Anaconda (required for Faiss)
+- Anaconda (re-installed)
     - https://docs.conda.io/projects/conda/en/stable/user-guide/install/linux.html
     - `wget https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh`
     - `bash Anaconda3-2022.10-Linux-x86_64.sh`
@@ -118,6 +121,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/8.3/settings.html
     - `sudo -u embeddings -s` (also: how to switch to user)
   - sudo ln -s embeddings_cc_e embeddings
 
+
 ## Public webservice: Start configuration
 
 ### uWSGI
@@ -130,7 +134,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/8.3/settings.html
 ;  Change directory to embeddings code root
 ;  Execute 'uwsgi /opt/uwsgi.ini'
 
-home    = /opt/anaconda3
+home    = /data/anaconda/
 plugins = python3
 mount   = /=webservice_public/wsgi.py
 
@@ -167,6 +171,29 @@ TimeoutStopSec=30
 [Install]
 WantedBy=multi-user.target
 ```
+
+### .bashrc
+
+The folling lines were added for user `wilke` at conda installation.  
+Afterwards, they were copied to `/home/embeddings/.bashrc`.
+
+```
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/data/anaconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/data/anaconda/etc/profile.d/conda.sh" ]; then
+        . "/data/anaconda/etc/profile.d/conda.sh"
+    else
+        export PATH="/data/anaconda/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+```
+
 
 ## Misc
 
