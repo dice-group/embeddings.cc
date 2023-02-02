@@ -1,3 +1,5 @@
+Note: This project was developed while working on the article ***Universal Knowledge Graph Embeddings*** (repository: [Universal_Embeddings](https://github.com/dice-group/Universal_Embeddings)), which is currently under review.
+
 # Universal Knowledge Graph Embeddings
 
 This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([also without TLS](http://embeddings.cs.uni-paderborn.de/)).
