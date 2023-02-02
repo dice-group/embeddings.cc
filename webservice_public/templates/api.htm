@@ -71,7 +71,6 @@ pre::-webkit-scrollbar-track {
 <span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
 <a href="/">Introduction</a>
 <a href="/api">API</a>
-<a href="/news">News</a>
 </div>
 
 <h1>API: Web services</h1>
@@ -83,8 +82,6 @@ pre::-webkit-scrollbar-track {
  <li><a href="#get_random_entities">/api/v1/get_random_entities</a></li>
  <li><a href="#get_entities">/api/v1/get_entities</a></li>
  <li><a href="#get_embeddings">/api/v1/get_embeddings</a></li>
- <li><a href="#get_similar_embeddings">/api/v1/get_similar_embeddings</a></li>
- <li><a href="#get_similar_entities">/api/v1/get_similar_entities</a></li>
 </ul>
 
 
@@ -410,136 +407,7 @@ else:
  </tr>
 </table>
 
-
-
-<h2 id="get_similar_embeddings">/api/v1/get_similar_embeddings</h2>
-
-<table>
- <tr>
-  <td class="title">Description</td>
-  <td>Takes embeddings and gets the top 10 similar embeddings based on cosine similarity.</td>
- </tr>
- <tr>
-  <td class="title">URL</td>
-  <td>https://embeddings.cc/api/v1/get_similar_embeddings</td>
- </tr>
- <tr>
-  <td>HTTP method</td>
-  <td>POST</td>
- </tr>
- <tr>
-  <td>Parameters</td>
-  <td>
-   <em>embeddings</em> { value: list of embeddings, max: 100, format: JSON } <br />
-   <em>index</em> { optional, format: JSON } </td>
- </tr>
- <tr>
-  <td>Returns</td>
-  <td>List of 4-element-lists (request index, cosine similarity, entity identifier and embeddings), format: JSON</td>
- </tr>
- <tr>
-  <td>Python code example</td>
-  <td class="code">
-<pre><code class="language-python">import httpx
-response = httpx.post('https://embeddings.cc/api/v1/get_similar_embeddings', json={'embeddings': [[-0.1, 0.0, 0.1], [-0.2, 0.0, 0.2]]})
-if response.status_code == 200:
-    print(response.json())
-else:
-    print('Error:', response.text)
-</code></pre>
-</td>
- </tr>
- <tr>
-  <td>Test</td>
-  <td>
-   <form onsubmit="apiCallParse('POST', '/api/v1/get_similar_embeddings', 'embeddings', 'get_similar_embeddings_parameters', 'get_similar_embeddings_input', 'get_similar_embeddings_result'); return false">
-    <textarea id="get_similar_embeddings_parameters">
-[
-  [], 
-  []
-]
-</textarea>
-    <input type="submit" value="Test API method">
-   </form>
-  </td>
- </tr>
- <tr class="test-input">
-  <td>Test input</td>
-  <td class="code"><pre><code id="get_similar_embeddings_input" class="language-json"></code></pre></td>
- </tr>
- <tr class="test-result">
-  <td>Test result</td>
-  <td class="code"><pre><code id="get_similar_embeddings_result" class="language-json"></code></pre></td>
- </tr>
-</table>
-
-
-
-<h2 id="get_similar_entities">/api/v1/get_similar_entities</h2>
-
-<table>
- <tr>
-  <td class="title">Description</td>
-  <td>Takes entity identifiers and gets the top 10 similar entity identifiers based on the cosine similarity of their embeddings.</td>
- </tr>
- <tr>
-  <td class="title">URL</td>
-  <td>https://embeddings.cc/api/v1/get_similar_entities</td>
- </tr>
- <tr>
-  <td>HTTP method</td>
-  <td>POST</td>
- </tr>
- <tr>
-  <td>Parameters</td>
-  <td>
-   <em>embeddings</em> { value: list of entity identifiers, max: 100, format: JSON } <br />
-   <em>index</em> { optional, format: JSON }
-  </td>
- </tr>
- <tr>
-  <td>Returns</td>
-  <td>List of 3-element-lists (request index, cosine similarity and entity identifier), format: JSON</td>
- </tr>
- <tr>
-  <td>Python code example</td>
-  <td class="code">
-<pre><code class="language-python">import httpx
-response = httpx.post('https://embeddings.cc/api/v1/get_similar_entities', json={'entities': ['http://example.org/1', 'http://example.org/2']})
-if response.status_code == 200:
-    print(response.json())
-else:
-    print('Error:', response.text)
-</code></pre>
-</td>
- </tr>
- <tr>
-  <td>Test</td>
-  <td>
-   <form onsubmit="apiCallParse('POST', '/api/v1/get_similar_entities', 'entities', 'get_similar_entities_parameters', 'get_similar_entities_input', 'get_similar_entities_result'); return false">
-
-    <textarea id="get_similar_entities_parameters">
-[
-  "http://example.org/1", 
-  "http://example.org/2"
-]
-</textarea>
-    <input type="submit" value="Test API method">
-   </form>
-  </td>
- </tr>
- <tr class="test-input">
-  <td>Test input</td>
-  <td class="code"><pre><code id="get_similar_entities_input" class="language-json"></code></pre></td>
- </tr>
- <tr class="test-result">
-  <td>Test result</td>
-  <td class="code"><pre><code id="get_similar_entities_result" class="language-json"></code></pre></td>
- </tr>
-</table>
-
 </div>
-<footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE" style="height:35px; margin-top:30px"></a></footer>
 <script src="/static/prism.js"></script>
 <script src="/static/api.js"></script>
 <script>

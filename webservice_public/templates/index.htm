@@ -31,7 +31,6 @@ span.entity {
 <span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
 <a href="/">Introduction</a>
 <a href="/api">API</a>
-<a href="/news">News</a>
 </div>
 
 <h1>Universal Knowledge Graph Embeddings</h1>
@@ -58,30 +57,8 @@ Use the button below to get some examples out of {{ index_size }} available enti
 {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
 <p>
-{% for e in entities %}<span class="entity" onclick="document.getElementById('similarity').value='{{ e[0] }}';document.getElementById('entity').value='{{ e[0] }}'">{{ e[1] }}</span>{% endfor %}
+{% for e in entities %}<span class="entity" onclick="document.getElementById('entity').value='{{ e[0] }}'">{{ e[1] }}</span>{% endfor %}
 </p>
-
-<h2 id="similar">Similar Entities</h2>
-
-<p>
-There are several approaches to identify similar entities.
-One method is to calculate and compare embeddings (see next section).
-Use the following form to find the most similar entities out of {{ index_size }} entities.
-Admittedly, the autocomplete form still needs work, pardon for that.
-</p>
-
-<form action="/#similar" id="form_similar" method="post">
-<input name="similarity" id="similarity" value="{{ entity }}" 
- type="text" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
-<input type="submit" value="Get similar entities">
-{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
-</form>
-<ul>
-{% for e in similar_entities %}
-    <li>{{ e[0] }} <span class="entity" onclick="document.getElementById('similarity').value='{{ e[1] }}';document.getElementById('form_similar').submit()">{{ e[2] }}</span>(<a target="_blank" href="{{ e[1] }}">external link</a>)</li>
-{% endfor %}
-</ul>
-
 
 <h2 id="embeddings">Embeddings</h2>
 
@@ -91,24 +68,29 @@ Embeddings are vectors with the desired property that close embeddings correspon
 Use the form below to view an example.
 </p>
 
+
 <form action="/#embeddings" method="post">
-<input type="text" name="entity" id="entity" value="{{ entity }}">
+<input type="text" name="entity" id="entity" value="{{ entity }}"
+ type="text" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
 <input type="submit" value="Get embeddings">
 <textarea readonly style="height:210px">{{ embeddings }}</textarea>
 {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
 </form>
 
-<h2>Collaboration</h2>
+<h2>Data and API</h2>
 
 <p>
-And now? We offer embeddings as a service with a convenient <a href="/api">API</a>. <br />
-Our experts are continuously working on updates, we try to hide them in the <a href="/news">news</a>.
+You can find the underlying data dump at <a target="_blank" href="https://zenodo.org/record/7566020#.Y9JQYtLMJH4">Zenodo</a><br />
+We also offer embeddings as a service with a convenient <a href="/api">API</a>. <br />
+</p>
+<p>
+The current version of this website serves data for a scientific conference review. We removed some parts, e.g. contact information. These parts will be re-added after the review process.
 </p>
 
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 <script>
 const autoCompleteJS = new autoComplete({
-    selector: "#similarity",
+    selector: "#entity",
     placeHolder: "Search for entities...",
     data: {
         src: async (query) => {
@@ -138,6 +120,5 @@ document.querySelector(".autoComplete_wrapper").style.display = "inline";
 </script>
 
 </div>
-<footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE" style="height:35px; margin-top:30px"></a></footer>
 </body>
 </html>
