@@ -1,4 +1,4 @@
-Note: This project was developed while working on the article ***Universal Knowledge Graph Embeddings*** (repository: [Universal_Embeddings]([https://github.com/dice-group/Universal_Embeddings], publication [link](https://dl.acm.org/doi/10.1145/3589335.3651978))).
+Note: This project was developed while working on the article ***Universal Knowledge Graph Embeddings*** (repository: ([https://github.com/dice-group/Universal_Embeddings], publication [link](https://dl.acm.org/doi/10.1145/3589335.3651978))).
 
 # Universal Knowledge Graph Embeddings
 
