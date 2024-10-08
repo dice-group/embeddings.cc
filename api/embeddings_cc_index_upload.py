@@ -12,7 +12,7 @@ from embeddings_cc_index import EmbeddingsCcIndex
 es_index      = 'index_vicodi'
 es_alias      = 'index_vicodi_alias'
 es_dimensions = 40
-es_shards     = 1000
+es_shards     = 5
 
 # Execution
 do_ping                  = True
@@ -26,6 +26,18 @@ do_add_data              = True
 do_print_indexes         = True
 do_count                 = False
 do_search                = False
+
+
+
+def add_embeddings(api, password, index, embeddings, i):
+    response = api.add(password, index, embeddings)
+    if response.status_code == 200:
+        print(i, end=' ')
+        sys.stdout.flush()
+        return True
+    else:
+        print('Could not add embeddings', response.status_code, response.text)
+        return False
 
 # Get password from CLI
 if len(sys.argv) > 1:
@@ -113,9 +125,13 @@ if do_add_data:
     except:
         print(f"Cannot find file {embeddings_path}")
         sys.exit(1)
-    embeddings = [(name, data[name].values.tolist()) for name in data.index]
-    response = embeddings_cc_index.add(password, es_index, embeddings)
-    print('add data:', response.status_code, response.text)
+    embeddings = [(name, data.loc[name].values.tolist()) for name in data.index]
+    print("\nTotal number of entities: ", len(embeddings),"\n")
+    Embeddings = []
+    for i in range(0, len(embeddings), 5000):
+    	Embeddings = embeddings[i:i+5000]
+    	if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings, min(i+5000, len(embeddings))):
+            break
 
 # Gets the maximum CPU useage of ES nodes
 if do_print_cpu_usage:

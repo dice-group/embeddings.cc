@@ -263,7 +263,7 @@ def create_app(test_config=None):
             documents.append({
                 'entity': doc[index_entity],
                 'embeddings': doc[index_embeddings],
-                'entity_completion': re.split('[^A-Za-z0-9]+',  doc[index_entity].rsplit('/', 1)[1])
+                'entity_completion': re.split('[^A-Za-z0-9]+',  doc[index_entity].rsplit('/', 1)[-1])
             })
 
         try:
