@@ -1,7 +1,11 @@
+pandas
+torch
+tqdm
 markupsafe==2.0.1
-elasticsearch==8.3.1
 Flask==1.1.4
 Flask-Cors==3.0.10
+dicee==0.1.4
 httpx
-uwsgi
-pandas
+pyuwsgi
+elasticsearch==8.3.1
+#uwsgi

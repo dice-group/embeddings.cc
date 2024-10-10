@@ -5,19 +5,19 @@
 # Local usage: python3 api/embeddings_cc_index_examples.py <PASSWORD> http://127.0.0.1:8008
 
 import sys
+import glob
 import pandas as pd
 from embeddings_cc_index import EmbeddingsCcIndex
 
 # Configuration
-es_index      = 'index_vicodi'
-es_alias      = 'index_vicodi_alias'
-es_dimensions = 40
+es_index      = 'index_example'
+es_alias      = 'index_example_alias'
 es_shards     = 5
 
 # Execution
 do_ping                  = True
 do_print_cpu_usage       = False
-do_delete_index          = True
+do_delete_index          = False
 do_create_index          = True
 do_create_index_usagelog = True
 do_alias_delete          = False
@@ -54,7 +54,14 @@ if len(sys.argv) > 2:
 embeddings_path = None
 if len(sys.argv) > 3:
     embeddings_path = sys.argv[3]
-
+    
+try:
+    path = glob.glob(embeddings_path)[0]
+    data = pd.read_csv(path, index_col=0)
+except:
+    print(f"Cannot find file {embeddings_path}")
+    sys.exit(1)
+es_dimensions = data.shape[1]
 # Print configuration
 print("es_index:",       es_index)
 print("es_alias:",       es_alias)
@@ -120,17 +127,12 @@ if do_print_indexes:
 
 
 if do_add_data:
-    try:
-        data = pd.read_csv(embeddings_path, index_col=0)
-    except:
-        print(f"Cannot find file {embeddings_path}")
-        sys.exit(1)
-    embeddings = [(name, data.loc[name].values.tolist()) for name in data.index]
+    embeddings = [(str(name), data.loc[name].values.tolist()) for name in data.index]
     print("\nTotal number of entities: ", len(embeddings),"\n")
     Embeddings = []
     for i in range(0, len(embeddings), 5000):
-    	Embeddings = embeddings[i:i+5000]
-    	if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings, min(i+5000, len(embeddings))):
+        Embeddings = embeddings[i:i+5000]
+        if not add_embeddings(embeddings_cc_index, password, es_index, Embeddings, min(i+5000, len(embeddings))):
             break
 
 # Gets the maximum CPU useage of ES nodes

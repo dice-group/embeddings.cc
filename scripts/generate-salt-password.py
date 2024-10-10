@@ -1,6 +1,7 @@
 # Script to generate config.py values
 
 import os
+import json
 import sys
 import inspect
 
@@ -18,6 +19,9 @@ else:
 
 salt = security.generate_salt()
 hash_ = security.hash_password(password, salt)
+
+with open("./salt_password.json", "w") as f:
+    json.dump({"salt": str(salt), "psw": str(hash_)}, f)
 
 print('SALT          =', salt)
 print('PSW_SALT_HASH =', hash_)

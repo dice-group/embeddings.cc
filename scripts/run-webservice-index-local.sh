@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash -e
 
 echo "[Starting webservice index]"
 eval "$(conda shell.bash hook)" # https://stackoverflow.com/a/56155771

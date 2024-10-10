@@ -35,7 +35,7 @@ python create -n embcc --y && conda activate embcc
 git clone https://github.com/dice-group/embeddings.cc.git && cd embeddings.cc && pip install -r requirements.txt
 mkdir instance && cp -f config.py instance/
 ```
-5. Run `python scripts/generate-salt-password.py <PASSWORD>`. Note that `PASSWORD` must be the you created in step 3. Here you will get two outputs: values for `SALT` and `PSW_SALT_HASH`. Copy them to a safe place for the next step.
+5. Run `python scripts/generate-salt-password.py <PASSWORD>`. Note that `PASSWORD` must be the one you created in step 3. Here you will get two outputs: values for `SALT` and `PSW_SALT_HASH`. Copy them to a safe place for the next step.
 6. Edit the file `config.py` which is located in `embeddings_cc/instance`. ES_USER is `elastic` by default if you did not change it in the previous steps. ES_HOST is `https://localhost:9200/`. ES_PASSWORD is the password in step 7. ES_INDEX is the index you are willing to create (in our example, the index is "index_vicodi" as can be seen in the config file. If you use a different index name, make sure you use it in both `/instance/config.py` and `api/embeddings_cc_index_upload.py`). Set values for `SALT` and `PSW_SALT_HASH` as generated in step 5.
 7. Open a new terminal and run `/scripts/run-webservice-public-local.sh`
 8. Open another terminal and run `./scripts/run-webservice-index-local.sh`
