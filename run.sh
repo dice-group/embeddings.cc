@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Will execute commands in pop up terminals with a delay of 30 sec."
+echo "Will execute commands in pop up terminals with a delay of 10 sec."
 # Function to execute a command in a new terminal with a delay
 run_in_terminal() {
   command=$1
