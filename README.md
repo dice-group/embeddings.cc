@@ -23,7 +23,7 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 
 2. Create an empty directory `/data` under this repository. Add your knowledge graph as `train.txt` into `/data`. You may additionally add `valid.txt` and `test.txt`, see [dice-embeddings](https://github.com/dice-group/dice-embeddings) for more details. For the next steps, you may need to make sure all Shell files are executable. You may need to assign appropriate rights for this, e.g., `chmod +x ./tain.sh`.
 
-3. From the main directory, run `./install.sh` to install all required libraries.
+3. From the main directory, run `./install.sh` to install all required libraries. Note that a new environment (`embcc`) will be created on which libraries are installed. So you do not need to create a new one.
 
 4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph.
 
