@@ -50,7 +50,7 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 
 3. From the main directory, run `./install.sh` to install all required libraries. Note that a new environment (`embcc`) will be created on which libraries are installed. So you do not need to create a new one. It is recommended to deactivate any conda environment before this installation.
 
-4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph.
+4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph. Steps 1 to 4 are summarized as:
 
 ```bash
 eval "$(conda shell.bash hook)"
