@@ -23,7 +23,7 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 
 2. Create an empty directory `/data` under this repository. Add your knowledge graph as `train.txt` into `/data`. You may additionally add `valid.txt` and `test.txt`, see [dice-embeddings](https://github.com/dice-group/dice-embeddings) for more details. For the next steps, you may need to make sure all Shell files are executable. You may need to assign appropriate rights for this, e.g., `chmod +x ./tain.sh`.
 
-3. From the main directory, run `./install.sh` to install all required libraries. Note that a new environment (`embcc`) will be created on which libraries are installed. So you do not need to create a new one.
+3. From the main directory, run `./install.sh` to install all required libraries. Note that a new environment (`embcc`) will be created on which libraries are installed. So you do not need to create a new one. It is recommended to deactivate any conda environment before this installation.
 
 4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph.
 
@@ -31,13 +31,29 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 
 6. From the main directory, run `./elasticsearch-8.3.3/bin/elasticsearch-reset-password --username elastic --interactive` to provide a new password and confirm. Now keep this password safe, or remmeber it for the next steps.
 
-7. Run `conda activate embcc && python ./scripts/generate-salt-password.py <PASSWORD>`. Note that `PASSWORD` must be the one you created in Step 6 above. Here you will get two outputs: values for `SALT` and `PSW_SALT_HASH`. Copy them to a safe place for the next step.
+7. Edit the file `/commands/upload.sh` by replacing "EasyPass" with the password you just selected.
 
-8. Edit the file `config.py` which is located in `embeddings_cc/instance`. ES_USER is `elastic`. ES_HOST is `https://localhost:9200/`. ES_PASSWORD is the password in Step 6. ES_INDEX is the index you are willing to create (in our example, the index is "index_example" as can be seen in the config file. If you use a different index name, make sure you use it in both `/instance/config.py` and `api/embeddings_cc_index_upload.py`). Set values for `SALT` and `PSW_SALT_HASH` as generated in Step 7.
+8. Run `conda activate embcc && python ./scripts/generate-salt-password.py <PASSWORD>`. Note that `PASSWORD` must be the one you created in Step 6 above. Here you will get two outputs: values for `SALT` and `PSW_SALT_HASH`. Copy them to a safe place for the next step.
 
-9. Run `./run.sh` and wait until 3 pop up terminals have opened, and the third one (for uploading embeddings) has completed.
+9. Edit the file `config.py` which is located in `embeddings_cc/instance`. ES_USER is `elastic`. ES_HOST is `https://localhost:9200/`. ES_PASSWORD is the password in Step 6. ES_INDEX is the index you are willing to create (in our example, the index is "index_example" as can be seen in the config file. If you use a different index name, make sure you use it in both `/instance/config.py` and `api/embeddings_cc_index_upload.py`). Set values for `SALT` and `PSW_SALT_HASH` as generated in Step 7.
 
-10. Now access the URL [http://127.0.0.1:1337/](http://127.0.0.1:1337/) to access the embeddings_cc API with your uploaded embeddings.
+10. Run `./run.sh` and wait until 3 pop up terminals have opened, and the third one (for uploading embeddings) has completed.
+
+11. Now access the URL [http://127.0.0.1:1337/](http://127.0.0.1:1337/) to access the embeddings_cc API with your uploaded embeddings.
+
+*HTTP Requests to the API*:
+
+```python
+>>> import httpx
+>>> index = "index_example"
+>>> entity = "_derivationally_related_form"
+>>> webservice_url = "http://127.0.0.1:8008"
+>>> response = httpx.get(webservice_url + '/get_embeddings', params={'index': index, 'entity': entity})
+>>> print(response.text)
+{"_derivationally_related_form": [[0.05112762, -0.7333016, 0.021954058, -0.016982945, -0.79204845, 0.0027191583, 1.0582609, -0.035856135, 0.004805608, 0.23186462, -0.00032222472, -0.38192114, -0.1920939, 0.8178917, -0.37373748, 0.28562018, 0.033060074, 0.0044505247, -0.85810864, -0.8185167, 0.021285398, -1.9875485, -1.4432987, -0.42645997, -0.08704758, -0.09042055, 0.008345734, 0.13854085, 0.00014656025, -0.61636055, 0.0014690972, -0.00089473446, -0.06372755, 0.029681738, 0.02126768, 0.033864107, 1.9365994, 0.0007361686, 0.8378815, -0.3289622, 0.02990957, -0.3481966, -0.014761708, -1.4790889, -0.39987803, 0.66778237, 0.37295908, 0.07800242, 0.19964921, 0.015911236, -1.2357806, 2.307485, 0.010366534, -2.453191, -0.9509186, -1.5705742, 0.27018142, 0.040954825, -0.025361957, 1.1823225, -0.027570289, 0.9071816, -0.22726324, -0.031022083]]}
+>>>
+```
+
 
 #### Complete documentation
 - Use the Index API to create Elasticsearch indexes and to **add data**.
