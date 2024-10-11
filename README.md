@@ -16,6 +16,31 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 
 ### Index API (for data developers)
 
+- Use the Index API to create Elasticsearch indexes and to **add data**.
+- It is only available in UPB network (use **VPN**).
+- It can easily accessed using the methods in [API python file](api/embeddings_cc_index.py).  
+  Usage examples are provided in the files for [simple examples](api/embeddings_cc_index_examples.py),
+  in the [adding CSV](api/embeddings_cc_index_csv.py) and
+  in the [adding UniKGE data](api/embeddings_cc_index_unikge.py).
+- **Important**: Create an alias for each index to be available in public. Only aliases can be accessed by webservices.
+
+| Webservice             | Method | Parameters                          |
+|------------------------|--------|-------------------------------------|
+| /ping                  | GET    | -                                   |
+| /count                 | GET    | index                               |
+| /get_embeddings        | GET    | index, entity                       |
+| /get_cpu_usage         | POST   | password                            |
+| /get_indexes           | POST   | password                            |
+| /create_index          | POST   | password, index, dimensions, shards |
+| /create_index_usagelog | POST   | password                            |
+| /delete_index          | POST   | password, index                     |
+| /add                   | POST   | password, index, docs               |
+| /alias_put             | POST   | password, index, alias              |
+| /alias_delete          | POST   | password, index, alias              |
+
+
+### Development (for python developers)
+
 #### Quick start for Linux
 This part helps you train embeddings for your knowledge graph, serve these embeddings on the embeddinng.cc API then query for embeddings via http requests or via a web browser. Please follow instructions carefully.
 
@@ -54,32 +79,7 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 >>>
 ```
 
-
-#### Complete documentation
-- Use the Index API to create Elasticsearch indexes and to **add data**.
-- It is only available in UPB network (use **VPN**).
-- It can easily accessed using the methods in [API python file](api/embeddings_cc_index.py).  
-  Usage examples are provided in the files for [simple examples](api/embeddings_cc_index_examples.py),
-  in the [adding CSV](api/embeddings_cc_index_csv.py) and
-  in the [adding UniKGE data](api/embeddings_cc_index_unikge.py).
-- **Important**: Create an alias for each index to be available in public. Only aliases can be accessed by webservices.
-
-| Webservice             | Method | Parameters                          |
-|------------------------|--------|-------------------------------------|
-| /ping                  | GET    | -                                   |
-| /count                 | GET    | index                               |
-| /get_embeddings        | GET    | index, entity                       |
-| /get_cpu_usage         | POST   | password                            |
-| /get_indexes           | POST   | password                            |
-| /create_index          | POST   | password, index, dimensions, shards |
-| /create_index_usagelog | POST   | password                            |
-| /delete_index          | POST   | password, index                     |
-| /add                   | POST   | password, index, docs               |
-| /alias_put             | POST   | password, index, alias              |
-| /alias_delete          | POST   | password, index, alias              |
-
-
-### Development (for python developers)
+#### Complete Documentation
 
 - [How to install on your system](docs/local.md)
 - [Development](docs/development.md) (External documentation of integrated components)
