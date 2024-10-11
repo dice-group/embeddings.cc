@@ -53,12 +53,9 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph. Steps 1 to 4 are summarized as:
 
 ```bash
-eval "$(conda shell.bash hook)"
-echo "before calling source: $PATH"
 git clone https://github.com/dice-group/embeddings.cc.git && cd embeddings.cc
 conda create -n embcc python=3.10 --y
 conda activate embcc
-echo "after calling source: $PATH"
 python -m pip install -r requirements.txt
 mkdir -p instance
 cp -f ./config.py instance
