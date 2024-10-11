@@ -50,7 +50,7 @@ This part helps you train embeddings for your knowledge graph, serve these embed
 
 3. From the main directory, run `./install.sh` to install all required libraries. Note that a new environment (`embcc`) will be created on which libraries are installed. So you do not need to create a new one. It is recommended to deactivate any conda environment before this installation.
 
-4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph.
+4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph. It is currently set to run for 1 epoch only. You may want to increase this value to 100 when training on GPUs.
 
 5. Open a new terminal, navigate to the main directory (embeddings.cc). Run `./commands/start_es.sh` to start Elasticsearch. This automatically sets the default user as `elastic` and a password. The next step describes how you can change the password. Note that the username will remain unchanged for our running example.
 
