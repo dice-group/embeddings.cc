@@ -17,32 +17,29 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 ### Index API (for data developers)
 
 #### Quick start for Linux
-1. Make sure you have a csv file containing embeddings for entities. Entity names should be on the first column so that `pandas.read_csv("file_name.csv", index_col=0)` can run properly. Otherwise, please edit the script `api/embeddings_cc_index_upload.py` to fit your input file requirements.
+This part helps you train embeddings for your knowledge graph, serve these embeddings on the embeddinng.cc API then query for embeddings via http requests or via a web browser. Please follow instructions carefully.
 
-2. Shell (Install Elasticsearch)
-```shell
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512
-shasum -a 512 -c elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512 
-tar -xzf elasticsearch-8.3.3-linux-x86_64.tar.gz
-cd elasticsearch-8.3.3 && ./bin/elasticsearch
-```
-3. You now have to set a password for the username (write down the password somewhere!). Open a new terminal. Run `cd elasticsearch-8.3.3 && ./bin/elasticsearch-reset-password --username elastic --interactive`. Follow instructions to set a new password.
+1. Clone this repository: `git clone https://github.com/dice-group/embeddings.cc.git`
 
-4. Open a new terminal!
-```python
-python create -n embcc --y && conda activate embcc
-git clone https://github.com/dice-group/embeddings.cc.git && cd embeddings.cc && pip install -r requirements.txt
-mkdir instance && cp -f config.py instance/
-```
-5. Run `python scripts/generate-salt-password.py <PASSWORD>`. Note that `PASSWORD` must be the one you created in step 3. Here you will get two outputs: values for `SALT` and `PSW_SALT_HASH`. Copy them to a safe place for the next step.
-6. Edit the file `config.py` which is located in `embeddings_cc/instance`. ES_USER is `elastic` by default if you did not change it in the previous steps. ES_HOST is `https://localhost:9200/`. ES_PASSWORD is the password in step 7. ES_INDEX is the index you are willing to create (in our example, the index is "index_vicodi" as can be seen in the config file. If you use a different index name, make sure you use it in both `/instance/config.py` and `api/embeddings_cc_index_upload.py`). Set values for `SALT` and `PSW_SALT_HASH` as generated in step 5.
-7. Open a new terminal and run `/scripts/run-webservice-public-local.sh`
-8. Open another terminal and run `./scripts/run-webservice-index-local.sh`
-9. Run `python api/embeddings_cc_index_upload.py <PASSWORD>  http://127.0.0.1:8008 PATH_CSV_FILE` (to upload your embeddings)
+2. Create an empty directory `/data` under this repository. Add your knowledge graph as `train.txt` into `/data`. You may additionally add `valid.txt` and `test.txt`, see [dice-embeddings](https://github.com/dice-group/dice-embeddings) for more details. For the next steps, you may need to make sure all Shell files are executable. You may need to assign appropriate rights for this, e.g., `chmod +x ./tain.sh`.
+
+3. From the main directory, run `./install.sh` to install all required libraries.
+
+4. From the main directory, run `./train.sh` to compute embeddings for your knowledge graph.
+
+5. Open a new terminal, navigate to the main directory (embeddings.cc). Run `./commands/start_es.sh` to start Elasticsearch. This automatically sets the default user as `elastic` and a password. The next step describes how you can change the password. Note that the username will remain unchanged for our running example.
+
+6. From the main directory, run `./elasticsearch-8.3.3/bin/elasticsearch-reset-password --username elastic --interactive` to provide a new password and confirm. Now keep this password safe, or remmeber it for the next steps.
+
+7. Run `python ./scripts/generate-salt-password.py <PASSWORD>`. Note that `PASSWORD` must be the one you created in Step 6 above. Here you will get two outputs: values for `SALT` and `PSW_SALT_HASH`. Copy them to a safe place for the next step.
+
+8. Edit the file `config.py` which is located in `embeddings_cc/instance`. ES_USER is `elastic`. ES_HOST is `https://localhost:9200/`. ES_PASSWORD is the password in Step 6. ES_INDEX is the index you are willing to create (in our example, the index is "index_example" as can be seen in the config file. If you use a different index name, make sure you use it in both `/instance/config.py` and `api/embeddings_cc_index_upload.py`). Set values for `SALT` and `PSW_SALT_HASH` as generated in Step 7.
+
+9. Run `./run.sh` and wait until 3 pop up terminals have opened, and the third one (for uploading embeddings) has completed.
+
 10. Now access the URL [http://127.0.0.1:1337/](http://127.0.0.1:1337/) to access the embeddings_cc API with your uploaded embeddings.
 
-### Complete documentation
+#### Complete documentation
 - Use the Index API to create Elasticsearch indexes and to **add data**.
 - It is only available in UPB network (use **VPN**).
 - It can easily accessed using the methods in [API python file](api/embeddings_cc_index.py).  
@@ -72,7 +69,7 @@ mkdir instance && cp -f config.py instance/
 - [Development](docs/development.md) (External documentation of integrated components)
 
 
-### Virtual machine (for system administrators)
+##### Virtual machine (for system administrators)
 
 - [Virtual machine](docs/vm.md) (Installation and deployment)
 - [VM nginx](docs/vm-nginx-certbot.md) (Webserver configuration)
