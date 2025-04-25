@@ -1,0 +1,7 @@
+{# templates/nav.html #}
+<div id="nav">
+    <span class="custom-span">&nbsp;</span>
+    <a href="/" class="{% if request.path == '/' %}active{% endif %}">Introduction</a>
+    <a href="/api" class="{% if request.path == '/api' %}active{% endif %}">API</a>
+    <a href="/news" class="{% if request.path == '/news' %}active{% endif %}">News</a>
+</div>

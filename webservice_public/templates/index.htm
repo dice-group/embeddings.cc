@@ -1,143 +1,96 @@
 <!DOCTYPE html>
 <html lang=en>
+
 <head>
-<meta charset=utf-8>
-<title>embeddings.cc</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-<link href="/static/embeddings_cc.css" rel="stylesheet" />
-<!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
-<!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
-<style>
-span.entity {
-    background: #d1e28a;
-    display: inline-block;
-    padding: 4px 8px;
-    margin: 3px 3px 0 0;
-    border: 1px solid #000;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: .9em;
-    color: #000;
-    line-height: 1.2em;
-}
-</style>
+    <meta charset=utf-8>
+    <title>embeddings.cc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap"
+        rel="stylesheet">
+    <link href="/static/embeddings_cc.css" rel="stylesheet" />
+    <!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
+    <!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
 </head>
+
 <body>
-<div id="container">
+    <div id="container">
 
-<div id="nav">
-<span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
-<a href="/">Introduction</a>
-<a href="/api">API</a>
-<a href="/news">News</a>
-</div>
+        {% include 'nav.html' %}
 
-<h1>Universal Knowledge Graph Embeddings</h1>
+        <h1>Embedding the Web: An Open Billion-Scale Repository for
+            Knowledge Graph Embeddings</h1>
 
-{% if dev %}
-<!-- List of indices for developers -->
-<div style="padding:10px;border:1px solid #e97369;background:#fbe3e1;margin-bottom:10px">
-{% for index in dev %}
-    <a href="/?index={{ index }}">{{ index }}</a><br/>
-{% endfor %}
-</div>
-{% endif %}
+        <h2 id="entities" class="custom-h2">Entities</h2>
 
-<h2 id="entities" style="margin-top:0px">Entities</h2>
+        <p>
+            Knowledge Graphs can contain millions of entities.
+            Entities (like persons, animals or films) have identifiers.
+            Use the button below to get some examples out of available entities.
+        </p>
+        <h1> Embeddings available:
+            <span id="slot-machine" class="slot-machine">
+            </span>
+            <span id="count" style="display:none;"></span>
+        </h1>
 
-<p>
-Knowledge Graphs can contain millions of entities.
-Entities (like persons, animals or films) have identifiers.
-Use the button below to get some examples out of {{ index_size }} available entities.
-</p>
+        <div id="entity-container">
+            <button id="random-btn">Get random entities</button>
+            <div id="random-entities">
+                {% for e in entities %}
+                <span class="entity" onclick="updateEntitySubmit('{{ e }}')">{{ e }}</span>
+                {% endfor %}
+            </div>
+        </div>
 
-<form action="/" method="post">
-<input type="submit" value="Get random entities" name="get_entities">
-{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
-</form>
-<p>
-{% for e in entities %}<span class="entity" onclick="document.getElementById('similarity').value='{{ e[0] }}';document.getElementById('entity').value='{{ e[0] }}'">{{ e[1] }}</span>{% endfor %}
-</p>
+        <h2 id="embeddings">Embeddings</h2>
 
-<h2 id="similar">Similar Entities</h2>
+        <p>
+            Embeddings can be computed through analysis of properties and relationships of entities.
+            Embeddings are vectors with the desired property that close embeddings correspond to a semantic similarity
+            of related entities.
+            Use the form below to view an example.
+        </p>
 
-<p>
-There are several approaches to identify similar entities.
-One method is to calculate and compare embeddings (see next section).
-Use the following form to find the most similar entities out of {{ index_size }} entities.
-Admittedly, the autocomplete form still needs work, pardon for that.
-</p>
+        <div id="embeddings-container">
+            <input type="text" id="entity-input" placeholder="Search for embeddings..." name="entity"
+                value="{{ entity }}">
+            <button id="embed-btn">Get embeddings</button>
+            <textarea id="embeddings-output" readonly class="whale-area">{{ embeddings }}</textarea>
+        </div>
 
-<form action="/#similar" id="form_similar" method="post">
-<input name="similarity" id="similarity" value="{{ entity }}" 
- type="text" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
-<input type="submit" value="Get similar entities">
-{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
-</form>
-<ul>
-{% for e in similar_entities %}
-    <li>{{ e[0] }} <span class="entity" onclick="document.getElementById('similarity').value='{{ e[1] }}';document.getElementById('form_similar').submit()">{{ e[2] }}</span>(<a target="_blank" href="{{ e[1] }}">external link</a>)</li>
-{% endfor %}
-</ul>
+        <h2>Data</h2>
 
+        <p>
+            The Universal Embeddings are based on embeddings computed on data from
+            <a target="_blank" href="https://webdatacommons.org/structureddata/2023-12/stats/stats.html"> Web data
+                commons</a> with <a target="_blank"
+                href="https://papers.dice-research.org/2023/ECML_Clifford/public.pdf">Keci</a>.
+            You can find the underlying data dump <a target="_blank"
+                href="https://files.dice-research.org/datasets/WHALE/WDC/embeddings/">here</a>.
+        </p>
+        <p>
+            Old data related to the article <i>Universal Knowledge Graph Embeddings</i> can be found on this <a
+                href="/old">page</a>.
+        </p>
 
-<h2 id="embeddings">Embeddings</h2>
+        <h2>Collaboration</h2>
 
-<p>
-Embeddings can be computed through analysis of properties and relationships of entities.
-Embeddings are vectors with the desired property that close embeddings correspond to a semantic similarity of related entities.
-Use the form below to view an example.
-</p>
+        <p>
+            And now? We offer embeddings as a service with a convenient <a href="/api">API</a>. <br />
+            Our experts are continuously working on updates, we try to hide them in the <a href="/news">news</a>.
+        </p>
 
-<form action="/#embeddings" method="post">
-<input type="text" name="entity" id="entity" value="{{ entity }}">
-<input type="submit" value="Get embeddings">
-<textarea readonly style="height:210px">{{ embeddings }}</textarea>
-{% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
-</form>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 
-<h2>Collaboration</h2>
-
-<p>
-And now? We offer embeddings as a service with a convenient <a href="/api">API</a>. <br />
-Our experts are continuously working on updates, we try to hide them in the <a href="/news">news</a>.
-</p>
-
-<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
-<script>
-const autoCompleteJS = new autoComplete({
-    selector: "#similarity",
-    placeHolder: "Search for entities...",
-    data: {
-        src: async (query) => {
-          try {
-            const source = await fetch(`/api/v1/autocomplete?search_term=${query}`);
-            const data = await source.json();
-            return data;
-          } catch (error) {
-            return error;
-          }
-        },
-    },
-    resultItem: {
-        highlight: true
-    },
-    events: {
-        input: {
-            selection: (event) => {
-                const selection = event.detail.selection.value;
-                autoCompleteJS.input.value = selection;
-            }
-        }
-    }
-});
-
-document.querySelector(".autoComplete_wrapper").style.display = "inline";
-</script>
-
-</div>
-<footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE" style="height:35px; margin-top:30px"></a></footer>
+    </div>
+    <footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE"
+                style="height:35px; margin-top:30px"></a></footer>
+    <script src="/static/scripts/helpers.js"></script>
+    <script src="/static/scripts/slot.js"></script>
+    <script src="/static/scripts/getRandom.js"></script>
+    <script src="/static/scripts/getEmbed.js"></script>
 </body>
+
 </html>

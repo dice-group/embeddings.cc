@@ -28,6 +28,10 @@ def create_app(test_config=None):
 
     # Webservices ------------------------------------------------------------------------------------------------------
 
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return render_template('500.html'), 500
+
     @app.route('/api/v1/autocomplete', methods=['GET'])
     @cross_origin()
     def dev():
@@ -215,7 +219,79 @@ def create_app(test_config=None):
                                                  title))
 
         log()
-        return render_template('index.htm', entities=entities, entity=entity,
+        return render_template('index.htm')
+
+    @app.route('/old', methods=['GET', 'POST'])
+    def old():
+
+        # Add links to indices for developers
+        dev = ''
+        index = ''
+        if 'dev' in request.values:
+            dev = es.get_indices()
+        if 'index' in request.values:
+            index = request.values['index']
+
+        index_size = es.get_es().cat.count(index=get_index())
+        index_size = index_size[index_size.rindex(' ') + 1:]
+        index_size = f'{int(index_size):,}'
+
+        entities = []
+        entity = ''
+        embeddings = ''
+        similar_entities = []
+        if request.method == 'POST':
+            matches = ["&amp;", "'"]
+
+            # First form: Set entities and entity
+            if 'get_entities' in request.values:
+                entities_results = es.get_random_entities(get_index(), size=15)
+                for entities_result in entities_results:
+                    if any(x in entities_result for x in matches):
+                        continue
+
+                    title = entities_result
+                    if 'fr.dbpedia.org/resource/' in title:
+                        title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)'
+                    elif 'dbpedia.org/resource/' in title:
+                        title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
+                    elif 'http://caligraph.org/ontology/' in title:
+                        title = title[30 + title.index('http://caligraph.org/ontology/'):].replace('_', ' ')
+                    entities.append((entities_result, title))
+
+                entity = entities[0][0]
+
+            # Third form: Set embeddings and embedding
+            if 'entity' in request.values and request.values['entity']:
+                entity = request.values['entity']
+                embeddings_results = es.get_embeddings(get_index(), [entity])
+                if len(embeddings_results) > 0:
+                    embeddings = embeddings_results[0][1]
+
+            # Second form: Set similar embeddings
+            if 'similarity' in request.values and request.values['similarity']:
+                entity = request.values['similarity']
+                embeddings_results = es.get_embeddings(get_index(), entities=[entity])
+                if len(embeddings_results) > 0:
+                    similar_entities = []
+                    for tup in es.get_similar_embeddings(get_index(),
+                                                         embeddings=[embeddings_results[0][1]]):
+                        if any(x in tup[2] for x in matches):
+                            continue
+
+                        title = tup[2]
+                        if 'fr.dbpedia.org/resource/' in title:
+                            title = title[24 + title.index('fr.dbpedia.org/resource/'):].replace('_', ' ') + ' (fr)'
+                        elif 'dbpedia.org/resource/' in title:
+                            title = title[21 + title.index('dbpedia.org/resource/'):].replace('_', ' ')
+                        elif 'http://caligraph.org/ontology/' in title:
+                            title = title[30 + title.index('http://caligraph.org/ontology/'):].replace('_', ' ')
+                        similar_entities.append((str("{:.4f}".format(round(tup[1], 4))),
+                                                 tup[2],
+                                                 title))
+
+        log()
+        return render_template('universal-knowledge-graph.htm', entities=entities, entity=entity,
                                embeddings=embeddings, similar_entities=similar_entities,
                                dev=dev, index=index, index_size=index_size)
 
@@ -228,6 +304,37 @@ def create_app(test_config=None):
     def news():
         log()
         return render_template('news.htm')
+
+    @app.route('/whale/embeddings', methods=['POST'])
+    def whale_embeddings():
+        data = request.get_json(force=True)
+        entity = data.get('entity', '')
+
+        try:
+            results = es.get_embeddings('whale', [entity])
+            embeddings = results[0][1] if results else ''
+        except Exception as e:
+            app.logger.warning(f"ES get_embeddings failed: {e}")
+            embeddings = ''
+        return jsonify(embeddings=embeddings)
+
+    @app.route('/whale/entites', methods=['GET'])
+    def whale_entities():
+        try:
+            entities = es.get_random_entities('whale', size=5)
+        except Exception:
+            app.logger.warning(f"ES get_random_entites failed: {e}")
+            entities = []
+        return jsonify(entities=entities)
+
+    @app.route('/whale/count', methods=['GET'])
+    def whale_count():
+        client = es.get_es()
+        try:
+            resp = client.count(index='whale', request_timeout=30)
+            return {'count': resp.get('count',0)}
+        except Exception:
+            return {'count': None}, 503
 
     @app.route('/usage', methods=['GET'])
     def usage():
@@ -242,8 +349,9 @@ def create_app(test_config=None):
     # Helpers ----------------------------------------------------------------------------------------------------------
 
     def get_index():
-        if request.json and 'index' in request.json and request.json['index']:
-            return request.json['index']
+        json_data = request.get_json(silent=True)
+        if json_data and 'index' in json_data and json_data['index']:
+            return json_data['index']
         elif request.values and 'index' in request.values and request.values['index']:
             return request.values['index']
         else:

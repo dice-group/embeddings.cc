@@ -1,17 +1,20 @@
+import os
 # This file contains public configuration (do not insert passwords etc.)
 # Copy this file into the 'instance' directory to enable usage.
 
 # Elasticsearch
-ES_HOST       = 'https://localhost:9200/'
-ES_USER       = 'elastic'
-ES_PASSWORD   = 'x#n8bqhE@fMq$yIJ'
-ES_INDEX      = 'index_example'
+ES_HOST       = os.getenv('ES_HOST', '')
+ES_USER       = os.getenv('ES_USER', '')
+ES_PASSWORD   = os.getenv('ES_PASSWORD', '')
+#ES_INDEX      = 'index_test'
+#ES_INDEX      = 'dbpedia_en_fr_100k_procrustes_v2'
+#ES_INDEX      = 'dbpedia_en_fr_15k_procrustes'
+#ES_INDEX      = 'dbpedia-wikidata-v1'
+ES_INDEX      = 'dbpedia_wikidata_full'
+# ES_INDEX     = 'whale'
 
 # Webservice password.
 # Generate with scripts/generate-salt-password.py
-SALT          = b'[\xbdr\x15\xc5\t\xa9t***\xdc-\xc3\xc2\xe9\xbe\xa7k)\n=\xc3\x94\x93\xe7\x15\xb80\xaf<V'
-PSW_SALT_HASH = b'\x03\xea\x1b\x867Y\x95lf\xa3\x0f{o\xc2\xc27\xc8\xa4k\x01\x1d0\x07\xd7)\x07:\xc6\x0f\xb4\x8f\x1b'
-
-# Webservice password '123123' for local tests
-#SALT          = b'[\xbdr\x15\xc5\t\xa9t***\xdc-\xc3\xc2\xe9\xbe\xa7k)\n=\xc3\x94\x93\xe7\x15\xb80\xaf<V'
-#PSW_SALT_HASH = b'\x03\xea\x1b\x867Y\x95lf\xa3\x0f{o\xc2\xc27\xc8\xa4k\x01\x1d0\x07\xd7)\x07:\xc6\x0f\xb4\x8f\x1b'
+#python scripts/generate-salt-password.py uni_kgs_emb_index
+SALT          = os.getenv('SALT', '')
+PSW_SALT_HASH = os.getenv('PSW_SALT_HASH', '')

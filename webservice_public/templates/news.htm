@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang=en>
+
 <head>
-<meta charset=utf-8>
-<title>News - embeddings.cc</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-<link href="/static/embeddings_cc.css" rel="stylesheet" />
+    <meta charset=utf-8>
+    <title>News - embeddings.cc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap"
+        rel="stylesheet">
+    <link href="/static/embeddings_cc.css" rel="stylesheet" />
 </head>
+
 <body>
-<div id="container">
+    <div id="container">
 
-<div id="nav">
-<span style="width:215px;padding:8px 0;display:inline-block">&nbsp;</span>
-<a href="/">Introduction</a>
-<a href="/api">API</a>
-<a href="/news">News</a>
-</div>
+        {% include 'nav.html' %}
 
-<h1>News</h1>
+        <h1>News</h1>
 
-<p>
-We use Twitter to publish news.
-Follow <a target="_blank" href="https://twitter.com/embeddings_cc">@embeddings_cc</a> to get news from our side. <br />
-If you're using our data, we would love to see you using the hashtag <a target="_blank" href="https://twitter.com/intent/tweet?text=We+use+Universal+Knowledge+Graph+Embeddings.+Hello+to+%40embeddings_cc+%23embeddings_cc">#embeddings_cc</a>!
-</p>
+        <p>
+            We use Twitter to publish news.
+            Follow <a target="_blank" href="https://twitter.com/embeddings_cc">@embeddings_cc</a> to get news from our
+            side. <br />
+            If you're using our data, we would love to see you using the hashtag <a target="_blank"
+                href="https://twitter.com/intent/tweet?text=We+use+Universal+Knowledge+Graph+Embeddings.+Hello+to+%40embeddings_cc+%23embeddings_cc">#embeddings_cc</a>!
+        </p>
 
-<div>
-<a class="twitter-timeline" data-width="600" data-dnt="true" href="https://twitter.com/embeddings_cc">Tweets by embeddings_cc</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
-</div>
+        <div>
+            <a class="twitter-timeline" data-width="600" data-dnt="true" href="https://twitter.com/embeddings_cc">Tweets
+                by embeddings_cc</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
 
-</div>
-<footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE" style="height:35px; margin-top:30px"></a></footer>
+    </div>
+    <footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE"
+                style="height:35px; margin-top:30px"></a></footer>
 </body>
+
 </html>

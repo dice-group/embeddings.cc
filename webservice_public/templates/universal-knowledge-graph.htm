@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <meta charset=utf-8>
+    <title>embeddings.cc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono&display=swap"
+        rel="stylesheet">
+    <link href="/static/embeddings_cc.css" rel="stylesheet" />
+    <!-- https://fonts.google.com/share?selection.family=Roboto%20Condensed:wght@400;700%7CRoboto%20Mono -->
+    <!-- https://raw.githubusercontent.com/adibaba/templates/master/claw/colors/claw-colors.svg -->
+</head>
+
+<body>
+    <div id="container">
+
+        {% include 'nav.html' %}
+
+        <h1>Universal Knowledge Graph Embeddings</h1>
+
+        {% if dev %}
+        <!-- List of indices for developers -->
+        <div style="padding:10px;border:1px solid #e97369;background:#fbe3e1;margin-bottom:10px">
+            {% for index in dev %}
+            <a href="/?index={{ index }}">{{ index }}</a><br />
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h2 id="entities" style="margin-top:0px">Entities</h2>
+
+        <p>
+            Knowledge Graphs can contain millions of entities.
+            Entities (like persons, animals or films) have identifiers.
+            Use the button below to get some examples out of {{ index_size }} available entities.
+        </p>
+
+        <form action="/old" method="post">
+            <input type="submit" value="Get random entities" name="get_entities">
+            {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
+        </form>
+        <p>
+            {% for e in entities %}<span class="entity"
+                onclick="document.getElementById('entity').value='{{ e[0] }}'">{{
+                e[1] }}</span>{% endfor %}
+        </p>
+
+        <!-- <h2 id="similar">Similar Entities</h2>
+
+        <p>
+            There are several approaches to identify similar entities.
+            One method is to calculate and compare embeddings (see next section).
+            Use the following form to find the most similar entities out of {{ index_size }} entities.
+            Admittedly, the autocomplete form still needs work, pardon for that.
+        </p>
+
+        <form action="/old#similar" id="form_similar" method="post">
+            <input name="similarity" id="similarity" value="{{ entity }}" type="text" dir="ltr" spellcheck=false
+                autocorrect="off" autocomplete="off" autocapitalize="off">
+            <input type="submit" value="Get similar entities">
+            {% if index %}<input type="hidden" value="{{ index }}" name="index">{% endif
+        %}
+        </form>
+        <ul>
+            {% for e in similar_entities %}
+            <li>{{ e[0] }} <span class="entity"
+                    onclick="document.getElementById('similarity').value='{{ e[1] }}';document.getElementById('form_similar').submit()">{{
+                    e[2] }}</span>(<a target="_blank" href="{{ e[1] }}">external link</a>)</li>
+            {% endfor %}
+        </ul> -->
+
+
+        <h2 id="embeddings">Embeddings</h2>
+
+        <p>
+            Embeddings can be computed through analysis of properties and relationships of entities.
+            Embeddings are vectors with the desired property that close embeddings correspond to a semantic similarity
+            of related entities.
+            Use the form below to view an example.
+        </p>
+
+        <form action="/old#embeddings" method="post">
+            <input type="text" name="entity" id="entity" value="{{ entity }}">
+            <input type="submit" value="Get embeddings">
+            <textarea readonly style="height:210px">{{ embeddings }}</textarea>
+            {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
+        </form>
+
+        <h2>Data and API</h2>
+
+        <p>
+            The current version of this website serves data for a scientific conference review of the article
+            <i>Universal Knowledge Graph Embeddings</i>.
+            We removed some parts, e.g. contact information. These parts will be re-added after the review process.
+        </p>
+        <p>
+            The Universal Embeddings are based on embeddings computed on data from DBpedia and Wikidata with <a
+                href="https://doi.org/10.1007/978-3-030-77385-4_24">ConEx</a>.<br />
+            You can find the underlying data dump at <a target="_blank"
+                href="https://zenodo.org/record/7566020#.Y9JQYtLMJH4">Zenodo</a>.<br />
+            We also offer embeddings as a service with a convenient <a href="/api">API</a>.
+        </p>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
+        <script>
+            const autoCompleteJS = new autoComplete({
+                selector: "#similarity",
+                placeHolder: "Search for entities...",
+                data: {
+                    src: async (query) => {
+                        try {
+                            const source = await fetch(`/api/v1/autocomplete?search_term=${query}`);
+                            const data = await source.json();
+                            return data;
+                        } catch (error) {
+                            return error;
+                        }
+                    },
+                },
+                resultItem: {
+                    highlight: true
+                },
+                events: {
+                    input: {
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            autoCompleteJS.input.value = selection;
+                        }
+                    }
+                }
+            });
+
+            document.querySelector(".autoComplete_wrapper").style.display = "inline";
+        </script>
+
+    </div>
+    <footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE"
+                style="height:35px; margin-top:30px"></a></footer>
+</body>
+
+</html>

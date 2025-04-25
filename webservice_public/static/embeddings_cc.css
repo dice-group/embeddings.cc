@@ -42,7 +42,7 @@ h2:after {
     opacity: 1;
 }
 
-p {    
+p {
     line-height: 1.5;
 }
 
@@ -59,6 +59,13 @@ ul {
     padding-bottom: 50px;
 }
 
+.container {
+    text-align: center;
+    padding-left: 15vw;
+    padding-right: 15vw;
+    padding-top: 5vw;
+}
+
 footer {
     text-align: center;
 }
@@ -68,7 +75,7 @@ footer {
     padding: 15px;
     text-align: right;
     background-image: url("embeddings_cc.svg");
-    background-repeat: no-repeat	;
+    background-repeat: no-repeat;
     background-size: 230px;
     background-position: top 15px left;
 }
@@ -87,6 +94,10 @@ footer {
 
 #nav a:hover {
     background: #d1e28a;
+}
+
+#nav a.active {
+    background-color: #d1e28a;
 }
 
 
@@ -109,7 +120,8 @@ td {
 
 
 
-input {
+input,
+button {
     margin: 0px;
     padding: 8px;
     border: 1px solid #000;
@@ -124,7 +136,8 @@ input[type=text] {
     font-size: .85em;
 }
 
-input[type=submit] {
+input[type=submit],
+button {
     background: #a9d4e8;
     font-weight: bold;
     cursor: pointer;
@@ -135,14 +148,20 @@ input:hover[type=text] {
     background: #f1f6db;
 }
 
-input:hover[type=submit] {
+input:hover[type=submit],
+button:hover {
     background: #d1e28a;
 }
 
-
+.whale-area {
+    height: 30vh;
+    margin-top: 1vw;
+    margin-bottom: 5vw;
+}
 
 textarea {
     width: 100%;
+    min-height: 150px;
     height: 100px;
     padding: 8px;
     margin-top: 4px;
@@ -184,3 +203,60 @@ textarea::-webkit-scrollbar-track {
     background: #f5f5f5;
 }
 
+.slot-machine {
+    display: inline-flex;
+    vertical-align: text-bottom;
+}
+
+.delimiter {
+    font-size: 1em;
+    line-height: 1;
+    align-self: flex-end;
+    user-select: none;
+    color: #a93983;
+}
+
+.reel {
+    width: 1ch;
+    height: 1.2em;
+    overflow: hidden;
+    position: relative;
+}
+
+.reel>div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: transform 1s ease-in-out;
+}
+
+span.entity {
+    background: #d1e28a;
+    display: inline-block;
+    padding: 4px 8px;
+    margin: 3px 3px 0 0;
+    border: 1px solid #000;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: .9em;
+    color: #000;
+    line-height: 1.2em;
+}
+
+.custom-span {
+    width: 215px;
+    padding: 8px 0;
+    display: inline-block;
+}
+
+.custom-div {
+    padding: 10px;
+    border: 1px solid #e97369;
+    background: #fbe3e1;
+    margin-bottom: 10px;
+}
+
+.custom-h2 {
+    margin-top: 0px;
+}
