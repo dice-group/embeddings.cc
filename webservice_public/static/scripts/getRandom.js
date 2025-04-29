@@ -1,34 +1,46 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('random-btn')
-    const container = document.getElementById('random-entities')
+document.addEventListener("DOMContentLoaded", function () {
+  const btn = document.getElementById("random-btn");
+  const container = document.getElementById("random-entities");
+  const randomError = document.getElementById("random-error-message");
 
-    if (!btn || !container) return;
+  if (btn && container && randomError) {
+    btn.addEventListener("click", async function (e) {
+      e.preventDefault();
 
-    btn.addEventListener('click', async function (e) {
-        e.preventDefault()
+      const originalText = btn.textContent;
+      btn.textContent = "Loading...";
+      btn.disabled = true;
+      randomError.textContent = "";
+      randomError.style.display = "none";
 
-        const originalText = btn.textContent
-        btn.textContent = 'Loading...'
-        btn.disabled = true;
+      try {
+        const resp = await fetch("/whale/entites");
+        if (!resp.ok) throw new Error(resp.statusText);
+        const { entities } = await resp.json();
 
-        try {
-            const resp = await fetch('/whale/entites')
-            if (!resp.ok) throw new Error(resp.statusText)
-            const { entities } = await resp.json()
-
-            container.innerHTML = ''
-            entities.forEach(val => {
-                const span = document.createElement('span')
-                span.className = 'entity'
-                span.textContent = val
-                span.onclick = () => updateEntitySubmit(val)
-                container.appendChild(span)
-            })
-        } catch (err) {
-            console.error('Failed to load entites:', err)
-        } finally {
-            btn.textContent = originalText
-            btn.disabled = false;
+        if (entities && entities.length) {
+          container.innerHTML = "";
+          entities.forEach((val) => {
+            const span = document.createElement("span");
+            span.className = "entity";
+            span.textContent = val;
+            span.onclick = () => updateEntitySubmit(val);
+            container.appendChild(span);
+          });
+        } else {
+          randomError.textContent =
+            "No entities found. Please try again later.";
+          randomError.style.display = "block";
         }
-    })
-})
+      } catch (err) {
+        console.error("Failed to load entites:", err);
+        randomError.textContent =
+          "Error fetching entites. Please try again later.";
+        randomError.style.display = "block";
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    });
+  }
+});

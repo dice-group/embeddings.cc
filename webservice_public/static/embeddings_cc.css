@@ -70,6 +70,12 @@ footer {
     text-align: center;
 }
 
+footer img {
+    height: 35px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
 #nav {
     margin: 0;
     padding: 15px;
@@ -259,4 +265,13 @@ span.entity {
 
 .custom-h2 {
     margin-top: 0px;
+}
+
+#error-message,
+#random-error-message {
+    display: none;
+    margin-top: 0, 5rem;
+    color: #c53030;
+    font-size: 0.9rem;
+    font-weight: 500;
 }

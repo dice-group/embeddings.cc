@@ -36,6 +36,7 @@
 
         <div id="entity-container">
             <button id="random-btn">Get random entities</button>
+            <div id="random-error-message"></div>
             <div id="random-entities">
                 {% for e in entities %}
                 <span class="entity" onclick="updateEntitySubmit('{{ e }}')">{{ e }}</span>
@@ -56,6 +57,7 @@
             <input type="text" id="entity-input" placeholder="Search for embeddings..." name="entity"
                 value="{{ entity }}">
             <button id="embed-btn">Get embeddings</button>
+            <div id="error-message"></div>
             <textarea id="embeddings-output" readonly class="whale-area">{{ embeddings }}</textarea>
         </div>
 
@@ -85,8 +87,7 @@
             src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 
     </div>
-    <footer><a target="_blank" href="https://dice-research.org/"><img src="/static/dice.svg" alt="DICE"
-                style="height:35px; margin-top:30px"></a></footer>
+    {% include 'footer.html' %}
     <script src="/static/scripts/helpers.js"></script>
     <script src="/static/scripts/slot.js"></script>
     <script src="/static/scripts/getRandom.js"></script>
