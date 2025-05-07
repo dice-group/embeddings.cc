@@ -1,4 +1,6 @@
 import os
+import json
+import random
 import time
 import hashlib
 import ipaddress
@@ -255,14 +257,27 @@ def create_app(test_config=None):
             embeddings = []
         return jsonify(embeddings=embeddings)
 
-    @app.route('/whale/entites', methods=['GET'])
+    @app.route('/whale/entities', methods=['GET'])
     def whale_entities():
         try:
             entities = es.get_random_entities('whale', size=5)
-        except Exception:
+        except Exception as e:
             app.logger.warning(f"ES get_random_entites failed: {e}")
             entities = []
         return jsonify(entities=entities)
+
+    @app.route('/whale/random_uris', methods=['GET'])
+    def random_uris():
+        path = os.path.join(current_app.instance_path, 'uris.json')
+        try:
+            with open(path, 'r') as f:
+                entities = json.load(f)
+        except Exception:
+            return jsonify(entities=[]), 200
+
+        picks = random.sample(entities, min(5, len(entities)))
+
+        return jsonify(entities=picks), 200
 
     @app.route('/whale/count', methods=['GET'])
     def whale_count():

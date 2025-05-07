@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
       randomError.style.display = "none";
 
       try {
-        const resp = await fetch("/whale/entites");
+        const resp = await fetch("/whale/random_uris");
         if (!resp.ok) throw new Error(resp.statusText);
         const { entities } = await resp.json();
 

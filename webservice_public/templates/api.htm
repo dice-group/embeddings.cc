@@ -118,8 +118,9 @@ if httpx.get('https://embeddings.cc/api/v1/ping').status_code == 200:
             <tr>
                 <td>Test</td>
                 <td>
-                    <form onsubmit="apiCall('GET', '/api/v1/ping', {}, null, 'ping_result'); return false">
+                    <form onsubmit="return apiCall(this, 'GET', '/api/v1/ping', {}, null, 'ping_result')">
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -168,8 +169,9 @@ if httpx.get('https://embeddings.cc/api/v1/ping').status_code == 200:
                 <td>Test</td>
                 <td>
                     <form
-                        onsubmit="apiCall('POST', '/api/v1/get_indices', {}, null, 'get_indices_result'); return false">
+                        onsubmit="return apiCall(this, 'POST', '/api/v1/get_indices', {}, null, 'get_indices_result')">
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -223,8 +225,9 @@ else:
             <tr>
                 <td>Test</td>
                 <td>
-                    <form onsubmit="apiCall('POST', '/api/v1/get_size', {}, null, 'get_size_result'); return false">
+                    <form onsubmit="return apiCall(this, 'POST', '/api/v1/get_size', {}, null, 'get_size_result')">
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -280,9 +283,10 @@ else:
                 <td>Test</td>
                 <td>
                     <form
-                        onsubmit="apiCall('POST', '/api/v1/get_random_entities', {size:document.getElementById('get_random_entities_size').value}, 'get_random_entities_input', 'get_random_entities_result'); return false">
+                        onsubmit="return apiCall(this, 'POST', '/api/v1/get_random_entities', {size:document.getElementById('get_random_entities_size').value}, 'get_random_entities_input', 'get_random_entities_result')">
                         <input type="number" id="get_random_entities_size" value="10" min="1" max="100">
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -345,10 +349,11 @@ else:
                 <td>Test</td>
                 <td>
                     <form
-                        onsubmit="apiCall('POST', '/api/v1/get_entities', {size:document.getElementById('get_entities_size').value, offset:document.getElementById('get_entities_offset').value}, 'get_entities_input', 'get_entities_result'); return false">
+                        onsubmit="return apiCall(this, 'POST', '/api/v1/get_entities', {size:document.getElementById('get_entities_size').value, offset:document.getElementById('get_entities_offset').value}, 'get_entities_input', 'get_entities_result')">
                         <input type="number" id="get_entities_size" value="100" min="1" max="1000">
                         <input type="number" id="get_entities_offset" value="0" min="0">
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -410,7 +415,7 @@ else:
                 <td>Test</td>
                 <td>
                     <form
-                        onsubmit="apiCallParse('POST', '/api/v1/get_embeddings', 'entities', 'get_embeddings_parameters', 'get_embeddings_input', 'get_embeddings_result'); return false">
+                        onsubmit="return apiCallParse(this, 'POST', '/api/v1/get_embeddings', 'entities', 'get_embeddings_parameters', 'get_embeddings_input', 'get_embeddings_result')">
                         <textarea id="get_embeddings_parameters">
 [
   "http://example.org/1", 
@@ -418,6 +423,7 @@ else:
 ]
 </textarea>
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -480,7 +486,7 @@ else:
                 <td>Test</td>
                 <td>
                     <form
-                        onsubmit="apiCallParse('POST', '/api/v1/get_similar_embeddings', 'embeddings', 'get_similar_embeddings_parameters', 'get_similar_embeddings_input', 'get_similar_embeddings_result'); return false">
+                        onsubmit="return apiCallParse(this, 'POST', '/api/v1/get_similar_embeddings', 'embeddings', 'get_similar_embeddings_parameters', 'get_similar_embeddings_input', 'get_similar_embeddings_result')">
                         <textarea id="get_similar_embeddings_parameters">
 [
   [], 
@@ -488,6 +494,7 @@ else:
 ]
 </textarea>
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
@@ -550,7 +557,7 @@ else:
                 <td>Test</td>
                 <td>
                     <form
-                        onsubmit="apiCallParse('POST', '/api/v1/get_similar_entities', 'entities', 'get_similar_entities_parameters', 'get_similar_entities_input', 'get_similar_entities_result'); return false">
+                        onsubmit="return apiCallParse(this, 'POST', '/api/v1/get_similar_entities', 'entities', 'get_similar_entities_parameters', 'get_similar_entities_input', 'get_similar_entities_result')">
 
                         <textarea id="get_similar_entities_parameters">
 [
@@ -559,6 +566,7 @@ else:
 ]
 </textarea>
                         <input type="submit" value="Test API method">
+                        <span class="spinner" style="display: none;">Loading...</span>
                     </form>
                 </td>
             </tr>
