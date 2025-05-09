@@ -115,37 +115,60 @@ def create_app(test_config=None):
 
     @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
     @cross_origin()
-    def get_similar_embeddings():
-        if 'embeddings' not in request.json or not request.json.get('embeddings'):
-            return 'Missing parameter: embeddings', 422
-        else:
-            embeddings = request.json['embeddings']
+    def api_get_similar_embeddings():
+        payload = request.get_json(force=True)
+
+        embeddings = payload.get('embeddings')
+        if not embeddings:
+            return "Missing parameter: embeddings", 422
         if len(embeddings) > 100:
-            return 'Incorrect value for parameter: embeddings', 422
-        for i, embedding in enumerate(embeddings):
-            if es.get_dimensions(get_index()) != len(embedding):
-                return 'Incorrect dimensions (' + str(len(embedding)) + ' instead of ' + \
-                       str(es.get_dimensions(get_index())) + ') for embeddings index: ' + str(i), 422
-        log()
-        return jsonify(es.get_similar_embeddings(get_index(), embeddings))
+            return "Incorrect value for parameter: embeddings", 422
+
+        client = es.get_es()
+        idx = get_index()
+        dims = es.get_dimensions(idx)
+        for i, emb in enumerate(embeddings):
+            if len(emb) != dims:
+                return (f"Incorrect dimensions ({len(emb)} instead of {dims}) for index {i}", 422)
+
+        try:
+            results = es.get_similar_embeddings(client, idx, embeddings)
+        except Exception as e:
+            return f"Error querying Elasticsearch: {e}", 500
+
+        return jsonify(results)
 
     @app.route('/api/v1/get_similar_entities', methods=['POST'])
     @cross_origin()
-    def get_similar_entities():
-        if 'entities' not in request.json or not request.json['entities']:
+    def api_get_similar_entities():
+        payload = request.get_json(force=True)
+
+        entities = payload.get('entities')
+
+        if not entities:
             return 'Missing parameter: entities', 422
-        else:
-            entities = request.json['entities']
         if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
 
+        client = es.get_es()
+        idx = get_index()
+        dims = es.get_dimensions(idx)
         embeddings = []
-        for tup in es.get_embeddings(get_index(), entities=entities):
-            embeddings.append(tup[1])
+        for i, tup in enumerate(es.get_embeddings(idx, entities=entities)):
+            vec = tup[1]
+            if len(vec) != dims:
+                return (
+                    f"Incorrect dimensions ({len(vec)} instead of {dims}) for entity at position {i}",
+                    422
+                )
+            embeddings.append(vec)
 
-        results = []
-        for trip in es.get_similar_embeddings(get_index(), embeddings):
-            results.append((trip[0], trip[1], trip[2]))
+        try:
+            sims = es.get_similar_embeddings(client, idx, embeddings)
+        except Exception as e:
+            return f"Error querying Elasticsearch: {e}", 500
+
+        results = [(qi, score, entity) for qi, score, entity, _ in sims]
         log()
         return jsonify(results)
 
@@ -275,7 +298,7 @@ def create_app(test_config=None):
         except Exception:
             return jsonify(entities=[]), 200
 
-        picks = random.sample(entities, min(5, len(entities)))
+        picks = random.sample(entities, min(15, len(entities)))
 
         return jsonify(entities=picks), 200
 

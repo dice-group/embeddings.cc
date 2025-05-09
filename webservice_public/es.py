@@ -135,19 +135,34 @@ def get_similar_embeddings_cossim(index, embeddings):
             results.append((i, hit['_score'] - 1, hit['_source']['entity'], hit['_source']['embeddings']))
     return results
 
-
-def get_similar_embeddings(index, embeddings):
-    # similar embeddings based on k nearest neighbours
-    results = []
-    for i, embedding in enumerate(embeddings):
-        response = get_es().knn_search(index=index, knn={
-            "field":"embeddings",
-            "query_vector":embedding,
-            "k": 10,
-            "num_candidates": 1000
+def get_similar_embeddings(es, index, embeddings, k=10, num_candidates=100):
+    msearch_body = []
+    for vec in embeddings:
+        msearch_body.append({"index": index})
+        msearch_body.append({
+            "size": k,
+            "query": {
+                "script_score": {
+                    "query": { "match_all": {} },
+                    "script": {
+                        "source": "cosineSimilarity(params.qvec, 'embeddings') + 1.0",
+                        "params": { "qvec": vec }
+                    }
+                }
+            }
         })
-        for hit in response['hits']['hits']:
-            results.append((i, hit['_score'], hit['_source']['entity'], hit['_source']['embeddings']))
+
+    resp = es.msearch(body=msearch_body)
+
+    results = []
+    for i, sub in enumerate(resp["responses"]):
+        for hit in sub["hits"]["hits"]:
+            results.append((
+                i,
+                hit["_score"],
+                hit["_source"]["entity"],
+                hit["_source"]["embeddings"],
+            ))
     return results
 
 
