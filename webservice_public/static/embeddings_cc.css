@@ -124,7 +124,56 @@ td {
     vertical-align: top;
 }
 
+tr.test-input {
+    display: none;
+}
 
+tr.test-result {
+    display: none;
+}
+
+td.title {
+    width: 20%;
+    font-weight: bold
+}
+
+input[type=text] {
+    width: 180px;
+}
+
+input[type=number] {
+    background: #e5f2f8;
+    width: 180px;
+}
+
+input:hover[type=number] {
+    background: #f1f6db;
+}
+
+textarea {
+    width: 96%;
+}
+
+pre[class*=language-] {
+    padding-bottom: 5px;
+}
+
+pre {
+    scrollbar-color: #ccc #f5f5f5;
+}
+
+pre::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
 
 input,
 button {

@@ -114,7 +114,7 @@
                 data: {
                     src: async (query) => {
                         try {
-                            const source = await fetch(`/api/v1/autocomplete?search_term=${encodeURIComponent(query)}`);
+                            const source = await fetch(`/autocomplete?search_term=${encodeURIComponent(query)}`);
                             return await source.json()
                         } catch (err) {
                             console.error(err)

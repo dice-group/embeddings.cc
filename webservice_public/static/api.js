@@ -50,18 +50,15 @@ function apiCall(formEl, httpMethod, path, parameters, inputId, resultId) {
       } else {
         const parsed = JSON.parse(xhr.responseText);
         let pretty;
-        if (
-          [
-            "/api/v1/get_embeddings",
-            "/api/v1/get_similar_embeddings",
-            "/api/v1/get_similar_entities",
-          ].includes(path)
-        ) {
-          pretty = JSON.stringify(parsed).replace(/\],\[/g, "],\n[");
+
+        if (Array.isArray(parsed)) {
+          pretty = parsed.map((sub) => JSON.stringify(sub)).join("\n");
         } else {
           pretty = JSON.stringify(parsed, null, 2);
         }
+
         outEl.textContent = pretty;
+        Prism.highlightElement(outEl);
       }
       Prism.highlightElement(outEl);
     } else {
@@ -131,24 +128,37 @@ function initialize_parameters(httpMethod, path, parameters) {
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      if (path == "/api/v1/get_random_entities") {
-        document.getElementById("get_embeddings_parameters").innerHTML =
-          xhr.responseText;
-        document.getElementById("get_similar_entities_parameters").innerHTML =
-          xhr.responseText;
+      if (path === "/api/v1/get_random_entities") {
+        const ids = JSON.parse(xhr.responseText);
+
+        document.getElementById("get_embeddings_parameters").textContent =
+          JSON.stringify(
+            {
+              index: parameters.index,
+              entities: ids,
+            },
+            null,
+            2
+          );
+
+        document.getElementById("get_similar_entities_parameters").textContent =
+          JSON.stringify(ids, null, 2);
+
         initialize_parameters("POST", "/api/v1/get_embeddings", {
-          entities: JSON.parse(xhr.responseText),
+          index: parameters.index,
+          entities: ids,
         });
       } else if (path == "/api/v1/get_embeddings") {
-        var embeddings = [];
-        JSON.parse(xhr.responseText).forEach((element) =>
-          embeddings.push(element[1])
-        );
-        document.getElementById("get_similar_embeddings_parameters").innerHTML =
-          JSON.stringify(embeddings).replace(/\],\[/g, "],\n[").trim();
+        const pairs = JSON.parse(xhr.responseText);
+        const embeddings = pairs.map(([_, vec]) => vec);
+
+        const lines = embeddings.map((vec) => `[${vec.join(", ")}]`);
+        const pretty = "[\n" + lines.join(",\n") + "\n]";
+
+        document.getElementById(
+          "get_similar_embeddings_parameters"
+        ).textContent = pretty;
       }
-    } else if (this.readyState === XMLHttpRequest.DONE) {
-      console.log(xhr.responseText);
     }
   };
   xhr.send(JSON.stringify(parameters));

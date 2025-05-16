@@ -34,14 +34,13 @@ def create_app(test_config=None):
     def internal_server_error(error):
         return render_template('500.html'), 500
 
-    @app.route('/api/v1/autocomplete', methods=['GET'])
+    @app.route('/autocomplete', methods=['GET'])
     @cross_origin()
     def dev():
         if request.args.get('search_term'):
             return jsonify(es.search_completion(get_index(), request.args.get('search_term')))
         else:
             return jsonify([])
-
 
     @app.route('/api/v1/ping', methods=['GET', 'POST'])
     @cross_origin()
@@ -62,12 +61,26 @@ def create_app(test_config=None):
     @cross_origin()
     def get_size():
         log()
-        count_string = es.get_es().cat.count(index=get_index())
-        return count_string[count_string.rindex(' ') + 1:]
+
+        payload = request.get_json(silent=True) or {}
+
+        index = payload.get('index') or get_index()
+
+        count_string = es.get_es().cat.count(index=index)
+
+        count = count_string.strip().split()[-1]
+
+        return jsonify(count=int(count))
 
     @app.route('/api/v1/get_random_entities', methods=['POST'])
     @cross_origin()
     def get_random_entities():
+        log()
+
+        payload = request.get_json(silent=True) or {}
+
+        index = payload.get('index') or get_index()
+
         size = 10
         if 'size' in request.json and request.json['size']:
             try:
@@ -76,42 +89,65 @@ def create_app(test_config=None):
                 return 'Incorrect type for parameter: size', 415
         if size < 1 or size > 100:
             return 'Incorrect value for parameter: size', 422
-        log()
-        return jsonify(es.get_random_entities(get_index(), size=size))
+
+        entities = es.get_random_entities(index, size=size)
+        return jsonify(entities)
 
     @app.route('/api/v1/get_entities', methods=['POST'])
     @cross_origin()
     def get_entities():
-        size = 100
-        offset = 0
-        if 'size' in request.json and request.json['size']:
-            try:
-                size = int(request.json['size'])
-            except ValueError:
-                return 'Incorrect type for parameter: size', 415
+        log()
+
+        payload = request.get_json(silent=True) or {}
+
+        index = payload.get('index') or get_index()
+
+        size = payload.get('size', 100)
+        try:
+            size = int(size)
+        except (TypeError, ValueError):
+            return 'Incorrect type for parameter: size', 415
         if size < 1 or size > 10000:
             return 'Incorrect value for parameter: size', 422
-        if 'offset' in request.json and request.json['offset']:
-            try:
-                offset = int(request.json['offset'])
-            except ValueError:
-                return 'Incorrect type for parameter: offset', 415
+
+        offset = payload.get('offset', 0)
+        try:
+            offset = int(offset)
+        except (TypeError, ValueError):
+            return 'Incorrect type for parameter: offset', 415
         if offset < 0:
             return 'Incorrect value for parameter: offset', 422
-        log()
-        return jsonify(es.get_entities(get_index(), size=size, offset=offset))
+
+        entities = es.get_entities(index, size=size, offset=offset)
+        return jsonify(entities)
 
     @app.route('/api/v1/get_embeddings', methods=['POST'])
     @cross_origin()
     def get_embeddings():
-        if 'entities' not in request.json or not request.json['entities']:
-            return 'Missing parameter: entities', 422
+        log()
+
+        data = request.get_json(silent=True)
+        if data is None:
+            return 'Invalid or missing JSON body', 415
+
+        if isinstance(data, list):
+            entities = data
+            index = get_index()
+
+        elif isinstance(data, dict):
+            entities = data.get('entities')
+            index = data.get('index') or get_index()
         else:
-            entities = request.json['entities']
+            return 'JSON body must be an object or array', 415
+
+        if not entities:
+            return 'Missing parameter: entities', 422
+        if not isinstance(entities, list):
+            return 'Incorrect type for parameter: entities', 415
         if len(entities) > 100:
             return 'Incorrect value for parameter: entities', 422
-        log()
-        return jsonify(es.get_embeddings(get_index(), entities=entities))
+
+        return jsonify(es.get_embeddings(index, entities=entities))
 
     @app.route('/api/v1/get_similar_embeddings', methods=['POST'])
     @cross_origin()
@@ -254,15 +290,44 @@ def create_app(test_config=None):
                                embeddings=embeddings, similar_entities=similar_entities,
                                dev=dev, index=index, index_size=index_size)
 
+    def get_api_entries():
+        entries = []
+        for endpoint, view_fn in app.view_functions.items():
+            if endpoint == 'static':
+                continue
+
+            for rule in app.url_map.iter_rules(endpoint):
+                if not rule.rule.startswith('/api/v1/'):
+                    continue
+
+                path = rule.rule
+                slug = path.rsplit('/', 1)[-1]
+                methods = [m for m in rule.methods
+                            if m in ('GET', 'POST', 'PUT', 'DELETE', 'PATCH')]
+
+                entries.append({
+                    'path': path,
+                    'slug': slug,
+                    'description': getattr(view_fn, 'api_description', ''),
+                    'example': getattr(view_fn, 'api_example', ''),
+                    'methods': methods,
+                })
+        
+        return entries
+
     @app.route('/api', methods=['GET'])
     def api():
         log()
-        return render_template('api.htm')
+        return render_template(
+            'api.htm',
+            page_title='API',
+            api_entries = get_api_entries()
+            )
 
     @app.route('/news', methods=['GET'])
     def news():
         log()
-        return render_template('news.htm')
+        return render_template('news.htm', page_title='News')
 
     @app.route('/whale/embeddings', methods=['POST'])
     def whale_embeddings():
