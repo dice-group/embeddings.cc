@@ -264,11 +264,16 @@ textarea::-webkit-scrollbar-track {
 }
 
 .delimiter {
-    font-size: 1em;
-    line-height: 1;
-    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
     user-select: none;
     color: #a93983;
+}
+
+.slot-machine .delimiter {
+    align-self: flex-end;
 }
 
 .reel {
