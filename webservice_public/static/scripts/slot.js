@@ -93,10 +93,20 @@ document.addEventListener("DOMContentLoaded", () => {
           countEl.style.display = "inline";
           return;
         }
-        previousPlain = plain;
 
         if (plain.length !== currentLen) {
           initReels(plain.length);
+        }
+
+        let diffIndex = 0;
+        if (previousPlain) {
+          while (
+            diffIndex < plain.length &&
+            diffIndex < previousPlain.length &&
+            plain[diffIndex] === previousPlain[diffIndex]
+          ) {
+            diffIndex++;
+          }
         }
 
         const formatted = new Intl.NumberFormat("en-US").format(real);
@@ -108,16 +118,22 @@ document.addEventListener("DOMContentLoaded", () => {
         slot.style.display = "inline-flex";
         countEl.style.display = "none";
 
-        strips.forEach((s) => {
-          s.style.transition = "none";
-          s.style.transform = `translateY(${-s.currentDigit * digitH}px)`;
-        });
+        for (let i = 0; i < diffIndex; i++) {
+          const d = +plain[i];
+          const strip = strips[i];
+          strip.currentDigit = d;
+          strip.style.transition = "none";
+          strip.style.transform = `translateY(${-d * digitH}px)`;
+        }
+
         slot.offsetHeight;
 
         plain.split("").forEach((ch, i) => {
+          if (i < diffIndex) return;
           const d = +ch;
           const strip = strips[i];
           const offset = -(loops * 10 + d) * digitH;
+
           strip.currentDigit = d;
           strip.style.transition = "transform 1s ease-in-out";
           strip.style.transform = `translateY(${offset}px)`;
@@ -127,6 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
           slot.style.display = "none";
           countEl.style.display = "inline";
         }, 1000);
+
+        previousPlain = plain;
       })
       .catch(() => {
         slot.style.display = "none";
