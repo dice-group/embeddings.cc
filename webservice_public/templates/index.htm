@@ -46,8 +46,10 @@
         </p>
 
         <div id="embeddings-container">
-            <input type="text" id="entity-input" placeholder="Search for embeddings..." name="entity"
-                value="{{ entity }}">
+            <div class="autoComplete_wrapper">
+                <input type="text" id="entity-input" placeholder="Search for embeddings..." name="entity"
+                    value="{{ entity }}">
+            </div>
             <button id="embed-btn">Get embeddings</button>
             <div id="error-message"></div>
             <textarea id="embeddings-output" readonly class="whale-area">{{ embeddings }}</textarea>
@@ -77,11 +79,11 @@
             Our experts are continuously working on updates, we try to hide them in the <a href="/news">news</a>.
         </p>
 
-        <script
-            src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 
     </div>
     {% include 'footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
+    <script src="/static/scripts/autocomplete-setup.js"></script>
     <script src="/static/scripts/helpers.js"></script>
     <script src="/static/scripts/slot.js"></script>
     <script src="/static/scripts/getRandom.js"></script>

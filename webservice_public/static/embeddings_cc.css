@@ -329,3 +329,32 @@ span.entity {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
+#embeddings-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+#embeddings-container > .autoComplete_wrapper {
+    order: 1;
+    flex: 0 0 50%;
+    min-width: 0;
+}
+
+#embeddings-container > button {
+    order: 2;
+    flex: 0 0 auto;
+}
+
+#embeddings-container > *:not(.autoComplete_wrapper):not(button) {
+    order: 3;
+    flex: 1 1 100%;
+    margin-top: 0.5rem;
+}
+
+#embeddings-container .autoComplete_wrapper input {
+    width: 100% !important;
+    box-sizing: border-box;
+}

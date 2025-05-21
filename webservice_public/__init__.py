@@ -36,11 +36,17 @@ def create_app(test_config=None):
 
     @app.route('/autocomplete', methods=['GET'])
     @cross_origin()
-    def dev():
-        if request.args.get('search_term'):
-            return jsonify(es.search_completion(get_index(), request.args.get('search_term')))
-        else:
+    def autocomplete():
+        search_term = request.args.get('search_term')
+        index_name = request.args.get('index')
+
+        idx = index_name if index_name else get_index()
+        
+        if not search_term:
             return jsonify([])
+
+        results = es.search_completion(idx, search_term)
+        return jsonify(results)
 
     @app.route('/api/v1/ping', methods=['GET', 'POST'])
     @cross_origin()
