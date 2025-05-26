@@ -89,6 +89,28 @@ def search_completion(index, search_term, size=10):
         for opt in response["suggest"]["entity_suggest"][0]["options"]
     ]
 
+def search_terms_enum(index, prefix, size=10):
+    """
+    Very low-heap, prefix lookup on a keyword field.
+    """
+    body = {
+        "field": "entity",
+        "string": prefix,
+        "size": size
+    }
+    client = get_es()
+
+    if hasattr(client, "terms_enum"):
+        resp = client.terms_enum(index=index, body=body)
+    else:
+        resp = client.transport.perform_request(
+            "GET",
+            f"/{index}/_terms_enum",
+            body=body
+        )
+
+    return resp.get("terms", [])
+
 
 def get_dimensions(index):
     response = get_es().search(index=index, body={

@@ -15,7 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const _fetch = async (query) => {
     const res = await fetch(
-      `/autocomplete?search_term=${encodeURIComponent(query)}&index=whale`
+      `/autocomplete?search_term=${encodeURIComponent(
+        query
+      )}&index=whale&method=enum`
     );
     return res.ok ? await res.json() : [];
   };
@@ -37,12 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
     selector: "#entity-input",
     placeHolder: "Search for embeddings...",
     threshold: 3,
-    debounce: 0,
+    debounce: 500,
     data: {
-      src: async (query) => {
-        if (query.length < 3) return [];
-        return await fetchSuggestions(query);
-      },
+      src: fetchSuggestions,
     },
     resultItem: {
       highlight: true,

@@ -38,15 +38,18 @@ def create_app(test_config=None):
     @cross_origin()
     def autocomplete():
         search_term = request.args.get('search_term')
-        index_name = request.args.get('index')
-
-        idx = index_name if index_name else get_index()
-        
         if not search_term:
             return jsonify([])
 
-        results = es.search_completion(idx, search_term)
-        return jsonify(results)
+        idx = request.args.get('index') or get_index()
+        method = request.args.get('method', 'completion').lower()
+
+        if method == 'enum':
+            suggestions = es.search_terms_enum(idx, search_term)
+        else:
+            suggestions = es.search_completion(idx, search_term)
+
+        return jsonify(suggestions)
 
     @app.route('/api/v1/ping', methods=['GET', 'POST'])
     @cross_origin()
