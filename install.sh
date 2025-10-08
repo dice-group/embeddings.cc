@@ -1,13 +1,12 @@
 #!/usr/bin/bash -e
-# eval "$(conda shell.bash hook)"
-# echo "before calling source: $PATH"
+eval "$(/Users/admin/miniconda3/bin/conda shell.zsh hook)" # echo "before calling source: $PATH"
 # git clone https://github.com/dice-group/embeddings.cc.git && cd embeddings.cc
 ml lang
 ml Miniforge3
 conda create -n embcc python=3.10 -y
 conda init
 . $HOME/.bashrc
-conda activate .conda/envs/embcc
+conda activate /Users/admin/miniconda3/envs/embcc
 python -m pip install -r requirements.txt
 mkdir -p instance
 cp -f ./config.py instance

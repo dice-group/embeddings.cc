@@ -157,9 +157,10 @@ def get_similar_embeddings(es, index, embeddings, k=10, num_candidates=100):
     results = []
     for i, sub in enumerate(resp["responses"]):
         for hit in sub["hits"]["hits"]:
+            classic_score = hit["_score"] - 1.0
             results.append((
                 i,
-                hit["_score"],
+                classic_score,
                 hit["_source"]["entity"],
                 hit["_source"]["embeddings"],
             ))
