@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("random-entities");
   const randomError = document.getElementById("random-error-message");
 
+  if (container) {
+    container.querySelectorAll("span.entity").forEach((span) => {
+      applyDomainColor(span, span.textContent);
+    });
+  }
+
   if (btn && container && randomError) {
     btn.addEventListener("click", async function (e) {
       e.preventDefault();
@@ -25,6 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
             span.className = "entity";
             span.textContent = val;
             span.onclick = () => updateEntitySubmit(val);
+
+            applyDomainColor(span, val);
+
             container.appendChild(span);
           });
         } else {
