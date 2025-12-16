@@ -11,6 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (embedBtn && entityInput && embedOutput && errorMsg) {
     embedBtn.addEventListener("click", async (e) => {
       e.preventDefault();
+
+      const entity = (entityInput.value || "").trim();
+      setEmbeddingsDomain(getDomainFromUri(entity));
+
       const origText = embedBtn.textContent;
       embedBtn.textContent = "Loading...";
       embedBtn.disabled = true;
@@ -23,11 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (globalOutput) globalOutput.value = "";
 
       try {
-        const entity = (entityInput.value || "").trim();
-
-        if (!entity) {
-          return;
-        }
+        if (!entity) return;
 
         let localEmbeddings = [];
         try {
