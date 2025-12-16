@@ -2,30 +2,49 @@ from elasticsearch import Elasticsearch
 from flask import current_app, g
 
 
+def _make_es(host, user=None, password=None):
+    es_kwargs = {
+        'hosts': [host],
+        'http_compress': True,
+        'verify_certs': False,
+        'timeout': 60,
+        'max_retries': 5,
+        'retry_on_timeout': True
+    }
+    if user and password:
+        es_kwargs['http_auth'] = (user, password)
+    return Elasticsearch(**es_kwargs)
+
 def get_es():
     if 'es' not in g:
-        es_kwargs = {
-            'hosts': [current_app.config['ES_HOST']],
-            'http_compress': True,
-            'verify_certs': False,
-            'timeout': 60,
-            'max_retries': 5,
-            'retry_on_timeout': True
-        }
-        es_user = current_app.config.get('ES_USER')
-        es_pass = current_app.config.get('ES_PASSWORD')
-        if es_user and es_pass:
-            es_kwargs['http_auth'] = (es_user, es_pass)
-
-        g.es = Elasticsearch(**es_kwargs)
+        g.es = _make_es(
+            current_app.config['ES_HOST'],
+            current_app.config.get('ES_USER'),
+            current_app.config.get('ES_PASSWORD'),
+        )
     return g.es
 
+def get_es_demo():
+    if 'es_demo' not in g:
+        host = (current_app.config.get('ES_HOST_DEMO') or '').strip()
+        if not host:
+            g.es_demo = None
+        else:
+            g.es_demo = _make_es(
+                host,
+                current_app.config.get('ES_USER_DEMO'),
+                current_app.config.get('ES_PASSWORD_DEMO'),
+            )
+        return g.es_demo
 
 def close_es(e=None):
-    es = g.pop('es', None)
-
-    if es is not None:
-        es.close()
+    for key in ('es', 'es_demo'):
+        es_client = g.pop(key, None)
+        if es_client is not None:
+            try:
+                es_client.close()
+            except Exception:
+                pass
 
 
 def init_es():
@@ -94,8 +113,13 @@ def get_dimensions(index):
     })
     return len(response['hits']['hits'][0]['_source']['embeddings'])
 
-
 def get_embeddings(index, entities):
+    return get_embeddings_from_client(get_es(), index, entities)
+
+def get_embeddings_from_client(client, index, entities):
+    if client is None:
+        return []
+    
     request = []
     for entity in entities:
         req_head = {'index': index}
@@ -109,6 +133,9 @@ def get_embeddings(index, entities):
         for hit in resp['hits']['hits']:
             results.append((hit['_source']['entity'], hit['_source']['embeddings']))
     return results
+
+def get_embeddings_demo(index, entities):
+    return get_embeddings_from_client(get_es_demo(), index, entities)
 
 
 def get_similar_embeddings_cossim(index, embeddings):

@@ -6,6 +6,12 @@ import os
 ES_HOST       = os.getenv('ES_HOST', '')
 ES_USER       = os.getenv('ES_USER', '')
 ES_PASSWORD   = os.getenv('ES_PASSWORD', '')
+
+# demo db
+ES_HOST_DEMO       = os.getenv('ES_HOST_DEMO', '')
+ES_USER_DEMO       = os.getenv('ES_USER', '')
+ES_PASSWORD_DEMO   = os.getenv('ES_PASSWORD', '')
+
 #ES_INDEX      = 'index_test'
 #ES_INDEX      = 'dbpedia_en_fr_100k_procrustes_v2'
 #ES_INDEX      = 'dbpedia_en_fr_15k_procrustes'

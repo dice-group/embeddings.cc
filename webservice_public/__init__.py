@@ -344,6 +344,24 @@ def create_app(test_config=None):
             app.logger.warning(f"ES get_embeddings failed: {e}")
             embeddings = []
         return jsonify(embeddings=embeddings)
+    
+    @app.route('/demo/embeddings', methods=['POST'])
+    def demo_embeddings():
+        data = request.get_json(silent=True) or {}
+        entity = (data.get('entity') or '').strip()
+        index = (data.get('index') or '').strip()
+
+        if not entity or not index:
+            return jsonify(embeddings=[]), 200
+        
+        try:
+            results = es.get_embeddings_demo(index, [entity])
+            embeddings = results[0][1] if results else []
+        except Exception as e:
+            app.logger.warning(f"Demo ES get_embeddings failed ({index}): {e}")
+            embeddings = []
+
+        return jsonify(embeddings=embeddings), 200
 
     @app.route('/whale/entities', methods=['GET'])
     def whale_entities():
