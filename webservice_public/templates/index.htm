@@ -49,6 +49,7 @@
             <input type="text" id="entity-input" placeholder="Search for embeddings..." name="entity"
                 value="{{ entity }}">
             <button id="embed-btn">Get embeddings</button>
+            <span id="embed-domain" class="domain-chip" style="display: none;"></span>
             <div id="error-message"></div>
             <textarea id="embeddings-output" readonly class="whale-area">{{ embeddings }}</textarea>
 
