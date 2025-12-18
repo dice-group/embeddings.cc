@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const globalOutput = document.getElementById("global-embeddings-output");
   const errorMsg = document.getElementById("error-message");
+  const localLabel = document.getElementById("local-embeddings-label");
 
   if (embedBtn && entityInput && embedOutput && errorMsg) {
     embedBtn.addEventListener("click", async (e) => {
@@ -73,9 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
             globalContainer &&
             globalOutput
           ) {
+            if (localLabel)
+              localLabel.style.setProperty("display", "block", "important");
+
             globalContainer.style.display = "block";
             globalOutput.value = globalEmbeddings;
           } else if (globalContainer) {
+            if (localLabel) localLabel.style.display = "none";
             globalContainer.style.display = "none";
           }
 

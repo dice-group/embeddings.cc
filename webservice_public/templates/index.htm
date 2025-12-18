@@ -51,11 +51,16 @@
             <button id="embed-btn">Get embeddings</button>
             <span id="embed-domain" class="domain-chip" style="display: none;"></span>
             <div id="error-message"></div>
+            <div id="local-embeddings-label" style="display: none; margin-top: 1vw; font-weight: bold;">
+                Local embedding:
+            </div>
             <textarea id="embeddings-output" readonly class="whale-area">{{ embeddings }}</textarea>
 
             <div id="global-embeddings-container" style="display: none;">
-                <div style="margin-top:1vw; font-weight: bold;">Global embeddings</div>
-                <textarea id="global-embeddings-output" readonly class="whale-area"></textarea>
+                <div style="margin-top:1vw; font-weight: bold;">Global embedding:</div>
+                <textarea id="global-embeddings-output" readonly class="whale-area">
+
+                </textarea>
             </div>
         </div>
 

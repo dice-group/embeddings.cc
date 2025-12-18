@@ -35,7 +35,7 @@ def get_es_demo():
                 current_app.config.get('ES_USER_DEMO'),
                 current_app.config.get('ES_PASSWORD_DEMO'),
             )
-        return g.es_demo
+    return g.es_demo
 
 def close_es(e=None):
     for key in ('es', 'es_demo'):
@@ -75,6 +75,16 @@ def get_entities(index, size=100, offset=0):
     for hit in response['hits']['hits']:
         entities.append(hit['_source']['entity'])
     return entities
+
+def get_entities_demo(index, size=100, offset=0):
+    client = get_es_demo()
+    if client is None:
+        return []
+    
+    response = client.search(index=index, body={
+        "from": offset, "size": size, "query": {"match_all": {}}
+    })
+    return [hit["_source"]["entity"] for hit in response["hits"]["hits"]]
 
 
 def search_prefix(index, search_term):
@@ -127,7 +137,7 @@ def get_embeddings_from_client(client, index, entities):
             'entity': entity
         }}}
         request.extend([req_head, req_body])
-    response = get_es().msearch(body=request)
+    response = client.msearch(body=request)
     results = []
     for resp in response['responses']:
         for hit in resp['hits']['hits']:

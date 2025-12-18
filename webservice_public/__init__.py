@@ -362,6 +362,24 @@ def create_app(test_config=None):
             embeddings = []
 
         return jsonify(embeddings=embeddings), 200
+    
+    @app.route('/demo/entities', methods=['POST'])
+    def demo_entities():
+        data = request.get_json(silent=True) or {}
+        index = (data.get('index') or '').strip()
+        if not index:
+            return jsonify(entities=[]), 200
+        
+        size = int(data.get('size', 100) or 100)
+        offset = int(data.get('offset', 0) or 0)
+
+        try:
+            entities = es.get_entities_demo(index, size=size, offset=offset)
+        except Exception as e:
+            app.logger.warning(f"Demo ES get_entities failed ({index}): {e}")
+            entities = []
+
+        return jsonify(entities=entities), 200
 
     @app.route('/whale/entities', methods=['GET'])
     def whale_entities():
@@ -383,6 +401,18 @@ def create_app(test_config=None):
 
         picks = random.sample(entities, min(15, len(entities)))
 
+        return jsonify(entities=picks), 200
+    
+    @app.route('/demo/random_uris_global', methods=['GET'])
+    def demo_random_uris_global():
+        path = os.path.join(current_app.instance_path, 'uris_demo_global.json')
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                entities = json.load(f)
+        except Exception:
+            return jsonify(entities=[]), 200
+        
+        picks = random.sample(entities, min(15, len(entities)))
         return jsonify(entities=picks), 200
 
     @app.route('/whale/count', methods=['GET'])
