@@ -42,8 +42,8 @@
             {% if index %}<!-- Index for developers --><input type="hidden" value="{{ index }}" name="index">{% endif %}
         </form>
         <p>
-            {% for e in entities %}<span class="entity"
-                onclick="document.getElementById('entity').value='{{ e[0] }}'">{{
+            {% for e in entities %}<span class="entity" + data-entity="{{ e[0] }}"
+                onclick="document.getElementById('get-embeddings').value=this.dataset.entity">{{
                 e[1] }}</span>{% endfor %}
         </p>
 
