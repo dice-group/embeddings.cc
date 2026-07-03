@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    {% include 'head.html' %}
+</head>
+
+<body>
+    <div id="container">
+
+        {% include 'nav.html' %}
+
+        <h1>Predict</h1>
+
+        <form id="predict-form">
+            <div class="predict-grid">
+                <label for="positive-examples">
+                    Positive examples
+                    <textarea id="positive-examples" class="predict-input" spellcheck="false" autocorrect="off"
+                        autocomplete="off" autocapitalize="off">
+                            http://whale.data.dice-research.org/resource#node1hhjj61gvx44683360
+                            http://whale.data.dice-research.org/resource#nodeeddb6167ffcc9fabfb9729a7e7d61
+                            http://whale.data.dice-research.org/resource#node1hhkflq3rx6748296
+                            http://whale.data.dice-research.org/resource#node1hhkf3390x14039410
+                            http://whale.data.dice-research.org/resource#node1hhjldi9ex32333187
+                    </textarea>
+                </label>
+
+                <label for="negative-examples">
+                    Negative examples
+                    <textarea id="negative-examples" class="predict-input" spellcheck="false" autocorrect="off"
+                        autocomplete="off" autocapitalize="off">
+                            http://whale.data.dice-research.org/resource#node1hhkasoscx3716564
+                            http://whale.data.dice-research.org/resource#node1hhjjcbanx33124044
+                            http://whale.data.dice-research.org/resource#node38fd9e1535bd65875dc1179dd6db386
+                            http://whale.data.dice-research.org/resource#genid2dc200ecb7748f41dca2f81c5f1cd7ee2a2dN65743
+                            http://whale.data.dice-research.org/resource#node1hhk2c0mhx10098747
+                    </textarea>
+                </label>
+            </div>
+
+            <button id="predict-btn" type="submit">Predict</button>
+        </form>
+
+        <div id="predict-error-message"></div>
+
+        <div id="predict-result-container" class="predict-result-container">
+            <h2>Result</h2>
+            <table class="predict-result-table">
+                <tr>
+                    <td class="title">Expression</td>
+                    <td id="predict-expression"></td>
+                </tr>
+                <tr>
+                    <td class="title">Raw output</td>
+                    <td id="predict-raw-output"></td>
+                </tr>
+                <tr>
+                    <td class="title">Parses as DL</td>
+                    <td id="predict-parses-as-dl"></td>
+                </tr>
+                <tr>
+                    <td class="title">Used fallback</td>
+                    <td id="predict-used-fallback"></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    {% include 'footer.html' %}
+    <script src="/static/scripts/predict.js?v=2"></script>
+</body>
+
+</html>

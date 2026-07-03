@@ -4,6 +4,7 @@ import random
 import time
 import hashlib
 import ipaddress
+import httpx
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from . import es
@@ -323,6 +324,45 @@ def create_app(test_config=None):
             page_title='API',
             api_entries = get_api_entries()
             )
+
+    @app.route('/predict', methods=['GET', 'POST'])
+    def predict():
+        if request.method == 'POST':
+            data = request.get_json(force=True)
+            try:
+                response = httpx.post(
+                    'http://131.234.29.20:8000/predict',
+                    json={
+                        'positive_uris': data.get('positive_uris', []),
+                        'negative_uris': data.get('negative_uris', []),
+                    },
+                    timeout=600,
+                )
+                response.raise_for_status()
+            except httpx.HTTPStatusError as e:
+                try:
+                    detail = e.response.json()
+                except ValueError:
+                    detail = e.response.text
+
+                if isinstance(detail, dict) and 'detail' in detail:
+                    detail = detail['detail']
+
+                return jsonify({
+                    'error': 'Prediction service returned an error.',
+                    'status_code': e.response.status_code,
+                    'detail': detail,
+                }), 502
+            except httpx.RequestError as e:
+                return jsonify({
+                    'error': 'Prediction service unavailable.',
+                    'detail': str(e),
+                }), 502
+
+            return jsonify(response.json())
+
+        log()
+        return render_template('predict.htm', page_title='Predict')
 
     @app.route('/news', methods=['GET'])
     def news():

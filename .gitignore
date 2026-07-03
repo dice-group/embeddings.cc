@@ -166,3 +166,4 @@ cython_debug/
 
 Miniconda3-latest-MacOSX-x86_64.sh
 webservice_public/static/scripts/testEndpoint.js
+global_demo_uri_extractor.py
