@@ -13,13 +13,15 @@ import json
 
 class EmbeddingsCcIndex():
     WEBSERVICE_URL = 'http://embeddings.cs.uni-paderborn.de:8008'
+    GET_EMBEDDINGS_TIMEOUT = 600.0
 
-    def __init__(self, webservice_url=None):
+    def __init__(self, webservice_url=None, get_embeddings_timeout=GET_EMBEDDINGS_TIMEOUT):
         if webservice_url is None:
             self.webservice_url = self.WEBSERVICE_URL
         else:
             self.webservice_url = webservice_url
         self.headers_json = {'Content-Type': 'application/json'}
+        self.get_embeddings_timeout = get_embeddings_timeout
 
     # ----------| GET requests without password |-----------------------------------------------------------------------
 
@@ -41,11 +43,15 @@ class EmbeddingsCcIndex():
         """
         return httpx.get(self.webservice_url + '/count', params={'index': index})
 
-    def get_embeddings(self, index, entity):
+    def get_embeddings(self, index, entity, timeout=None):
         """
         Searches for an entity in Elasticsearch and returns related embeddings.
         """
-        return httpx.get(self.webservice_url + '/get_embeddings', params={'index': index, 'entity': entity})
+        if timeout is None:
+            timeout = self.get_embeddings_timeout
+        return httpx.get(self.webservice_url + '/get_embeddings',
+                         params={'index': index, 'entity': entity},
+                         timeout=timeout)
 
     # ----------| POST requests with password |-------------------------------------------------------------------------
 

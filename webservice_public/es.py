@@ -7,7 +7,7 @@ def _make_es(host, user=None, password=None):
         'hosts': [host],
         'http_compress': True,
         'verify_certs': False,
-        'timeout': 60,
+        'timeout': 600,
         'max_retries': 5,
         'retry_on_timeout': True
     }

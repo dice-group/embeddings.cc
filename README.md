@@ -1,18 +1,15 @@
-Note: This project was developed while working on the article ***Universal Knowledge Graph Embeddings*** (repository: ([https://github.com/dice-group/Universal_Embeddings], publication [link](https://dl.acm.org/doi/10.1145/3589335.3651978))).
+Note: This project was developed while working on the article **_Universal Knowledge Graph Embeddings_** (repository: ([https://github.com/dice-group/Universal_Embeddings], publication [link](https://dl.acm.org/doi/10.1145/3589335.3651978))).
 
 # Universal Knowledge Graph Embeddings
 
 This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([also without TLS](http://embeddings.cs.uni-paderborn.de/)).
 
-
 ## Documentation
-
 
 ### Public API (for users)
 
 - The API is documented at [embeddings.cc/api](https://embeddings.cc/api)
 - Additional examples are provided in [Python examples](api/embeddings_cc_public_examples.py) and [JavaScript HTML form](api/embeddings_cc_public.htm)
-
 
 ### Index API (for data developers)
 
@@ -25,7 +22,7 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 - **Important**: Create an alias for each index to be available in public. Only aliases can be accessed by webservices.
 
 | Webservice             | Method | Parameters                          |
-|------------------------|--------|-------------------------------------|
+| ---------------------- | ------ | ----------------------------------- |
 | /ping                  | GET    | -                                   |
 | /count                 | GET    | index                               |
 | /get_embeddings        | GET    | index, entity                       |
@@ -38,10 +35,10 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 | /alias_put             | POST   | password, index, alias              |
 | /alias_delete          | POST   | password, index, alias              |
 
-
 ### Development (for python developers)
 
 #### Quick start for Linux
+
 This part helps you train embeddings for your knowledge graph, serve these embeddings on the embeddinng.cc API then query for embeddings via http requests or via a web browser. Please follow instructions carefully.
 
 1. Clone this repository: `git clone https://github.com/dice-group/embeddings.cc.git`
@@ -61,7 +58,7 @@ mkdir -p instance
 cp -f ./config.py instance
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512
-shasum -a 512 -c elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512 
+shasum -a 512 -c elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512
 tar -xzf elasticsearch-8.3.3-linux-x86_64.tar.gz
 wget https://files.dice-research.org/datasets/dice-embeddings/KGs.zip --no-check-certificate && unzip KGs.zip && rm -rf KGs.zip
 dicee --dataset_dir KGs/UMLS --model DeCaL --num_epochs 1 --batch_size 512 --path_to_store_single_run ./embeddings --save_embeddings_as_csv --eval_model "None" --embedding_dim 64
@@ -82,14 +79,14 @@ dicee --dataset_dir KGs/UMLS --model DeCaL --num_epochs 1 --batch_size 512 --pat
 
 11. Now access the URL [http://127.0.0.1:1337/](http://127.0.0.1:1337/) to access the embeddings_cc API with your uploaded embeddings.
 
-*HTTP Requests to the API*:
+_HTTP Requests to the API_:
 
 ```python
 >>> import httpx
 >>> index = "index_example"
 >>> entity = "_derivationally_related_form"
 >>> webservice_url = "http://127.0.0.1:8008"
->>> response = httpx.get(webservice_url + '/get_embeddings', params={'index': index, 'entity': entity})
+>>> response = httpx.get(webservice_url + '/get_embeddings', params={'index': index, 'entity': entity}, timeout=600.0)
 >>> print(response.text)
 {"_derivationally_related_form": [[0.05112762, -0.7333016, 0.021954058, -0.016982945, -0.79204845, 0.0027191583, 1.0582609, -0.035856135, 0.004805608, 0.23186462, -0.00032222472, -0.38192114, -0.1920939, 0.8178917, -0.37373748, 0.28562018, 0.033060074, 0.0044505247, -0.85810864, -0.8185167, 0.021285398, -1.9875485, -1.4432987, -0.42645997, -0.08704758, -0.09042055, 0.008345734, 0.13854085, 0.00014656025, -0.61636055, 0.0014690972, -0.00089473446, -0.06372755, 0.029681738, 0.02126768, 0.033864107, 1.9365994, 0.0007361686, 0.8378815, -0.3289622, 0.02990957, -0.3481966, -0.014761708, -1.4790889, -0.39987803, 0.66778237, 0.37295908, 0.07800242, 0.19964921, 0.015911236, -1.2357806, 2.307485, 0.010366534, -2.453191, -0.9509186, -1.5705742, 0.27018142, 0.040954825, -0.025361957, 1.1823225, -0.027570289, 0.9071816, -0.22726324, -0.031022083]]}
 >>>
@@ -99,7 +96,6 @@ dicee --dataset_dir KGs/UMLS --model DeCaL --num_epochs 1 --batch_size 512 --pat
 
 - [How to install on your system](docs/local.md)
 - [Development](docs/development.md) (External documentation of integrated components)
-
 
 ##### Virtual machine (for system administrators)
 
