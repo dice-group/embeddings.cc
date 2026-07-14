@@ -18,11 +18,11 @@
                     Positive examples
                     <textarea id="positive-examples" class="predict-input" spellcheck="false" autocorrect="off"
                         autocomplete="off" autocapitalize="off">
-                            http://whale.data.dice-research.org/resource#node1hhjj61gvx44683360
-                            http://whale.data.dice-research.org/resource#nodeeddb6167ffcc9fabfb9729a7e7d61
-                            http://whale.data.dice-research.org/resource#node1hhkflq3rx6748296
-                            http://whale.data.dice-research.org/resource#node1hhkf3390x14039410
-                            http://whale.data.dice-research.org/resource#node1hhjldi9ex32333187
+                            http://whale.data.dice-research.org/resource#node30c56d9e776b2f779f90349796d9935c
+                            http://whale.data.dice-research.org/resource#node4e3330d276e6bb211dd96564aabe3741
+                            http://whale.data.dice-research.org/resource#node5712dccd90d6232eebc534d47d6119e
+                            http://whale.data.dice-research.org/resource#nodecfbcd277f434d51173d28f6c91343cf
+                            http://whale.data.dice-research.org/resource#node913cf0aad98478c76ed623661d6e8d
                     </textarea>
                 </label>
 
@@ -30,16 +30,19 @@
                     Negative examples
                     <textarea id="negative-examples" class="predict-input" spellcheck="false" autocorrect="off"
                         autocomplete="off" autocapitalize="off">
-                            http://whale.data.dice-research.org/resource#node1hhkasoscx3716564
-                            http://whale.data.dice-research.org/resource#node1hhjjcbanx33124044
-                            http://whale.data.dice-research.org/resource#node38fd9e1535bd65875dc1179dd6db386
-                            http://whale.data.dice-research.org/resource#genid2dc200ecb7748f41dca2f81c5f1cd7ee2a2dN65743
-                            http://whale.data.dice-research.org/resource#node1hhk2c0mhx10098747
+                            http://whale.data.dice-research.org/resource#node884eeced41d863196ba159bd850ad26
+                            http://whale.data.dice-research.org/resource#node2bd95b447ea643df7ea1715d6e36c4
+                            http://whale.data.dice-research.org/resource#nodebdeed23f5a4f508c1528729ea6fa66cb
+                            http://whale.data.dice-research.org/resource#node99267a1654a59ce4c6321d39b9e8808c
+                            http://whale.data.dice-research.org/resource#nodeac7d8baf5b4af9822430885c49b4836
                     </textarea>
                 </label>
             </div>
 
-            <button id="predict-btn" type="submit">Predict</button>
+            <div class="predict-actions">
+                <button id="random-example-btn" type="button">Get random example</button>
+                <button id="predict-btn" type="submit">Predict</button>
+            </div>
         </form>
 
         <div id="predict-error-message"></div>
@@ -68,7 +71,7 @@
 
     </div>
     {% include 'footer.html' %}
-    <script src="/static/scripts/predict.js?v=2"></script>
+    <script src="/static/scripts/predict.js?v=3"></script>
 </body>
 
 </html>

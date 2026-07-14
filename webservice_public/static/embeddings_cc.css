@@ -275,7 +275,13 @@ textarea.predict-input {
     min-height: 190px;
 }
 
-#predict-btn:disabled {
+.predict-actions {
+    display: flex;
+    gap: 8px;
+}
+
+#predict-btn:disabled,
+#random-example-btn:disabled {
     cursor: wait;
     opacity: .7;
 }

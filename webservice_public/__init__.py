@@ -364,6 +364,36 @@ def create_app(test_config=None):
         log()
         return render_template('predict.htm', page_title='Predict')
 
+    @app.route('/class-examples', methods=['GET'])
+    def class_examples():
+        try:
+            response = httpx.get(
+                'http://131.234.29.20:8000/class-examples',
+                timeout=60,
+            )
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            try:
+                detail = e.response.json()
+            except ValueError:
+                detail = e.response.text
+
+            if isinstance(detail, dict) and 'detail' in detail:
+                detail = detail['detail']
+
+            return jsonify({
+                'error': 'Example service returned an error.',
+                'status_code': e.response.status_code,
+                'detail': detail,
+            }), 502
+        except httpx.RequestError as e:
+            return jsonify({
+                'error': 'Example service unavailable.',
+                'detail': str(e),
+            }), 502
+
+        return jsonify(response.json())
+
     @app.route('/news', methods=['GET'])
     def news():
         log()

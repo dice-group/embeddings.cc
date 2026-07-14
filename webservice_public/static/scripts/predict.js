@@ -1,9 +1,14 @@
 const PREDICT_ENDPOINT = "/predict";
+const CLASS_EXAMPLES_ENDPOINT = "/class-examples";
+
+function stripQuotes(value) {
+  return String(value).trim().replace(/^["']|["']$/g, "");
+}
 
 function parseUriList(value) {
   return value
     .split(/\r?\n/)
-    .map((item) => item.trim().replace(/^["']|["']$/g, ""))
+    .map(stripQuotes)
     .filter(Boolean);
 }
 
@@ -59,10 +64,53 @@ async function readResponseBody(response) {
   }
 }
 
+document.getElementById("random-example-btn").addEventListener("click", async () => {
+  const randomButton = document.getElementById("random-example-btn");
+  const predictButton = document.getElementById("predict-btn");
+  const positiveExamples = document.getElementById("positive-examples");
+  const negativeExamples = document.getElementById("negative-examples");
+  const errorMessage = document.getElementById("predict-error-message");
+  const resultContainer = document.getElementById("predict-result-container");
+  const expression = document.getElementById("predict-expression");
+  const rawOutput = document.getElementById("predict-raw-output");
+  const parsesAsDl = document.getElementById("predict-parses-as-dl");
+  const usedFallback = document.getElementById("predict-used-fallback");
+  const originalText = randomButton.textContent;
+
+  errorMessage.textContent = "";
+  randomButton.textContent = "Loading...";
+  randomButton.disabled = true;
+  predictButton.disabled = true;
+
+  try {
+    const response = await fetch(CLASS_EXAMPLES_ENDPOINT);
+    const data = await readResponseBody(response);
+
+    if (!response.ok) {
+      throw new Error(data.detail ? renderValue(data.detail) : renderError(data, response.status));
+    }
+
+    positiveExamples.value = (data.positive_uris || []).map(stripQuotes).join("\n");
+    negativeExamples.value = (data.negative_uris || []).map(stripQuotes).join("\n");
+    expression.textContent = renderValue(data.expression);
+    rawOutput.textContent = "";
+    parsesAsDl.textContent = "";
+    usedFallback.textContent = "";
+    resultContainer.style.display = "block";
+  } catch (error) {
+    errorMessage.textContent = error.message || "Could not get a random example.";
+  } finally {
+    randomButton.textContent = originalText;
+    randomButton.disabled = false;
+    predictButton.disabled = false;
+  }
+});
+
 document.getElementById("predict-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const button = document.getElementById("predict-btn");
+  const randomButton = document.getElementById("random-example-btn");
   const errorMessage = document.getElementById("predict-error-message");
   const resultContainer = document.getElementById("predict-result-container");
   const expression = document.getElementById("predict-expression");
@@ -79,6 +127,7 @@ document.getElementById("predict-form").addEventListener("submit", async (event)
   resultContainer.style.display = "none";
   button.textContent = "Loading...";
   button.disabled = true;
+  randomButton.disabled = true;
 
   const payload = {
     positive_uris: parseUriList(document.getElementById("positive-examples").value),
@@ -110,5 +159,6 @@ document.getElementById("predict-form").addEventListener("submit", async (event)
   } finally {
     button.textContent = origText;
     button.disabled = false;
+    randomButton.disabled = false;
   }
 });
