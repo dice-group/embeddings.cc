@@ -1,5 +1,6 @@
 const PREDICT_ENDPOINT = "/predict";
 const CLASS_EXAMPLES_ENDPOINT = "/class-examples";
+const EMBEDDINGS_ENDPOINT = "/api/v1/get_embeddings";
 
 function stripQuotes(value) {
   return String(value).trim().replace(/^["']|["']$/g, "");
@@ -62,6 +63,53 @@ async function readResponseBody(response) {
   } catch {
     return { detail: text };
   }
+}
+
+async function getEmbeddings(uris, label) {
+  if (uris.length === 0) {
+    return [];
+  }
+
+  const response = await fetch(EMBEDDINGS_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      index: "whale",
+      entities: uris,
+    }),
+  });
+  const data = await readResponseBody(response);
+
+  if (!response.ok) {
+    throw new Error(`Could not load ${label} embeddings: ${renderValue(data.detail || data)}`);
+  }
+
+  if (!Array.isArray(data)) {
+    throw new Error(`The ${label} embedding response has an invalid shape.`);
+  }
+
+  const embeddingsByUri = new Map();
+  for (const item of data) {
+    if (Array.isArray(item) && typeof item[0] === "string" && Array.isArray(item[1])) {
+      embeddingsByUri.set(item[0], item[1]);
+    }
+  }
+
+  const missingUris = uris.filter((uri) => !embeddingsByUri.has(uri));
+  if (missingUris.length > 0) {
+    throw new Error(
+      `Could not find embeddings for these ${label} examples:\n${missingUris.join("\n")}`
+    );
+  }
+
+  const embeddings = uris.map((uri) => embeddingsByUri.get(uri));
+  if (embeddings.some((embedding) => !Array.isArray(embedding))) {
+    throw new Error(`The ${label} embedding response has an invalid shape.`);
+  }
+
+  return embeddings;
 }
 
 document.getElementById("random-example-btn").addEventListener("click", async () => {
@@ -135,12 +183,19 @@ document.getElementById("predict-form").addEventListener("submit", async (event)
   button.disabled = true;
   randomButton.disabled = true;
 
-  const payload = {
-    positive_uris: parseUriList(document.getElementById("positive-examples").value),
-    negative_uris: parseUriList(document.getElementById("negative-examples").value),
-  };
+  const positiveUris = parseUriList(document.getElementById("positive-examples").value);
+  const negativeUris = parseUriList(document.getElementById("negative-examples").value);
 
   try {
+    const [positiveEmbeddings, negativeEmbeddings] = await Promise.all([
+      getEmbeddings(positiveUris, "positive"),
+      getEmbeddings(negativeUris, "negative"),
+    ]);
+    const payload = {
+      positive_embeddings: positiveEmbeddings,
+      negative_embeddings: negativeEmbeddings,
+    };
+
     const response = await fetch(PREDICT_ENDPOINT, {
       method: "POST",
       headers: {

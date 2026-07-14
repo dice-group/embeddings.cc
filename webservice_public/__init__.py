@@ -333,8 +333,8 @@ def create_app(test_config=None):
                 response = httpx.post(
                     'http://131.234.29.20:8000/predict',
                     json={
-                        'positive_uris': data.get('positive_uris', []),
-                        'negative_uris': data.get('negative_uris', []),
+                        'positive_embeddings': data.get('positive_embeddings', []),
+                        'negative_embeddings': data.get('negative_embeddings', []),
                     },
                     timeout=600,
                 )
