@@ -70,6 +70,8 @@ document.getElementById("random-example-btn").addEventListener("click", async ()
   const positiveExamples = document.getElementById("positive-examples");
   const negativeExamples = document.getElementById("negative-examples");
   const errorMessage = document.getElementById("predict-error-message");
+  const exampleExpressionContainer = document.getElementById("example-expression-container");
+  const exampleExpression = document.getElementById("example-expression");
   const resultContainer = document.getElementById("predict-result-container");
   const expression = document.getElementById("predict-expression");
   const rawOutput = document.getElementById("predict-raw-output");
@@ -78,6 +80,13 @@ document.getElementById("random-example-btn").addEventListener("click", async ()
   const originalText = randomButton.textContent;
 
   errorMessage.textContent = "";
+  exampleExpression.textContent = "";
+  exampleExpressionContainer.style.display = "none";
+  expression.textContent = "";
+  rawOutput.textContent = "";
+  parsesAsDl.textContent = "";
+  usedFallback.textContent = "";
+  resultContainer.style.display = "none";
   randomButton.textContent = "Loading...";
   randomButton.disabled = true;
   predictButton.disabled = true;
@@ -92,11 +101,8 @@ document.getElementById("random-example-btn").addEventListener("click", async ()
 
     positiveExamples.value = (data.positive_uris || []).map(stripQuotes).join("\n");
     negativeExamples.value = (data.negative_uris || []).map(stripQuotes).join("\n");
-    expression.textContent = renderValue(data.expression);
-    rawOutput.textContent = "";
-    parsesAsDl.textContent = "";
-    usedFallback.textContent = "";
-    resultContainer.style.display = "block";
+    exampleExpression.textContent = renderValue(data.expression);
+    exampleExpressionContainer.style.display = "block";
   } catch (error) {
     errorMessage.textContent = error.message || "Could not get a random example.";
   } finally {

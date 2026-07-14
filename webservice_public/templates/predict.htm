@@ -18,11 +18,6 @@
                     Positive examples
                     <textarea id="positive-examples" class="predict-input" spellcheck="false" autocorrect="off"
                         autocomplete="off" autocapitalize="off">
-                            http://whale.data.dice-research.org/resource#node30c56d9e776b2f779f90349796d9935c
-                            http://whale.data.dice-research.org/resource#node4e3330d276e6bb211dd96564aabe3741
-                            http://whale.data.dice-research.org/resource#node5712dccd90d6232eebc534d47d6119e
-                            http://whale.data.dice-research.org/resource#nodecfbcd277f434d51173d28f6c91343cf
-                            http://whale.data.dice-research.org/resource#node913cf0aad98478c76ed623661d6e8d
                     </textarea>
                 </label>
 
@@ -30,11 +25,6 @@
                     Negative examples
                     <textarea id="negative-examples" class="predict-input" spellcheck="false" autocorrect="off"
                         autocomplete="off" autocapitalize="off">
-                            http://whale.data.dice-research.org/resource#node884eeced41d863196ba159bd850ad26
-                            http://whale.data.dice-research.org/resource#node2bd95b447ea643df7ea1715d6e36c4
-                            http://whale.data.dice-research.org/resource#nodebdeed23f5a4f508c1528729ea6fa66cb
-                            http://whale.data.dice-research.org/resource#node99267a1654a59ce4c6321d39b9e8808c
-                            http://whale.data.dice-research.org/resource#nodeac7d8baf5b4af9822430885c49b4836
                     </textarea>
                 </label>
             </div>
@@ -46,6 +36,11 @@
         </form>
 
         <div id="predict-error-message"></div>
+
+        <div id="example-expression-container" class="example-expression-container">
+            <h2>Example expression</h2>
+            <div id="example-expression"></div>
+        </div>
 
         <div id="predict-result-container" class="predict-result-container">
             <h2>Result</h2>
@@ -71,7 +66,7 @@
 
     </div>
     {% include 'footer.html' %}
-    <script src="/static/scripts/predict.js?v=3"></script>
+    <script src="/static/scripts/predict.js?v=6"></script>
 </body>
 
 </html>

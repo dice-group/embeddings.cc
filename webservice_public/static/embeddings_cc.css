@@ -298,6 +298,16 @@ textarea.predict-input {
     margin-top: 24px;
 }
 
+.example-expression-container {
+    display: none;
+    margin-top: 24px;
+}
+
+#example-expression {
+    font-family: 'Roboto Mono', monospace;
+    overflow-wrap: anywhere;
+}
+
 .predict-result-table td {
     font-family: 'Roboto Mono', monospace;
     overflow-wrap: anywhere;
