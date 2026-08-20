@@ -8,10 +8,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const globalOutput = document.getElementById("global-embeddings-output");
   const errorMsg = document.getElementById("error-message");
   const localLabel = document.getElementById("local-embeddings-label");
+  const sourceInputs = document.querySelectorAll(
+    'input[name="entity-source"]'
+  );
+  const defaultBtnText = embedBtn ? embedBtn.textContent : "";
+  let activeRequest = null;
+  let requestVersion = 0;
+
+  function resetEmbeddings() {
+    requestVersion += 1;
+    if (activeRequest) activeRequest.abort();
+    activeRequest = null;
+
+    if (entityInput) entityInput.value = "";
+    setEmbeddingsDomain("");
+    if (embedOutput) {
+      embedOutput.value = "";
+      embedOutput.style.display = "none";
+    }
+    if (localLabel) localLabel.style.display = "none";
+    if (globalOutput) globalOutput.value = "";
+    if (globalContainer) globalContainer.style.display = "none";
+    if (errorMsg) {
+      errorMsg.textContent = "";
+      errorMsg.style.display = "none";
+    }
+    if (embedBtn) {
+      embedBtn.textContent = defaultBtnText;
+      embedBtn.disabled = false;
+    }
+  }
+
+  sourceInputs.forEach((input) => {
+    input.addEventListener("change", resetEmbeddings);
+  });
 
   if (embedBtn && entityInput && embedOutput && errorMsg) {
     embedBtn.addEventListener("click", async (e) => {
       e.preventDefault();
+
+      if (activeRequest) activeRequest.abort();
+      const controller = new AbortController();
+      activeRequest = controller;
+      const currentRequestVersion = ++requestVersion;
 
       const entity = (entityInput.value || "").trim();
       const selectedSource =
@@ -19,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
           ?.value || "wdc";
       setEmbeddingsDomain(getDomainFromUri(entity));
 
-      const origText = embedBtn.textContent;
       embedBtn.textContent = "Loading...";
       embedBtn.disabled = true;
       errorMsg.textContent = "";
@@ -36,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedSource !== "wdc") {
           const sparqlResp = await fetch("/demo/embeddings_sparql", {
             method: "POST",
+            signal: controller.signal,
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
@@ -45,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!sparqlResp.ok) throw new Error(sparqlResp.statusText);
 
           const data = await sparqlResp.json();
+          if (currentRequestVersion !== requestVersion) return;
           const embeddings = (data && data.embeddings) || [];
           if (embeddings.length) {
             embedOutput.style.display = "block";
@@ -61,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const localResp = await fetch("/demo/embeddings", {
             method: "POST",
+            signal: controller.signal,
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
@@ -74,6 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         } catch (_) {}
 
+        if (
+          controller.signal.aborted ||
+          currentRequestVersion !== requestVersion
+        )
+          return;
+
         if (localEmbeddings && localEmbeddings.length) {
           embedOutput.style.display = "block";
           embedOutput.value = localEmbeddings;
@@ -82,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
           try {
             const globalResp = await fetch("/demo/embeddings", {
               method: "POST",
+              signal: controller.signal,
               headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
@@ -94,6 +142,12 @@ document.addEventListener("DOMContentLoaded", () => {
               globalEmbeddings = (data && data.embeddings) || [];
             }
           } catch (_) {}
+
+          if (
+            controller.signal.aborted ||
+            currentRequestVersion !== requestVersion
+          )
+            return;
 
           if (
             globalEmbeddings &&
@@ -116,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const resp = await fetch("/whale/embeddings", {
           method: "POST",
+          signal: controller.signal,
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -124,6 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         if (!resp.ok) throw new Error(resp.statusText);
         const { embeddings } = await resp.json();
+        if (currentRequestVersion !== requestVersion) return;
         if (embeddings && embeddings.length) {
           embedOutput.style.display = "block";
           embedOutput.value = embeddings;
@@ -133,13 +189,21 @@ document.addEventListener("DOMContentLoaded", () => {
           errorMsg.style.display = "block";
         }
       } catch (err) {
+        if (
+          err.name === "AbortError" ||
+          currentRequestVersion !== requestVersion
+        )
+          return;
         console.error("Failed to load embeddings:", err);
         errorMsg.textContent =
           "Error fetching embedding. Please try again later.";
         errorMsg.style.display = "block";
       } finally {
-        embedBtn.textContent = origText;
-        embedBtn.disabled = false;
+        if (currentRequestVersion === requestVersion) {
+          activeRequest = null;
+          embedBtn.textContent = defaultBtnText;
+          embedBtn.disabled = false;
+        }
       }
     });
   }
