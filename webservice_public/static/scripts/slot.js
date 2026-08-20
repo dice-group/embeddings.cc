@@ -76,9 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateCount() {
     fetch("/whale/count")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(r.statusText);
+        return r.json();
+      })
       .then((data) => {
-        const real = data.count ?? 0;
+        if (data.count == null) throw new Error("Count unavailable");
+        const real = data.count;
         const plain = new Intl.NumberFormat("en-US", {
           useGrouping: false,
         }).format(real);
@@ -154,5 +158,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   updateCount();
-  setInterval(updateCount, 60_000);
 });

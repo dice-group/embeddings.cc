@@ -27,7 +27,22 @@
         </h1>
 
         <div id="entity-container">
-            <button id="random-btn">Get random entities</button>
+            <div class="random-controls">
+                <fieldset class="entity-source-selector">
+                    <legend class="visually-hidden">Entity source</legend>
+
+                    <input type="radio" id="entity-source-wdc" name="entity-source" value="wdc" checked>
+                    <label for="entity-source-wdc">WDC</label>
+
+                    <input type="radio" id="entity-source-wikidata" name="entity-source" value="wikidata">
+                    <label for="entity-source-wikidata">Wikidata</label>
+
+                    <input type="radio" id="entity-source-dbpedia" name="entity-source" value="dbpedia">
+                    <label for="entity-source-dbpedia">DBpedia</label>
+                </fieldset>
+
+                <button id="random-btn">Get random entities</button>
+            </div>
             <div id="random-error-message"></div>
             <div id="random-entities">
                 {% for e in entities %}

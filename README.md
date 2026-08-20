@@ -1,18 +1,43 @@
-Note: This project was developed while working on the article ***Universal Knowledge Graph Embeddings*** (repository: ([https://github.com/dice-group/Universal_Embeddings], publication [link](https://dl.acm.org/doi/10.1145/3589335.3651978))).
+Note: This project was developed while working on the article **_Universal Knowledge Graph Embeddings_** (repository: ([https://github.com/dice-group/Universal_Embeddings], publication [link](https://dl.acm.org/doi/10.1145/3589335.3651978))).
 
 # Universal Knowledge Graph Embeddings
 
 This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([also without TLS](http://embeddings.cs.uni-paderborn.de/)).
 
-
 ## Documentation
 
+### albert branch homepage workflow
+
+                 User enters IRI
+                       │
+                       ▼
+                Get embeddings
+                       │
+                       ▼
+             /demo/embeddings
+              index=local_demo
+                       │
+                ┌──────┴──────┐
+              found         not found
+                │               │
+                ▼               ▼
+       display local       /whale/embeddings
+         embedding              │
+                │               ▼
+                │          main Elasticsearch
+                │            index "whale"
+                ▼               │
+       /demo/embeddings          ▼
+        index=global_demo   display embedding
+                │
+                ▼
+       display global
+          embedding
 
 ### Public API (for users)
 
 - The API is documented at [embeddings.cc/api](https://embeddings.cc/api)
 - Additional examples are provided in [Python examples](api/embeddings_cc_public_examples.py) and [JavaScript HTML form](api/embeddings_cc_public.htm)
-
 
 ### Index API (for data developers)
 
@@ -25,7 +50,7 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 - **Important**: Create an alias for each index to be available in public. Only aliases can be accessed by webservices.
 
 | Webservice             | Method | Parameters                          |
-|------------------------|--------|-------------------------------------|
+| ---------------------- | ------ | ----------------------------------- |
 | /ping                  | GET    | -                                   |
 | /count                 | GET    | index                               |
 | /get_embeddings        | GET    | index, entity                       |
@@ -38,10 +63,10 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
 | /alias_put             | POST   | password, index, alias              |
 | /alias_delete          | POST   | password, index, alias              |
 
-
 ### Development (for python developers)
 
 #### Quick start for Linux
+
 This part helps you train embeddings for your knowledge graph, serve these embeddings on the embeddinng.cc API then query for embeddings via http requests or via a web browser. Please follow instructions carefully.
 
 1. Clone this repository: `git clone https://github.com/dice-group/embeddings.cc.git`
@@ -61,7 +86,7 @@ mkdir -p instance
 cp -f ./config.py instance
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512
-shasum -a 512 -c elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512 
+shasum -a 512 -c elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512
 tar -xzf elasticsearch-8.3.3-linux-x86_64.tar.gz
 wget https://files.dice-research.org/datasets/dice-embeddings/KGs.zip --no-check-certificate && unzip KGs.zip && rm -rf KGs.zip
 dicee --dataset_dir KGs/UMLS --model DeCaL --num_epochs 1 --batch_size 512 --path_to_store_single_run ./embeddings --save_embeddings_as_csv --eval_model "None" --embedding_dim 64
@@ -82,7 +107,7 @@ dicee --dataset_dir KGs/UMLS --model DeCaL --num_epochs 1 --batch_size 512 --pat
 
 11. Now access the URL [http://127.0.0.1:1337/](http://127.0.0.1:1337/) to access the embeddings_cc API with your uploaded embeddings.
 
-*HTTP Requests to the API*:
+_HTTP Requests to the API_:
 
 ```python
 >>> import httpx
@@ -99,7 +124,6 @@ dicee --dataset_dir KGs/UMLS --model DeCaL --num_epochs 1 --batch_size 512 --pat
 
 - [How to install on your system](docs/local.md)
 - [Development](docs/development.md) (External documentation of integrated components)
-
 
 ##### Virtual machine (for system administrators)
 

@@ -5,7 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (container) {
     container.querySelectorAll("span.entity").forEach((span) => {
-      applyDomainColor(span, span.textContent);
+      const entity = span.dataset.entity || span.textContent.trim();
+      span.dataset.entity = entity;
+      span.textContent = decodeEntityUriForDisplay(entity);
+      span.onclick = () => updateEntitySubmit(entity);
+      applyDomainColor(span, entity);
     });
   }
 
@@ -20,7 +24,17 @@ document.addEventListener("DOMContentLoaded", function () {
       randomError.style.display = "none";
 
       try {
-        const resp = await fetch("/demo/random_uris_global");
+        const selectedSource =
+          document.querySelector('input[name="entity-source"]:checked')
+            ?.value || "wdc";
+        const endpoint =
+          selectedSource === "wdc"
+            ? "/demo/random_uris_global"
+            : `/demo/random_uris_sparql?source=${encodeURIComponent(
+                selectedSource
+              )}`;
+
+        const resp = await fetch(endpoint);
         if (!resp.ok) throw new Error(resp.statusText);
         const { entities } = await resp.json();
 
@@ -29,7 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
           entities.forEach((val) => {
             const span = document.createElement("span");
             span.className = "entity";
-            span.textContent = val;
+            span.dataset.entity = val;
+            span.textContent = decodeEntityUriForDisplay(val);
             span.onclick = () => updateEntitySubmit(val);
 
             applyDomainColor(span, val);

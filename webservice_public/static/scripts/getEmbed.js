@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const entity = (entityInput.value || "").trim();
+      const selectedSource =
+        document.querySelector('input[name="entity-source"]:checked')
+          ?.value || "wdc";
       setEmbeddingsDomain(getDomainFromUri(entity));
 
       const origText = embedBtn.textContent;
@@ -29,6 +32,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         if (!entity) return;
+
+        if (selectedSource !== "wdc") {
+          const sparqlResp = await fetch("/demo/embeddings_sparql", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ entity, source: selectedSource }),
+          });
+          if (!sparqlResp.ok) throw new Error(sparqlResp.statusText);
+
+          const data = await sparqlResp.json();
+          const embeddings = (data && data.embeddings) || [];
+          if (embeddings.length) {
+            embedOutput.style.display = "block";
+            embedOutput.value = embeddings;
+          } else {
+            errorMsg.textContent =
+              "No embeddings found for that entity. Please try another input.";
+            errorMsg.style.display = "block";
+          }
+          return;
+        }
 
         let localEmbeddings = [];
         try {

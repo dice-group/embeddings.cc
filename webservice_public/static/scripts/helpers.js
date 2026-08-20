@@ -12,6 +12,19 @@ function normalizeUri(raw) {
   return s;
 }
 
+function decodeEntityUriForDisplay(raw) {
+  const uri = normalizeUri(raw);
+  let decoded = uri;
+
+  try {
+    decoded = decodeURIComponent(uri);
+  } catch (_) {}
+
+  return decoded.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
+    String.fromCharCode(parseInt(hex, 16))
+  );
+}
+
 function getDomainFromUri(raw) {
   const s = normalizeUri(raw);
 
