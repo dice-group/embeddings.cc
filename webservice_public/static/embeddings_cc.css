@@ -252,6 +252,13 @@ button:hover {
     border-right: 1px solid #000;
 }
 
+.entity-source-count {
+    margin-left: 6px;
+    font-size: .85em;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
 .entity-source-selector label:hover,
 .entity-source-selector input[type=radio]:checked + label {
     background: #d1e28a;

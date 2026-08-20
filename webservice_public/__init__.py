@@ -534,25 +534,38 @@ WHERE {{
             whale_response = client.count(index='whale', request_timeout=30)
             whale_count = int(whale_response.get('count', 0))
 
-            sparql_query = '''SELECT (COUNT(*) AS ?tripleCount)
-WHERE {
-  ?s ?p ?o .
-}'''
             sparql_endpoint = current_app.config.get(
                 'SPARQL_ENDPOINT',
                 'https://sparql.embeddings.cc/sparql'
             )
-            sparql_response = httpx.post(
-                sparql_endpoint,
-                data={'query': sparql_query},
-                headers={'Accept': 'application/sparql-results+json'},
-                timeout=30.0,
-            )
-            sparql_response.raise_for_status()
-            bindings = sparql_response.json().get('results', {}).get('bindings', [])
-            sparql_count = int(bindings[0]['tripleCount']['value'])
 
-            return {'count': whale_count + sparql_count}
+            sparql_counts = {}
+            with httpx.Client(timeout=30.0) as sparql_client:
+                for source, graph in DEMO_SPARQL_GRAPHS.items():
+                    sparql_query = f'''SELECT (COUNT(*) AS ?tripleCount)
+WHERE {{
+  GRAPH <{graph}> {{
+    ?s ?p ?o .
+  }}
+}}'''
+                    sparql_response = sparql_client.post(
+                        sparql_endpoint,
+                        data={'query': sparql_query},
+                        headers={'Accept': 'application/sparql-results+json'},
+                    )
+                    sparql_response.raise_for_status()
+                    bindings = sparql_response.json().get(
+                        'results', {}
+                    ).get('bindings', [])
+                    sparql_counts[source] = int(
+                        bindings[0]['tripleCount']['value']
+                    )
+
+            source_counts = {'wdc': whale_count, **sparql_counts}
+            return {
+                'count': sum(source_counts.values()),
+                'sources': source_counts,
+            }
         except Exception as e:
             app.logger.warning(f"Combined embeddings count failed: {e}")
             return {'count': None}, 503
