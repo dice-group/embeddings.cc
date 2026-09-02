@@ -16,6 +16,11 @@ DEMO_SPARQL_GRAPHS = {
     'dbpedia': 'https://data.embeddings.cc/dbpedia',
 }
 
+DEMO_AUTOCOMPLETE_ENDPOINTS = {
+    'wikidata': 'https://wikidata.data.dice-research.org/sparql',
+    'dbpedia': 'https://dbpedia.data.dice-research.org/sparql',
+}
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -464,6 +469,59 @@ LIMIT 100'''
 
         picks = random.sample(entities, min(15, len(entities)))
         return jsonify(entities=picks), 200
+
+    @app.route('/demo/autocomplete_sparql', methods=['GET'])
+    def demo_autocomplete_sparql():
+        source = (request.args.get('source') or '').strip().lower()
+        endpoint = DEMO_AUTOCOMPLETE_ENDPOINTS.get(source)
+        if endpoint is None:
+            return jsonify(error='Unsupported entity source'), 400
+
+        search_term = (request.args.get('search_term') or '').strip()
+        if len(search_term) < 3:
+            return jsonify([]), 200
+        if len(search_term) > 100:
+            return jsonify(error='Search term is too long'), 400
+
+        # A JSON string literal uses the same escaping needed here for quotes,
+        # backslashes and control characters in a SPARQL string literal.
+        search_literal = json.dumps(search_term.lower())
+        query = f'''PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?entity ?label
+WHERE {{
+  ?entity rdfs:label ?label .
+  FILTER(LANG(?label) = "en")
+  FILTER(CONTAINS(LCASE(STR(?label)), {search_literal}))
+}}
+LIMIT 5'''
+
+        try:
+            response = httpx.post(
+                endpoint,
+                data={'query': query},
+                headers={'Accept': 'application/sparql-results+json'},
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            bindings = response.json().get('results', {}).get('bindings', [])
+            suggestions = [
+                {
+                    'entity': binding['entity']['value'],
+                    'label': binding['label']['value'],
+                    'source': source,
+                }
+                for binding in bindings
+                if binding.get('entity', {}).get('type') == 'uri'
+                and binding['entity'].get('value')
+                and binding.get('label', {}).get('value')
+            ]
+            return jsonify(suggestions), 200
+        except (httpx.HTTPError, ValueError, TypeError, KeyError) as e:
+            current_app.logger.warning(
+                f'SPARQL autocomplete failed ({source}): {e}'
+            )
+            return jsonify(error='Autocomplete unavailable'), 502
 
     @app.route('/demo/embeddings_sparql', methods=['POST'])
     def demo_embeddings_sparql():

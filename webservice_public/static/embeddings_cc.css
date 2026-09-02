@@ -203,6 +203,64 @@ input:hover[type=text] {
     background: #f1f6db;
 }
 
+.autoComplete_wrapper {
+    display: inline-block;
+    position: relative;
+    width: 50%;
+}
+
+.autoComplete_wrapper > input[type=text] {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.autoComplete_wrapper > ul {
+    box-sizing: border-box;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    max-height: 240px;
+    margin: 4px 0 0;
+    padding: 0;
+    overflow-y: auto;
+    border: 1px solid #000;
+    background: #e5f2f8;
+}
+
+.autoComplete_wrapper > ul[hidden] {
+    display: none;
+}
+
+.autoComplete_wrapper > ul > li {
+    padding: 8px;
+    overflow: hidden;
+    border-bottom: 1px solid #000;
+    font-family: 'Roboto Mono', monospace;
+    font-size: .85em;
+    list-style: none;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.autoComplete_wrapper > ul > li:last-child {
+    border-bottom: 0;
+}
+
+.autoComplete_wrapper > ul > li:hover,
+.autoComplete_wrapper > ul > li[aria-selected=true] {
+    background: #d1e28a;
+}
+
+.autoComplete_wrapper mark {
+    background: transparent;
+    color: inherit;
+    font-weight: bold;
+}
+
 input:hover[type=submit],
 button:hover {
     background: #d1e28a;
