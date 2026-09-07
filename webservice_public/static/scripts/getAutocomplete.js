@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     selector: "#entity-input",
     threshold: 3,
     debounce: 300,
+    // PostgreSQL already matches and ranks labels, types and spelling variants.
+    searchEngine: (query, record) => record,
     data: {
       keys: ["label"],
       src: async (query) => {
@@ -65,7 +67,15 @@ document.addEventListener("DOMContentLoaded", () => {
       maxResults: 5,
     },
     resultItem: {
-      highlight: true,
+      element: (item, data) => {
+        const suggestion = data.value;
+        const types = Array.isArray(suggestion.types)
+          ? suggestion.types.join(", ")
+          : suggestion.types;
+        item.textContent = types
+          ? `${suggestion.label} — ${types}`
+          : suggestion.label;
+      },
     },
     events: {
       input: {

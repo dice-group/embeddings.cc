@@ -8,7 +8,8 @@ import httpx
 from urllib.parse import urlsplit
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
-from . import es
+from . import es, postgres_search
+from dotenv import load_dotenv
 
 
 DEMO_SPARQL_GRAPHS = {
@@ -24,6 +25,7 @@ DEMO_AUTOCOMPLETE_ENDPOINTS = {
 
 def create_app(test_config=None):
     # create and configure the app
+    load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
     app = Flask(__name__, instance_relative_config=True)
 
     if test_config is None:
@@ -40,6 +42,7 @@ def create_app(test_config=None):
         pass
 
     es.init_app(app)
+    postgres_search.init_app(app)
 
     # Webservices ------------------------------------------------------------------------------------------------------
 
@@ -482,6 +485,16 @@ LIMIT 100'''
             return jsonify([]), 200
         if len(search_term) > 100:
             return jsonify(error='Search term is too long'), 400
+
+        if source == 'wikidata':
+            try:
+                return jsonify(postgres_search.search(search_term)), 200
+            except Exception as error:
+                # Do not log connection details or credentials.
+                current_app.logger.warning(
+                    'Wikidata autocomplete failed (%s)', type(error).__name__
+                )
+                return jsonify(error='Autocomplete unavailable'), 503
 
         # A JSON string literal uses the same escaping needed here for quotes,
         # backslashes and control characters in a SPARQL string literal.
