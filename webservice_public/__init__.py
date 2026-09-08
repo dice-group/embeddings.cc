@@ -477,7 +477,7 @@ LIMIT 100'''
     def demo_autocomplete_sparql():
         source = (request.args.get('source') or '').strip().lower()
         endpoint = DEMO_AUTOCOMPLETE_ENDPOINTS.get(source)
-        if endpoint is None:
+        if endpoint is None and source not in postgres_search.SOURCES:
             return jsonify(error='Unsupported entity source'), 400
 
         search_term = (request.args.get('search_term') or '').strip()
@@ -486,13 +486,13 @@ LIMIT 100'''
         if len(search_term) > 100:
             return jsonify(error='Search term is too long'), 400
 
-        if source == 'wikidata':
+        if source in postgres_search.SOURCES:
             try:
-                return jsonify(postgres_search.search(search_term)), 200
+                return jsonify(postgres_search.search(search_term, source=source)), 200
             except Exception as error:
                 # Do not log connection details or credentials.
                 current_app.logger.warning(
-                    'Wikidata autocomplete failed (%s)', type(error).__name__
+                    '%s autocomplete failed (%s)', source, type(error).__name__
                 )
                 return jsonify(error='Autocomplete unavailable'), 503
 

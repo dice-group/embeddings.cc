@@ -48,7 +48,7 @@ types
 search_vector
 ```
 
-`source` identifies the dataset, allowing searches to be restricted to Wikidata, DBpedia, WDC, Predict-feature or performed across several.
+`source` identifies the dataset, allowing searches to be restricted to Wikidata (1), DBpedia (2), WDC (3), Predict-feature (4) or performed across several.
 
 The `search_vector` is a PostgreSQL `tsvector` generated from the searchable textual fields. It is not an embedding vector. PostgreSQL creates a GIN inverted index over this column, which maps normalized terms to the entities containing them.
 

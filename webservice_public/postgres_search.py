@@ -1,4 +1,4 @@
-"""Wikidata autocomplete backed by the existing entity_search table."""
+"""Wikidata, DBpedia and WDC autocomplete backed by entity_search."""
 
 import atexit
 import os
@@ -11,6 +11,7 @@ from psycopg_pool import ConnectionPool
 
 _pool_lock = threading.Lock()
 LIMIT = 5
+SOURCES = {'wikidata': 1, 'dbpedia': 4, 'wdc': 3}
 
 
 def init_app(app):
@@ -56,7 +57,7 @@ def get_pool():
         return pool
 
 
-def search(search_term):
+def search(search_term, source='wikidata'):
     """Try both FTS modes; use label typos only if neither scores well.
 
     FTS scores use ts_rank_cd normalization 32. They are ranking heuristics,
@@ -64,6 +65,7 @@ def search(search_term):
     Word similarity matches the input against the best portion of a label.
     The trigram predicate targets an existing pg_trgm index on label.
     """
+    source_id = SOURCES[source]
     minimum = float(current_app.config['WIKIDATA_FTS_MIN_SCORE'])
     trigram_minimum = float(current_app.config['WIKIDATA_TRIGRAM_MIN_SCORE'])
     if not 0 <= minimum <= 1 or not 0 <= trigram_minimum <= 1:
@@ -90,10 +92,10 @@ def search(search_term):
                     SELECT entity_iri, label, types,
                            ts_rank_cd(search_vector, %(query)s::tsquery, 32) AS score
                     FROM entity_search
-                    WHERE source = 1 AND search_vector @@ %(query)s::tsquery
+                    WHERE source = %(source_id)s AND search_vector @@ %(query)s::tsquery
                     ORDER BY score DESC, label, entity_iri
                     LIMIT 5
-                    """, {'query': query},
+                    """, {'query': query, 'source_id': source_id},
                 ).fetchall()
             best_scores.append(max((row['score'] for row in rows), default=0))
             for row in rows:
@@ -116,10 +118,10 @@ def search(search_term):
                 SELECT entity_iri, label, types,
                        word_similarity(%(term)s, label) AS score
                 FROM entity_search
-                WHERE source = 1 AND label %%> %(term)s
+                WHERE source = %(source_id)s AND label %%> %(term)s
                 ORDER BY score DESC, label, entity_iri
                 LIMIT 5
-                """, {'term': search_term},
+                """, {'term': search_term, 'source_id': source_id},
             ).fetchall()
             # The two score scales are not comparable. Prefer qualifying typo
             # results to weak FTS results, then fill any remaining slots.
@@ -133,6 +135,6 @@ def search(search_term):
 
     return [
         {'entity': row['entity_iri'], 'label': row['label'],
-         'types': row['types'], 'source': 'wikidata'}
+         'types': row['types'], 'source': source}
         for row in rows[:LIMIT]
     ]

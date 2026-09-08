@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!entityInput || typeof autoComplete === "undefined") return;
 
-  const autocompleteSources = new Set(["wikidata", "dbpedia"]);
+  const autocompleteSources = new Set(["wikidata", "dbpedia", "wdc"]);
   let activeRequest = null;
   let requestVersion = 0;
 
