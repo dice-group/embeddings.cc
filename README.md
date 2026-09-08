@@ -4,9 +4,9 @@ Note: This project was developed while working on the article **_Universal Knowl
 
 This repository contains code to run [embeddings.cc](https://embeddings.cc/) and [embeddings.cs.upb.de](https://embeddings.cs.upb.de:8443/) ([also without TLS](http://embeddings.cs.uni-paderborn.de/)).
 
-## Documentation
+# Documentation
 
-### albert branch homepage workflow
+## albert branch homepage workflow
 
                  User enters IRI
                        │
@@ -33,6 +33,77 @@ This repository contains code to run [embeddings.cc](https://embeddings.cc/) and
                 ▼
        display global
           embedding
+
+## Full-Text Entity Search
+
+The website uses PostgreSQL Full-Text Search (FTS) to provide fast text-based entity lookup across collections.
+
+Searchable entities are stored in PostgreSQL with the following structure:
+
+```text
+entity_iri
+source
+label
+types
+search_vector
+```
+
+`source` identifies the dataset, allowing searches to be restricted to Wikidata, DBpedia, WDC, Predict-feature or performed across several.
+
+The `search_vector` is a PostgreSQL `tsvector` generated from the searchable textual fields. It is not an embedding vector. PostgreSQL creates a GIN inverted index over this column, which maps normalized terms to the entities containing them.
+
+Conceptually:
+
+```text
+malen       → entity 12, entity 84, ...
+footballer  → entity 12, entity 53, ...
+```
+
+A query such as:
+
+```text
+malen footballer
+```
+
+can therefore retrieve entities containing both terms without scanning every entity in the database.
+
+### Search strategy
+
+The search uses several matching levels:
+
+1. **Full-text search** for normal word-based queries.
+
+2. **Prefix search** for incomplete words, for example:
+
+   ```text
+   barac
+   ```
+
+   can match:
+
+   ```text
+   Barack
+   ```
+
+3. **Trigram similarity (**`pg_trgm`**)** is used as a fallback for fuzzy matches and spelling mistakes.
+
+Results are ranked by relevance and limited to the best matches.
+
+The PostgreSQL search layer is responsible only for entity discovery. Once an entity IRI has been found, the website can use that IRI for subsequent SPARQL queries against the corresponding RDF knowledge graph.
+
+```text
+User query
+    ↓
+PostgreSQL FTS
+    ↓
+Ranked entity IRIs
+    ↓
+Wikidata / DBpedia / WDC / Predict-feature
+    ↓
+SPARQL / entity data
+```
+
+This separation keeps text search fast while preserving SPARQL for structured graph queries.
 
 ### Public API (for users)
 
