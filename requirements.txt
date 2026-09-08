@@ -9,4 +9,5 @@ psycopg[binary,pool]>=3.1,<4
 python-dotenv>=0.21,<2
 pyuwsgi
 elasticsearch==8.3.1
+gunicorn
 #uwsgi
