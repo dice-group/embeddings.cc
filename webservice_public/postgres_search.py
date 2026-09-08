@@ -20,8 +20,8 @@ def init_app(app):
         'WIKIDATA_PG_DATABASE': 'postgres',
         'WIKIDATA_PG_USER': 'postgres',
         'WIKIDATA_PG_PASSWORD': '',
-        'WIKIDATA_FTS_MIN_SCORE': '0.9',
-        'WIKIDATA_TRIGRAM_MIN_SCORE': '0.7',
+        'WIKIDATA_FTS_MIN_SCORE': '0.05',
+        'WIKIDATA_TRIGRAM_MIN_SCORE': '0.3',
     }
     for key, default in defaults.items():
         app.config.setdefault(key, os.getenv(key, default))
