@@ -231,6 +231,10 @@ input:hover[type=text] {
     background: #e5f2f8;
 }
 
+.old-page .autoComplete_wrapper > ul {
+    width: min(800px, calc(100vw - 30px));
+}
+
 .autoComplete_wrapper > ul[hidden] {
     display: none;
 }
