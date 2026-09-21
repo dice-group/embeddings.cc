@@ -12,6 +12,9 @@ ES_HOST_DEMO       = os.getenv('ES_HOST_DEMO', '')
 ES_USER_DEMO       = os.getenv('ES_USER', '')
 ES_PASSWORD_DEMO   = os.getenv('ES_PASSWORD', '')
 
+# SPARQL endpoint used for the Wikidata and DBpedia homepage demos.
+SPARQL_ENDPOINT = os.getenv('SPARQL_ENDPOINT', 'https://sparql.embeddings.cc/sparql')
+
 #ES_INDEX      = 'index_test'
 #ES_INDEX      = 'dbpedia_en_fr_100k_procrustes_v2'
 #ES_INDEX      = 'dbpedia_en_fr_15k_procrustes'

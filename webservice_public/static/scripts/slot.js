@@ -8,6 +8,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let previousPlain = null;
 
+  function formatCompactCount(value) {
+    if (!Number.isFinite(value)) return "—";
+    if (value >= 1_000_000_000) {
+      return `${(value / 1_000_000_000).toFixed(1).replace(/\.0$/, "")}B`;
+    }
+    if (value >= 1_000_000) {
+      return `${Math.round(value / 1_000_000)}M`;
+    }
+    return new Intl.NumberFormat("en-US").format(value);
+  }
+
+  function updateSourceCounts(sourceCounts) {
+    document.querySelectorAll("[data-source-count]").forEach((element) => {
+      const value = Number(sourceCounts?.[element.dataset.sourceCount]);
+      element.textContent = formatCompactCount(value);
+    });
+  }
+
   function initReels(n) {
     slot.innerHTML = "";
     strips = [];
@@ -76,9 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateCount() {
     fetch("/whale/count")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(r.statusText);
+        return r.json();
+      })
       .then((data) => {
-        const real = data.count ?? 0;
+        if (data.count == null) throw new Error("Count unavailable");
+        updateSourceCounts(data.sources);
+        const real = data.count;
         const plain = new Intl.NumberFormat("en-US", {
           useGrouping: false,
         }).format(real);
@@ -147,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
         previousPlain = plain;
       })
       .catch(() => {
+        updateSourceCounts({});
         slot.style.display = "none";
         countEl.style.display = "inline";
         countEl.textContent = "MILLIONS";
@@ -154,5 +178,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   updateCount();
-  setInterval(updateCount, 60_000);
 });

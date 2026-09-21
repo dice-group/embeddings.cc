@@ -5,13 +5,27 @@ import time
 import hashlib
 import ipaddress
 import httpx
+from urllib.parse import urlsplit
 from flask import Flask, request, current_app, jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
-from . import es
+from . import es, postgres_search
+from dotenv import load_dotenv
+
+
+DEMO_SPARQL_GRAPHS = {
+    'wikidata': 'https://data.embeddings.cc/wikidata',
+    'dbpedia': 'https://data.embeddings.cc/dbpedia',
+}
+
+DEMO_AUTOCOMPLETE_ENDPOINTS = {
+    'wikidata': 'https://wikidata.data.dice-research.org/sparql',
+    'dbpedia': 'https://dbpedia.data.dice-research.org/sparql',
+}
 
 
 def create_app(test_config=None):
     # create and configure the app
+    load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
     app = Flask(__name__, instance_relative_config=True)
 
     if test_config is None:
@@ -28,6 +42,7 @@ def create_app(test_config=None):
         pass
 
     es.init_app(app)
+    postgres_search.init_app(app)
 
     # Webservices ------------------------------------------------------------------------------------------------------
 
@@ -485,13 +500,214 @@ def create_app(test_config=None):
         picks = random.sample(entities, min(15, len(entities)))
         return jsonify(entities=picks), 200
 
+    @app.route('/demo/random_uris_sparql', methods=['GET'])
+    def demo_random_uris_sparql():
+        source = (request.args.get('source') or '').strip().lower()
+        graph = DEMO_SPARQL_GRAPHS.get(source)
+        if graph is None:
+            return jsonify(error='Unsupported entity source'), 400
+
+        query = f'''SELECT DISTINCT ?entity
+WHERE {{
+  GRAPH <{graph}> {{
+    ?entity ?p ?o .
+  }}
+}}
+LIMIT 100'''
+
+        endpoint = current_app.config.get(
+            'SPARQL_ENDPOINT',
+            'https://sparql.embeddings.cc/sparql'
+        )
+
+        try:
+            response = httpx.post(
+                endpoint,
+                data={'query': query},
+                headers={'Accept': 'application/sparql-results+json'},
+                timeout=30.0,
+            )
+            response.raise_for_status()
+            bindings = response.json().get('results', {}).get('bindings', [])
+            entities = [
+                binding['entity']['value']
+                for binding in bindings
+                if binding.get('entity', {}).get('type') == 'uri'
+                and binding['entity'].get('value')
+            ]
+        except (httpx.HTTPError, ValueError, TypeError, KeyError) as e:
+            app.logger.warning(f"SPARQL random entities failed ({source}): {e}")
+            return jsonify(error='SPARQL endpoint unavailable'), 502
+
+        picks = random.sample(entities, min(15, len(entities)))
+        return jsonify(entities=picks), 200
+
+    @app.route('/demo/autocomplete_sparql', methods=['GET'])
+    def demo_autocomplete_sparql():
+        source = (request.args.get('source') or '').strip().lower()
+        endpoint = DEMO_AUTOCOMPLETE_ENDPOINTS.get(source)
+        if endpoint is None and source not in postgres_search.SOURCES:
+            return jsonify(error='Unsupported entity source'), 400
+
+        search_term = (request.args.get('search_term') or '').strip()
+        if len(search_term) < 3:
+            return jsonify([]), 200
+        if len(search_term) > 100:
+            return jsonify(error='Search term is too long'), 400
+
+        if source in postgres_search.SOURCES:
+            try:
+                return jsonify(postgres_search.search(search_term, source=source)), 200
+            except Exception as error:
+                # Do not log connection details or credentials.
+                current_app.logger.warning(
+                    '%s autocomplete failed (%s)', source, type(error).__name__
+                )
+                return jsonify(error='Autocomplete unavailable'), 503
+
+        # A JSON string literal uses the same escaping needed here for quotes,
+        # backslashes and control characters in a SPARQL string literal.
+        search_literal = json.dumps(search_term.lower())
+        query = f'''PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?entity ?label
+WHERE {{
+  ?entity rdfs:label ?label .
+  FILTER(LANG(?label) = "en")
+  FILTER(CONTAINS(LCASE(STR(?label)), {search_literal}))
+}}
+LIMIT 5'''
+
+        try:
+            response = httpx.post(
+                endpoint,
+                data={'query': query},
+                headers={'Accept': 'application/sparql-results+json'},
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            bindings = response.json().get('results', {}).get('bindings', [])
+            suggestions = [
+                {
+                    'entity': binding['entity']['value'],
+                    'label': binding['label']['value'],
+                    'source': source,
+                }
+                for binding in bindings
+                if binding.get('entity', {}).get('type') == 'uri'
+                and binding['entity'].get('value')
+                and binding.get('label', {}).get('value')
+            ]
+            return jsonify(suggestions), 200
+        except (httpx.HTTPError, ValueError, TypeError, KeyError) as e:
+            current_app.logger.warning(
+                f'SPARQL autocomplete failed ({source}): {e}'
+            )
+            return jsonify(error='Autocomplete unavailable'), 502
+
+    @app.route('/demo/embeddings_sparql', methods=['POST'])
+    def demo_embeddings_sparql():
+        data = request.get_json(silent=True) or {}
+        source = (data.get('source') or '').strip().lower()
+        entity = (data.get('entity') or '').strip()
+        graph = DEMO_SPARQL_GRAPHS.get(source)
+
+        if graph is None:
+            return jsonify(error='Unsupported entity source'), 400
+
+        parsed_entity = urlsplit(entity)
+        invalid_iri_characters = '<>"{}|^`\\\n\r\t '
+        if (
+            parsed_entity.scheme not in ('http', 'https')
+            or not parsed_entity.netloc
+            or any(character in entity for character in invalid_iri_characters)
+        ):
+            return jsonify(error='Invalid entity IRI'), 400
+
+        query = f'''SELECT ?embedding
+WHERE {{
+  GRAPH <{graph}> {{
+    <{entity}>
+      <https://ontology.embeddings.cc/hasKeciEmbeddings>
+      ?embedding .
+  }}
+}}'''
+
+        endpoint = current_app.config.get(
+            'SPARQL_ENDPOINT',
+            'https://sparql.embeddings.cc/sparql'
+        )
+
+        try:
+            response = httpx.post(
+                endpoint,
+                data={'query': query},
+                headers={'Accept': 'application/sparql-results+json'},
+                timeout=30.0,
+            )
+            response.raise_for_status()
+            bindings = response.json().get('results', {}).get('bindings', [])
+
+            if not bindings:
+                return jsonify(embeddings=[]), 200
+
+            embedding_value = bindings[0].get('embedding', {}).get('value')
+            embeddings = json.loads(embedding_value)
+            if (
+                not isinstance(embeddings, list)
+                or not all(
+                    isinstance(value, (int, float)) and not isinstance(value, bool)
+                    for value in embeddings
+                )
+            ):
+                raise ValueError('Invalid embedding vector')
+        except (httpx.HTTPError, ValueError, TypeError, KeyError) as e:
+            app.logger.warning(f"SPARQL embeddings failed ({source}): {e}")
+            return jsonify(error='SPARQL endpoint unavailable'), 502
+
+        return jsonify(embeddings=embeddings), 200
+
     @app.route('/whale/count', methods=['GET'])
     def whale_count():
         client = es.get_es()
         try:
-            resp = client.count(index='whale', request_timeout=30)
-            return {'count': resp.get('count',0)}
-        except Exception:
+            whale_response = client.count(index='whale', request_timeout=30)
+            whale_count = int(whale_response.get('count', 0))
+
+            sparql_endpoint = current_app.config.get(
+                'SPARQL_ENDPOINT',
+                'https://sparql.embeddings.cc/sparql'
+            )
+
+            sparql_counts = {}
+            with httpx.Client(timeout=30.0) as sparql_client:
+                for source, graph in DEMO_SPARQL_GRAPHS.items():
+                    sparql_query = f'''SELECT (COUNT(*) AS ?tripleCount)
+WHERE {{
+  GRAPH <{graph}> {{
+    ?s ?p ?o .
+  }}
+}}'''
+                    sparql_response = sparql_client.post(
+                        sparql_endpoint,
+                        data={'query': sparql_query},
+                        headers={'Accept': 'application/sparql-results+json'},
+                    )
+                    sparql_response.raise_for_status()
+                    bindings = sparql_response.json().get(
+                        'results', {}
+                    ).get('bindings', [])
+                    sparql_counts[source] = int(
+                        bindings[0]['tripleCount']['value']
+                    )
+
+            source_counts = {'wdc': whale_count, **sparql_counts}
+            return {
+                'count': sum(source_counts.values()),
+                'sources': source_counts,
+            }
+        except Exception as e:
+            app.logger.warning(f"Combined embeddings count failed: {e}")
             return {'count': None}, 503
 
     @app.route('/usage', methods=['GET'])
