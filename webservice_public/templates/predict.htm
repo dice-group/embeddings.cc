@@ -31,6 +31,12 @@
 
             <p id="examples-help">Search by name, or paste one URI per line. Press Enter to add a URI.</p>
 
+            <div class="predict-example-count">
+                <label for="example-count">Number of random examples: <output id="example-count-value"
+                        for="example-count">5</output></label>
+                <input id="example-count" type="range" min="2" max="50" step="1" value="5">
+            </div>
+
             <div class="predict-actions">
                 <button id="random-example-btn" type="button">Get random example</button>
                 <button id="predict-btn" type="submit">Predict</button>
@@ -61,7 +67,7 @@
     </div>
     {% include 'footer.html' %}
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
-    <script src="/static/scripts/predict.js?v=10"></script>
+    <script src="/static/scripts/predict.js?v=12"></script>
 </body>
 
 </html>

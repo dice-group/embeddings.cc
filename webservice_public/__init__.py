@@ -382,8 +382,16 @@ def create_app(test_config=None):
     @app.route('/class-examples', methods=['GET'])
     def class_examples():
         try:
+            count = int(request.args.get('count', '10'))
+        except ValueError:
+            return jsonify({'detail': 'count must be an integer between 2 and 50.'}), 400
+        if not 2 <= count <= 50:
+            return jsonify({'detail': 'count must be an integer between 2 and 50.'}), 400
+
+        try:
             response = httpx.get(
                 'http://131.234.29.20:8000/class-examples',
+                params={'count': count},
                 timeout=60,
             )
             response.raise_for_status()

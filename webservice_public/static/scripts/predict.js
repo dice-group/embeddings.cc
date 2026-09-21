@@ -251,6 +251,17 @@ function createExampleList(kind) {
 
 const positiveExamples = createExampleList("positive");
 const negativeExamples = createExampleList("negative");
+const exampleCount = document.getElementById("example-count");
+const exampleCountValue = document.getElementById("example-count-value");
+
+function updateExampleCount() {
+  exampleCountValue.value = exampleCount.value;
+  const progress = (exampleCount.value - exampleCount.min) / (exampleCount.max - exampleCount.min);
+  exampleCount.style.setProperty("--slider-fill", `${progress * 100}%`);
+}
+
+exampleCount.addEventListener("input", updateExampleCount);
+updateExampleCount();
 
 document.getElementById("random-example-btn").addEventListener("click", async () => {
   const randomButton = document.getElementById("random-example-btn");
@@ -274,7 +285,7 @@ document.getElementById("random-example-btn").addEventListener("click", async ()
   predictButton.disabled = true;
 
   try {
-    const response = await fetch(CLASS_EXAMPLES_ENDPOINT);
+    const response = await fetch(`${CLASS_EXAMPLES_ENDPOINT}?count=${encodeURIComponent(exampleCount.value)}`);
     const data = await readResponseBody(response);
 
     if (!response.ok) {
