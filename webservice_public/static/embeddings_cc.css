@@ -409,9 +409,80 @@ textarea::-webkit-scrollbar-track {
     font-weight: bold;
 }
 
-textarea.predict-input {
+.predict-example-group {
+    min-width: 0;
+}
+
+.predict-entity-box {
     box-sizing: border-box;
     min-height: 190px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 8px;
+}
+
+.predict-entity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.predict-entity-list > li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    overflow-wrap: anywhere;
+}
+
+.predict-entity-list > li > div {
+    min-width: 0;
+}
+
+.predict-entity-label {
+    display: block;
+    font-weight: bold;
+}
+
+.predict-entity-types,
+.predict-metadata-status {
+    display: block;
+    font-size: .9em;
+    color: #666;
+}
+
+.predict-entity-remove {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.predict-entity-box .autoComplete_wrapper,
+.predict-entity-box input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.predict-entity-box input[type=text] {
+    margin-top: 8px;
+}
+
+.predict-entity-box .autoComplete_wrapper > ul {
+    width: 100%;
+}
+
+.predict-metadata-status {
+    margin-top: 6px;
 }
 
 .predict-actions {

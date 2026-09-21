@@ -14,20 +14,22 @@
 
         <form id="predict-form">
             <div class="predict-grid">
-                <label for="positive-examples">
-                    Positive examples
-                    <textarea id="positive-examples" class="predict-input" spellcheck="false" autocorrect="off"
-                        autocomplete="off" autocapitalize="off">
-                    </textarea>
-                </label>
-
-                <label for="negative-examples">
-                    Negative examples
-                    <textarea id="negative-examples" class="predict-input" spellcheck="false" autocorrect="off"
-                        autocomplete="off" autocapitalize="off">
-                    </textarea>
-                </label>
+                {% for kind in ['positive', 'negative'] %}
+                <div class="predict-example-group">
+                    <label for="{{ kind }}-examples">{{ kind | capitalize }} examples</label>
+                    <div class="predict-entity-box">
+                        <ul id="{{ kind }}-example-list" class="predict-entity-list"
+                            aria-label="{{ kind | capitalize }} examples"></ul>
+                        <input id="{{ kind }}-examples" type="text" spellcheck="false" autocorrect="off"
+                            autocomplete="off" autocapitalize="off" aria-describedby="examples-help"
+                            placeholder="Search DBpedia or paste URIs">
+                    </div>
+                    <div id="{{ kind }}-metadata-status" class="predict-metadata-status" role="status"></div>
+                </div>
+                {% endfor %}
             </div>
+
+            <p id="examples-help">Search by name, or paste one URI per line. Press Enter to add a URI.</p>
 
             <div class="predict-actions">
                 <button id="random-example-btn" type="button">Get random example</button>
@@ -50,23 +52,16 @@
                     <td id="predict-expression"></td>
                 </tr>
                 <tr>
-                    <td class="title">Raw output</td>
-                    <td id="predict-raw-output"></td>
-                </tr>
-                <tr>
-                    <td class="title">Parses as DL</td>
-                    <td id="predict-parses-as-dl"></td>
-                </tr>
-                <tr>
-                    <td class="title">Used fallback</td>
-                    <td id="predict-used-fallback"></td>
+                    <td class="title">F1 score</td>
+                    <td id="predict-f1"></td>
                 </tr>
             </table>
         </div>
 
     </div>
     {% include 'footer.html' %}
-    <script src="/static/scripts/predict.js?v=8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
+    <script src="/static/scripts/predict.js?v=10"></script>
 </body>
 
 </html>

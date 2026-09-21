@@ -57,6 +57,25 @@ def get_pool():
         return pool
 
 
+def lookup_entities(uris, source='dbpedia'):
+    """Resolve exact IRIs using the same metadata as autocomplete."""
+    if not uris:
+        return []
+    with get_pool().connection() as connection:
+        rows = connection.execute(
+            """
+            SELECT entity_iri, label, types
+            FROM entity_search
+            WHERE source = %(source_id)s AND entity_iri = ANY(%(uris)s)
+            """, {'source_id': SOURCES[source], 'uris': list(dict.fromkeys(uris))},
+        ).fetchall()
+    return [
+        {'entity': row['entity_iri'], 'label': row['label'],
+         'types': row['types'], 'source': source}
+        for row in rows
+    ]
+
+
 def search(search_term, source='wikidata'):
     """Try both FTS modes; use label typos only if neither scores well.
 

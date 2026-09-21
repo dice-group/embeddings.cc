@@ -348,8 +348,8 @@ def create_app(test_config=None):
                 response = httpx.post(
                     'http://131.234.29.20:8000/predict',
                     json={
-                        'positive_embeddings': data.get('positive_embeddings', []),
-                        'negative_embeddings': data.get('negative_embeddings', []),
+                        'positive_uris': data.get('positive_uris', []),
+                        'negative_uris': data.get('negative_uris', []),
                     },
                     timeout=600,
                 )
@@ -541,6 +541,22 @@ LIMIT 100'''
 
         picks = random.sample(entities, min(15, len(entities)))
         return jsonify(entities=picks), 200
+
+    @app.route('/demo/dbpedia/entities', methods=['POST'])
+    def dbpedia_entities():
+        data = request.get_json(silent=True)
+        uris = data.get('uris') if isinstance(data, dict) else None
+        if (not isinstance(uris, list) or len(uris) > 500
+                or any(not isinstance(uri, str) or not uri or len(uri) > 8192
+                       for uri in uris)):
+            return jsonify(error='Expected at most 500 nonempty URI strings.'), 400
+        try:
+            return jsonify(postgres_search.lookup_entities(uris, source='dbpedia'))
+        except Exception as error:
+            current_app.logger.warning(
+                'DBpedia entity lookup failed (%s)', type(error).__name__
+            )
+            return jsonify(error='Entity details unavailable'), 503
 
     @app.route('/demo/autocomplete_sparql', methods=['GET'])
     def demo_autocomplete_sparql():
