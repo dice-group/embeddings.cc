@@ -1,4 +1,4 @@
-"""Wikidata, DBpedia and WDC autocomplete backed by entity_search."""
+"""Wikidata, DBpedia, WDC and Yago autocomplete backed by entity_search."""
 
 import atexit
 import os
@@ -11,7 +11,7 @@ from psycopg_pool import ConnectionPool
 
 _pool_lock = threading.Lock()
 LIMIT = 5
-SOURCES = {'wikidata': 1, 'dbpedia': 4, 'wdc': 3}
+SOURCES = {'wikidata': 1, 'dbpedia': 4, 'wdc': 3, 'yago': 5}
 
 
 def init_app(app):
@@ -46,7 +46,7 @@ def get_pool():
                     'user': config['WIKIDATA_PG_USER'],
                     'password': config['WIKIDATA_PG_PASSWORD'],
                     'connect_timeout': 3,
-                    'options': '-c statement_timeout=1500 -c default_transaction_read_only=on',
+                    'options': '-c statement_timeout=5000 -c default_transaction_read_only=on',
                     'row_factory': dict_row,
                 },
                 min_size=0, max_size=4, timeout=3, max_waiting=16,

@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const endpoint =
           selectedSource === "wdc"
             ? "/demo/random_uris_global"
+            : selectedSource === "yago"
+            ? "/demo/random_uris_yago"
             : `/demo/random_uris_sparql?source=${encodeURIComponent(
                 selectedSource
               )}`;

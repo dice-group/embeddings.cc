@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 DEMO_SPARQL_GRAPHS = {
     'wikidata': 'https://data.embeddings.cc/wikidata',
     'dbpedia': 'https://data.embeddings.cc/dbpedia',
+    'yago': 'https://data.embeddings.cc/yago',
 }
 
 DEMO_AUTOCOMPLETE_ENDPOINTS = {
@@ -420,8 +421,11 @@ def create_app(test_config=None):
         return jsonify(entities=picks), 200
     
     @app.route('/demo/random_uris_global', methods=['GET'])
+    @app.route('/demo/random_uris_yago', methods=['GET'])
     def demo_random_uris_global():
-        path = os.path.join(current_app.instance_path, 'uris_demo_global.json')
+        filename = ('uris_demo_yago.json' if request.path.endswith('/random_uris_yago')
+                    else 'uris_demo_global.json')
+        path = os.path.join(current_app.instance_path, filename)
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 entities = json.load(f)
@@ -555,11 +559,12 @@ LIMIT 5'''
         ):
             return jsonify(error='Invalid entity IRI'), 400
 
+        predicate = ('hasDeCaLEmbeddings' if source == 'yago' else 'hasKeciEmbeddings')
         query = f'''SELECT ?embedding
 WHERE {{
   GRAPH <{graph}> {{
     <{entity}>
-      <https://ontology.embeddings.cc/hasKeciEmbeddings>
+      <https://ontology.embeddings.cc/{predicate}>
       ?embedding .
   }}
 }}'''
